@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import {
   Button,
+  CheckCircle,
   DangerButton,
   Card,
   Empty,
@@ -452,19 +453,12 @@ function ShoppingView({
             </p>
             {items.map((item) => (
               <div key={item.id} className="flex items-center gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => toggle(item.id, !item.checked)}
-                  aria-label={item.checked ? "Wieder öffnen" : "Abhaken"}
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-[12px]"
-                  style={{
-                    borderColor: item.checked ? "var(--accent)" : "var(--line)",
-                    background: item.checked ? "var(--accent)" : "transparent",
-                    color: item.checked ? "var(--accent-ink)" : "transparent",
-                  }}
-                >
-                  ✓
-                </button>
+                <CheckCircle
+                  checked={item.checked}
+                  onChange={(next) => toggle(item.id, next)}
+                  label={item.checked ? "Wieder öffnen" : "Abhaken"}
+                  size={24}
+                />
                 <span
                   className="min-w-0 flex-1 truncate text-[14px]"
                   style={{

@@ -35,6 +35,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de" suppressHydrationWarning>
       <head>
+        {/* Next emits mobile-web-app-capable; older iOS still needs the
+            apple-prefixed variant to open the app without the browser bar. */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>{children}</body>

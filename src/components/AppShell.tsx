@@ -29,10 +29,13 @@ const ALL = [...PRIMARY, ...SECONDARY];
 export function AppShell({
   user,
   theme,
+  timezone,
   children,
 }: {
   user: { id: string; email: string; name: string };
   theme: string;
+  /** The user's configured timezone decides which day "heute" is. */
+  timezone: string;
   children: ReactNode;
 }) {
   const pathname = usePathname();
@@ -204,7 +207,7 @@ export function AppShell({
         </div>
       )}
 
-      <QuickAdd open={quickOpen} onClose={() => setQuickOpen(false)} />
+      <QuickAdd open={quickOpen} onClose={() => setQuickOpen(false)} timezone={timezone} />
       <NotificationScheduler />
     </div>
   );

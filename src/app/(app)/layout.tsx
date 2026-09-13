@@ -12,7 +12,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const settings = await loadSettings(user.id);
 
   return (
-    <AppShell user={user} theme={settings.theme}>
+    <AppShell user={user} theme={settings.theme} timezone={settings.timezone}>
       {children}
     </AppShell>
   );

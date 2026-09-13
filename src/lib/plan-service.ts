@@ -18,6 +18,7 @@ import {
 import { planDay, type PlanItem, type PlanResult, type Category } from "@/lib/planner";
 import {
   addDays,
+  formatDuration,
   formatTime,
   recurrenceMatches,
   startOfWeek,
@@ -86,7 +87,7 @@ export async function collectPlanItems(
     title: "Schlafen",
     category: "sleep",
     icon: "🌙",
-    description: `bis ${formatTime(nextWake)} · ${Math.floor(sleepMinutes / 60)} Std ${sleepMinutes % 60} Min`,
+    description: `bis ${formatTime(nextWake)} · ${formatDuration(sleepMinutes)}`,
     durationMinutes: Math.max(0, 1440 - sleepStart),
     priority: 1,
     isFixed: true,

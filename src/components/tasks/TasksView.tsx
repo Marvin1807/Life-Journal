@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import clsx from "clsx";
 import {
   Button,
+  CheckCircle,
   DangerButton,
   Empty,
   ErrorNote,
@@ -204,19 +205,11 @@ function TaskRow({
 
   return (
     <div className="card flex items-center gap-3 px-3 py-3">
-      <button
-        type="button"
-        aria-label={done ? "Als offen markieren" : "Als erledigt markieren"}
-        onClick={() => onToggle(task)}
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-[13px]"
-        style={{
-          borderColor: done ? "var(--accent)" : "var(--line)",
-          background: done ? "var(--accent)" : "transparent",
-          color: done ? "var(--accent-ink)" : "transparent",
-        }}
-      >
-        ✓
-      </button>
+      <CheckCircle
+        checked={done}
+        onChange={() => onToggle(task)}
+        label={done ? "Als offen markieren" : "Als erledigt markieren"}
+      />
       <button type="button" onClick={() => onOpen(task)} className="min-w-0 flex-1 text-left">
         <p
           className={clsx("truncate text-[15px]", done && "line-through")}
@@ -469,18 +462,12 @@ function TaskSheet({
             <div className="flex flex-col gap-1.5">
               {subtasks.map((s) => (
                 <div key={s.id} className="flex items-center gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => toggleSubtask(s.id, !s.done)}
-                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-[11px]"
-                    style={{
-                      borderColor: s.done ? "var(--accent)" : "var(--line)",
-                      background: s.done ? "var(--accent)" : "transparent",
-                      color: s.done ? "var(--accent-ink)" : "transparent",
-                    }}
-                  >
-                    ✓
-                  </button>
+                  <CheckCircle
+                    checked={s.done}
+                    onChange={(next) => toggleSubtask(s.id, next)}
+                    label={`Unteraufgabe ${s.title}`}
+                    size={22}
+                  />
                   <span
                     className={clsx("min-w-0 flex-1 truncate text-[14px]", s.done && "line-through")}
                     style={{ color: s.done ? "var(--ink-3)" : "var(--ink)" }}

@@ -254,6 +254,50 @@ export function WeekdayPicker({
   );
 }
 
+/**
+ * Round checkbox. The visible circle stays small, but the tappable area is a
+ * full 44px so it can be hit reliably with a thumb.
+ */
+export function CheckCircle({
+  checked,
+  onChange,
+  label,
+  size = 26,
+  color,
+}: {
+  checked: boolean;
+  onChange: (next: boolean) => void;
+  label: string;
+  size?: number;
+  color?: string;
+}) {
+  const accent = color ?? "var(--accent)";
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      aria-label={label}
+      onClick={() => onChange(!checked)}
+      className="-m-2 flex h-11 w-11 shrink-0 items-center justify-center p-2"
+    >
+      <span
+        className="flex items-center justify-center rounded-full border-2 font-bold"
+        style={{
+          width: size,
+          height: size,
+          fontSize: Math.round(size * 0.45),
+          borderColor: checked ? accent : "var(--line)",
+          background: checked ? accent : "transparent",
+          color: checked ? "var(--accent-ink)" : "transparent",
+        }}
+      >
+        ✓
+      </span>
+    </button>
+  );
+}
+
 /* ---------------------------- sheet / dialog ----------------------------- */
 
 export function Sheet({

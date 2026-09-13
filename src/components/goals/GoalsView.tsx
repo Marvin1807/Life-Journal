@@ -4,6 +4,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import {
   Button,
+  CheckCircle,
   DangerButton,
   Card,
   Empty,
@@ -147,19 +148,13 @@ function GoalCard({
         <div className="flex flex-col gap-1.5">
           {goal.milestones.map((m) => (
             <div key={m.id} className="flex items-center gap-2.5">
-              <button
-                type="button"
-                onClick={() => onToggleMilestone(goal.id, m.id, !m.done)}
-                aria-label={m.done ? "Meilenstein zurücknehmen" : "Meilenstein erreicht"}
-                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-[11px]"
-                style={{
-                  borderColor: m.done ? meta.color : "var(--line)",
-                  background: m.done ? meta.color : "transparent",
-                  color: m.done ? "#fff" : "transparent",
-                }}
-              >
-                ✓
-              </button>
+              <CheckCircle
+                checked={m.done}
+                onChange={(next) => onToggleMilestone(goal.id, m.id, next)}
+                label={m.done ? "Meilenstein zurücknehmen" : "Meilenstein erreicht"}
+                size={22}
+                color={meta.color}
+              />
               <span
                 className={clsx("min-w-0 flex-1 truncate text-[14px]", m.done && "line-through")}
                 style={{ color: m.done ? "var(--ink-3)" : "var(--ink)" }}

@@ -86,11 +86,11 @@ export function RoutineChecklist({
               key={step.id}
               type="button"
               onClick={() => toggle(step.id)}
-              className="flex items-center gap-2.5 rounded-lg px-2 py-2 text-left"
+              className="flex min-h-11 items-center gap-2.5 rounded-lg px-2 py-2 text-left"
               style={{ background: "var(--surface-2)" }}
             >
               <span
-                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-[11px]"
+                className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border-2 text-[10px] font-bold"
                 style={{
                   borderColor: isChecked ? "var(--accent)" : "var(--line)",
                   background: isChecked ? "var(--accent)" : "transparent",

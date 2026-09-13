@@ -67,6 +67,9 @@ export function TodayView() {
   const nextBlock = upcoming.find((b) => b.id !== activeBlock?.id) ?? null;
   const afterNext = upcoming.filter((b) => b.id !== activeBlock?.id && b.id !== nextBlock?.id)[0] ?? null;
 
+  const beforeWake = isToday && nowMinute < dayStart;
+  const afterSleep = isToday && nowMinute >= dayEnd;
+
   const doneCount = blocks.filter((b) => b.status === "done").length;
   const relevant = blocks.filter((b) => b.category !== "sleep");
   const plannedMinutes = relevant.reduce((sum, b) => sum + (b.endMinute - b.startMinute), 0);
@@ -248,12 +251,22 @@ export function TodayView() {
           ) : (
             <Card className="px-4 py-4">
               <p className="text-[15px] font-medium">
-                {isToday ? "Gerade ist nichts geplant." : "Noch nichts für diesen Tag geplant."}
+                {!isToday
+                  ? "Noch nichts für diesen Tag geplant."
+                  : beforeWake
+                    ? "Schlafenszeit."
+                    : afterSleep
+                      ? "Der Tag ist zu Ende."
+                      : "Gerade ist nichts geplant."}
               </p>
               <p className="mt-0.5 text-[13px]" style={{ color: "var(--ink-3)" }}>
-                {isToday
-                  ? "Freie Zeit gehört genauso zum Tag wie alles andere."
-                  : "Erstelle den Tagesplan, wenn du so weit bist."}
+                {!isToday
+                  ? "Erstelle den Tagesplan, wenn du so weit bist."
+                  : beforeWake
+                    ? `Dein Tag beginnt um ${formatTime(dayStart)} Uhr.`
+                    : afterSleep
+                      ? "Erholung zählt genauso wie alles andere."
+                      : "Freie Zeit gehört genauso zum Tag wie alles andere."}
               </p>
             </Card>
           )}
