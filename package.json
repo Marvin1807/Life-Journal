@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "setup": "node scripts/setup.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx src/db/migrate.ts",
+    "db:migrate": "tsx --tsconfig tsconfig.json src/db/migrate.ts",
     "db:push": "drizzle-kit push",
-    "test": "vitest run"
+    "test": "vitest run tests/planner.test.ts",
+    "test:all": "vitest run"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

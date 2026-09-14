@@ -27,12 +27,19 @@ auf jeder PostgreSQL-Datenbank, ohne an einen Dienst gebunden zu sein.
 
 ## Schnellstart
 
+Voraussetzung: Node.js 20 oder neuer und eine PostgreSQL-Datenbank
+(z. B. ein kostenloses Supabase-Projekt).
+
 ```bash
 npm install
-cp .env.example .env.local          # DATABASE_URL und AUTH_SECRET eintragen
-npm run db:migrate                  # Schema anlegen
-npm run dev                         # http://localhost:3000
+npm run setup        # fragt den Verbindungsstring ab, erzeugt das Secret selbst
+npm run db:migrate   # legt die 31 Tabellen an
+npm run dev          # http://localhost:3000
 ```
+
+`npm run setup` schreibt `.env.local` und würfelt `AUTH_SECRET` zufällig aus.
+Eine bestehende Datei wird nie überschrieben. Wer die Werte lieber selbst
+setzt, kopiert `.env.example` nach `.env.local`.
 
 Nach der Registrierung wird automatisch ein vollständiger Beispiel-Datensatz angelegt:
 Standardtagesablauf, Morgen- und Abendroutine, vier Trainingspläne mit 16 Übungen,
@@ -55,9 +62,14 @@ Die App läuft auf jeder Plattform, die Next.js im Node-Modus ausführt (Vercel,
 Fly.io, eigener Server).
 
 1. PostgreSQL-Datenbank anlegen — z. B. ein neues Supabase-Projekt.
-2. `DATABASE_URL` und `AUTH_SECRET` als Umgebungsvariablen setzen.
-3. `npm run db:migrate` einmalig gegen die Produktionsdatenbank ausführen.
+2. `DATABASE_URL` und `AUTH_SECRET` als Umgebungsvariablen der Plattform setzen.
+3. `npm run db:migrate` einmalig gegen die Produktionsdatenbank ausführen —
+   lokal reicht `DATABASE_URL=<produktion> npm run db:migrate`.
 4. `npm run build && npm run start`.
+
+Bei Supabase liegt der Verbindungsstring unter
+*Project Settings → Database → Connection string → URI*. Das Platzhalter-Passwort
+darin muss durch das echte Datenbank-Passwort ersetzt werden.
 
 HTTPS ist Voraussetzung: Session-Cookies werden in Produktion mit `secure` gesetzt und
 die PWA-Installation funktioniert nur über HTTPS.
@@ -131,10 +143,13 @@ Bleibt etwas übrig, sagt die App das offen, statt den Tag zu überfüllen.
 ## Tests
 
 ```bash
-npm test                               # Planungslogik (offline)
-npm run dev                            # in einem zweiten Terminal
-npx vitest run tests/api.test.ts       # API-Integrationstests gegen die echte Datenbank
+npm test              # Planungslogik, braucht weder Server noch Datenbank
+npm run dev           # in einem zweiten Terminal
+npm run test:all      # zusätzlich API- und Randfalltests gegen die echte Datenbank
 ```
+
+Die API-Tests erwarten die App unter `http://127.0.0.1:3100`; ein anderer Port geht
+über `LJ_BASE_URL`.
 
 `tests/planner.test.ts` prüft die Planungslogik: fixe Blöcke bleiben stehen,
 Überschneidungen werden gemeldet statt gelöscht, die minimale freie Zeit wird
