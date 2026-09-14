@@ -1,14 +1,11 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
+import { MISSING_URL_MESSAGE, resolveDatabaseUrl, sslFor } from "@/lib/env";
 
-const connectionString = process.env.DATABASE_URL;
+const connectionString = resolveDatabaseUrl();
 
-if (!connectionString) {
-  throw new Error(
-    "DATABASE_URL is not set. Copy .env.example to .env.local and point it at your PostgreSQL/Supabase database.",
-  );
-}
+if (!connectionString) throw new Error(MISSING_URL_MESSAGE);
 
 declare global {
   var __lifejournal_sql: ReturnType<typeof postgres> | undefined;
@@ -19,10 +16,10 @@ const client =
   postgres(connectionString, {
     max: 10,
     idle_timeout: 20,
+    // Required when the connection goes through a transaction pooler,
+    // which is the default for both Supabase and Neon.
     prepare: false,
-    ssl: connectionString.includes("localhost") || connectionString.includes("127.0.0.1")
-      ? false
-      : "require",
+    ssl: sslFor(connectionString),
   });
 
 if (process.env.NODE_ENV !== "production") global.__lifejournal_sql = client;

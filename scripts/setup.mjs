@@ -1,8 +1,7 @@
 /**
- * Erstellt .env.local beim ersten Start: fragt den Verbindungsstring ab und
- * erzeugt das Session-Secret selbst, damit niemand ein schwaches wählt.
+ * Erstellt .env.local beim ersten Start und fragt dafür nur den
+ * Verbindungsstring der Datenbank ab.
  */
-import { randomBytes } from "node:crypto";
 import { existsSync, writeFileSync } from "node:fs";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
@@ -29,8 +28,7 @@ if (!url.startsWith("postgres://") && !url.startsWith("postgresql://")) {
   process.exit(1);
 }
 
-const secret = randomBytes(48).toString("base64url");
-writeFileSync(FILE, `DATABASE_URL=${url}\nAUTH_SECRET=${secret}\n`);
+writeFileSync(FILE, `DATABASE_URL=${url}\n`);
 
-console.log(`\n${FILE} wurde angelegt, das Secret ist zufällig erzeugt.`);
-console.log("Nächster Schritt:  npm run db:migrate\n");
+console.log(`\n${FILE} wurde angelegt.`);
+console.log("Nächster Schritt:  npm run dev\n");

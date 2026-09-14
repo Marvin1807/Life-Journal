@@ -6,6 +6,23 @@ Kalender, Fitness, Ernährung, Ziele und Statistiken in einer Anwendung.
 Mobile-first für das iPhone gebaut, installierbar als PWA, mit echter Datenbank,
 echter Authentifizierung und persistenter Cloud-Speicherung.
 
+## In einem Klick online stellen
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMarvin1807%2FLife-Journal&project-name=life-journal&repository-name=life-journal&env=DATABASE_URL&envDescription=Verbindungsstring%20deiner%20PostgreSQL-Datenbank&envLink=https%3A%2F%2Fgithub.com%2FMarvin1807%2FLife-Journal%23datenbank-anlegen)
+
+Es wird genau eine Angabe gebraucht: `DATABASE_URL`. Die Tabellen legt die App
+beim Deployment selbst an, ein weiteres Secret ist nicht nötig.
+
+### Datenbank anlegen
+
+1. Auf [supabase.com](https://supabase.com) ein kostenloses Projekt erstellen.
+2. Das angezeigte Datenbank-Passwort sichern.
+3. Unter *Project Settings → Database → Connection string → URI* die Zeile kopieren.
+4. Darin `[YOUR-PASSWORD]` durch das echte Passwort ersetzen, Klammern entfernen.
+
+Wer stattdessen die Supabase- oder Neon-Integration von Vercel nutzt, muss gar
+nichts eintragen: Die App erkennt das automatisch gesetzte `POSTGRES_URL`.
+
 ---
 
 ## Technik
@@ -37,9 +54,10 @@ npm run db:migrate   # legt die 31 Tabellen an
 npm run dev          # http://localhost:3000
 ```
 
-`npm run setup` schreibt `.env.local` und würfelt `AUTH_SECRET` zufällig aus.
-Eine bestehende Datei wird nie überschrieben. Wer die Werte lieber selbst
-setzt, kopiert `.env.example` nach `.env.local`.
+`npm run setup` schreibt `.env.local`. Eine bestehende Datei wird nie
+überschrieben. Wer den Wert lieber selbst setzt, kopiert `.env.example` nach
+`.env.local`. `npm run db:migrate` ist nur nötig, wenn man die Tabellen vor dem
+ersten Start anlegen will — `npm run build` erledigt das ohnehin.
 
 Nach der Registrierung wird automatisch ein vollständiger Beispiel-Datensatz angelegt:
 Standardtagesablauf, Morgen- und Abendroutine, vier Trainingspläne mit 16 Übungen,
@@ -48,11 +66,16 @@ Alle Werte sind reine Startwerte und vollständig editierbar.
 
 ### Umgebungsvariablen
 
-| Variable       | Pflicht | Bedeutung                                                       |
-| -------------- | ------- | --------------------------------------------------------------- |
-| `DATABASE_URL` | ja      | PostgreSQL-Verbindungsstring. Bei Supabase den Pooler verwenden. |
-| `AUTH_SECRET`  | ja      | Mindestens 32 zufällige Zeichen.                                 |
-| `SMTP_URL`     | nein    | Ohne SMTP wird der Passwort-Link direkt in der Oberfläche angezeigt. |
+| Variable                   | Pflicht | Bedeutung                                                        |
+| -------------------------- | ------- | ---------------------------------------------------------------- |
+| `DATABASE_URL`             | ja*     | PostgreSQL-Verbindungsstring.                                     |
+| `POSTGRES_URL`             | –       | Alternative, die Vercel-Integrationen selbst setzen.              |
+| `POSTGRES_URL_NON_POOLING` | –       | Direkte Verbindung, wird für Schemaänderungen bevorzugt.          |
+| `SMTP_URL`                 | nein    | Ohne SMTP wird der Passwort-Link direkt in der Oberfläche gezeigt. |
+
+\* Eine der drei Postgres-Variablen muss gesetzt sein. Ein eigenes Session-Secret
+gibt es bewusst nicht: Sessions sind Zufalls-Token, die nur als SHA-256-Hash in
+der Datenbank liegen. Es gäbe also nichts zu signieren.
 
 ---
 
@@ -62,19 +85,21 @@ Die App läuft auf jeder Plattform, die Next.js im Node-Modus ausführt (Vercel,
 Fly.io, eigener Server).
 
 1. PostgreSQL-Datenbank anlegen — z. B. ein neues Supabase-Projekt.
-2. `DATABASE_URL` und `AUTH_SECRET` als Umgebungsvariablen der Plattform setzen.
-3. `npm run db:migrate` einmalig gegen die Produktionsdatenbank ausführen —
-   lokal reicht `DATABASE_URL=<produktion> npm run db:migrate`.
-4. `npm run build && npm run start`.
+2. `DATABASE_URL` als Umgebungsvariable der Plattform setzen.
+3. `npm run build && npm run start`.
+
+Die fehlenden Tabellen legt der Build selbst an, abgesichert über eine
+Datenbanksperre, damit parallele Deployments sich nicht in die Quere kommen.
+Ist die Datenbank nicht erreichbar, scheitert das Deployment absichtlich,
+statt eine kaputte App online zu stellen.
 
 Bei Supabase liegt der Verbindungsstring unter
 *Project Settings → Database → Connection string → URI*. Das Platzhalter-Passwort
 darin muss durch das echte Datenbank-Passwort ersetzt werden.
 
-**Ohne Node auf dem eigenen Rechner:** Statt Schritt 3 den Inhalt von
-`drizzle/schema-komplett.sql` in den Supabase SQL Editor einfügen und ausführen.
-Das legt dieselben 31 Tabellen an. Danach nicht mehr `npm run db:migrate`
-verwenden, sonst kollidieren die Migrationen.
+**Notfalls von Hand:** `drizzle/schema-komplett.sql` lässt sich im Supabase
+SQL Editor einfügen und ausführen. Das legt dieselben 31 Tabellen an und wird
+nur gebraucht, wenn der automatische Weg blockiert ist.
 
 HTTPS ist Voraussetzung: Session-Cookies werden in Produktion mit `secure` gesetzt und
 die PWA-Installation funktioniert nur über HTTPS.
@@ -171,7 +196,8 @@ Statistiken, Datenpersistenz — und dass kein Konto die Daten eines anderen sie
 ## Datenschutz
 
 - Passwörter werden mit bcrypt (12 Runden) gehasht.
-- Sessions liegen als SHA-256-Hash in der Datenbank und lassen sich einzeln widerrufen.
+- Sessions sind Zufalls-Token, die nur als SHA-256-Hash in der Datenbank liegen
+  und sich einzeln widerrufen lassen.
 - Jede Abfrage ist serverseitig auf die eingeloggte User-ID eingegrenzt.
 - Nach einem Passwort-Reset werden alle bestehenden Sessions ungültig.
 - Jeder API-Endpunkt validiert seine Eingaben mit Zod.

@@ -161,6 +161,14 @@ export async function pruneExpired(): Promise<void> {
 export async function getUserSettings(userId: string) {
   const rows = await db.select().from(settings).where(eq(settings.userId, userId)).limit(1);
   if (rows[0]) return rows[0];
-  const created = await db.insert(settings).values({ userId }).returning();
-  return created[0];
+
+  const created = await db
+    .insert(settings)
+    .values({ userId })
+    .onConflictDoNothing({ target: settings.userId })
+    .returning();
+  if (created[0]) return created[0];
+
+  const existing = await db.select().from(settings).where(eq(settings.userId, userId)).limit(1);
+  return existing[0];
 }

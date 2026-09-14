@@ -27,12 +27,30 @@ import {
 
 export type Settings = typeof settingsTable.$inferSelect;
 
-/** Loads the user's settings, creating defaults on first use. */
+/**
+ * Loads the user's settings, creating defaults on first use.
+ *
+ * Opening the app fires several requests at once, so two of them can reach the
+ * insert together. `onConflictDoNothing` lets the loser of that race read the
+ * row the winner wrote instead of failing.
+ */
 export async function loadSettings(userId: string): Promise<Settings> {
   const rows = await db.select().from(settingsTable).where(eq(settingsTable.userId, userId)).limit(1);
   if (rows[0]) return rows[0];
-  const created = await db.insert(settingsTable).values({ userId }).returning();
-  return created[0];
+
+  const created = await db
+    .insert(settingsTable)
+    .values({ userId })
+    .onConflictDoNothing({ target: settingsTable.userId })
+    .returning();
+  if (created[0]) return created[0];
+
+  const existing = await db
+    .select()
+    .from(settingsTable)
+    .where(eq(settingsTable.userId, userId))
+    .limit(1);
+  return existing[0];
 }
 
 export async function getOrCreatePlan(userId: string, day: string) {
@@ -42,8 +60,20 @@ export async function getOrCreatePlan(userId: string, day: string) {
     .where(and(eq(dailyPlans.userId, userId), eq(dailyPlans.day, day)))
     .limit(1);
   if (rows[0]) return rows[0];
-  const created = await db.insert(dailyPlans).values({ userId, day }).returning();
-  return created[0];
+
+  const created = await db
+    .insert(dailyPlans)
+    .values({ userId, day })
+    .onConflictDoNothing({ target: [dailyPlans.userId, dailyPlans.day] })
+    .returning();
+  if (created[0]) return created[0];
+
+  const existing = await db
+    .select()
+    .from(dailyPlans)
+    .where(and(eq(dailyPlans.userId, userId), eq(dailyPlans.day, day)))
+    .limit(1);
+  return existing[0];
 }
 
 export async function loadBlocks(userId: string, day: string) {

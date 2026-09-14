@@ -238,10 +238,35 @@ describe("Eingabevalidierung", () => {
     expect(res.status).toBe(404);
   });
 
-  it("weist eine syntaktisch falsche ID ab, ohne abzustürzen", async () => {
-    const res = await call("/api/tasks/keine-uuid", { method: "PATCH", json: { title: "Neu" } });
-    expect([400, 404, 422, 500]).toContain(res.status);
-    expect(res.status).not.toBe(200);
+  it("beantwortet eine syntaktisch falsche ID mit 404, nicht mit 500", async () => {
+    for (const path of ["/api/tasks/keine-uuid", "/api/goals/12345", "/api/exercises/x"]) {
+      const res = await call<{ error: string }>(path, { method: "PATCH", json: { title: "Neu" } });
+      expect(res.status).toBe(404);
+      expect(res.body.error).toBe("Nicht gefunden");
+    }
+  });
+});
+
+describe("Gleichzeitige Zugriffe", () => {
+  it("legt einen neuen Tag auch bei parallelen Anfragen genau einmal an", async () => {
+    const day = "2031-03-17";
+    const responses = await Promise.all(
+      Array.from({ length: 8 }, () => call<{ day: string }>(`/api/plan?day=${day}`)),
+    );
+    for (const res of responses) {
+      expect(res.status).toBe(200);
+      expect(res.body.day).toBe(day);
+    }
+  });
+
+  it("verträgt parallele Planungen desselben Tages", async () => {
+    const day = "2031-03-18";
+    const responses = await Promise.all(
+      Array.from({ length: 4 }, () =>
+        call(`/api/plan/generate`, { method: "POST", json: { day, keepCompleted: false } }),
+      ),
+    );
+    expect(responses.every((r) => r.status === 200)).toBe(true);
   });
 });
 
