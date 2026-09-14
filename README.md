@@ -71,6 +71,11 @@ Bei Supabase liegt der Verbindungsstring unter
 *Project Settings → Database → Connection string → URI*. Das Platzhalter-Passwort
 darin muss durch das echte Datenbank-Passwort ersetzt werden.
 
+**Ohne Node auf dem eigenen Rechner:** Statt Schritt 3 den Inhalt von
+`drizzle/schema-komplett.sql` in den Supabase SQL Editor einfügen und ausführen.
+Das legt dieselben 31 Tabellen an. Danach nicht mehr `npm run db:migrate`
+verwenden, sonst kollidieren die Migrationen.
+
 HTTPS ist Voraussetzung: Session-Cookies werden in Produktion mit `secure` gesetzt und
 die PWA-Installation funktioniert nur über HTTPS.
 
