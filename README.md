@@ -6,22 +6,28 @@ Kalender, Fitness, Ernährung, Ziele und Statistiken in einer Anwendung.
 Mobile-first für das iPhone gebaut, installierbar als PWA, mit echter Datenbank,
 echter Authentifizierung und persistenter Cloud-Speicherung.
 
-## In einem Klick online stellen
+## Online stellen
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMarvin1807%2FLife-Journal&project-name=life-journal&repository-name=life-journal&env=DATABASE_URL&envDescription=Verbindungsstring%20deiner%20PostgreSQL-Datenbank&envLink=https%3A%2F%2Fgithub.com%2FMarvin1807%2FLife-Journal%23datenbank-anlegen)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMarvin1807%2FLife-Journal&project-name=life-journal&repository-name=life-journal)
 
-Es wird genau eine Angabe gebraucht: `DATABASE_URL`. Die Tabellen legt die App
-beim Deployment selbst an, ein weiteres Secret ist nicht nötig.
+Der einfachste Weg braucht nur ein Vercel-Konto, keine zweite Anmeldung
+woanders:
 
-### Datenbank anlegen
+1. Auf den Button klicken und das Projekt anlegen. Der erste Build läuft
+   absichtlich ohne Datenbank durch.
+2. Im Projekt auf *Storage*, dann *Create Database*, *Postgres* wählen und
+   verbinden. Vercel trägt die Zugangsdaten selbst als Umgebungsvariablen ein.
+3. Auf *Deployments* das letzte Deployment erneut ausführen (*Redeploy*).
+   Dabei legt die App ihre 31 Tabellen selbst an.
 
-1. Auf [supabase.com](https://supabase.com) ein kostenloses Projekt erstellen.
-2. Das angezeigte Datenbank-Passwort sichern.
-3. Unter *Project Settings → Database → Connection string → URI* die Zeile kopieren.
-4. Darin `[YOUR-PASSWORD]` durch das echte Passwort ersetzen, Klammern entfernen.
+Danach die Adresse in Safari öffnen, registrieren, fertig.
 
-Wer stattdessen die Supabase- oder Neon-Integration von Vercel nutzt, muss gar
-nichts eintragen: Die App erkennt das automatisch gesetzte `POSTGRES_URL`.
+### Mit eigener Datenbank
+
+Wer lieber Supabase oder Neon direkt nutzt, setzt beim Anlegen des Projekts
+`DATABASE_URL` auf den Verbindungsstring. Bei Supabase steht er unter
+*Project Settings → Database → Connection string → URI*; das `[YOUR-PASSWORD]`
+darin muss durch das echte Passwort ersetzt werden.
 
 ---
 
