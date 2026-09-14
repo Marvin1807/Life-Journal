@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Die Migrationsdateien müssen mit in die Serverless-Funktion, damit das
+  // Schema auch zur Laufzeit angelegt werden kann.
+  outputFileTracingIncludes: { "/**": ["./drizzle/**"] },
   experimental: { serverActions: { bodySizeLimit: "2mb" } },
   async headers() {
     return [
