@@ -22,6 +22,11 @@ woanders:
 
 Danach die Adresse in Safari öffnen, registrieren, fertig.
 
+Sollte Vercel beim Verbinden melden, es gebe `DATABASE_URL` bereits: Das
+stammt aus `.env.example`, das beim Import als Vorlage gelesen wird. Trage in
+*Custom Prefix* einfach `STORAGE` ein. Die App erkennt auch Variablen mit
+eigenem Präfix und ignoriert übernommene Platzhalterwerte.
+
 ### Mit eigener Datenbank
 
 Wer lieber Supabase oder Neon direkt nutzt, setzt beim Anlegen des Projekts

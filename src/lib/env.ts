@@ -11,19 +11,47 @@ export function loadEnv(): void {
 }
 
 /**
+ * Values that look like a connection string but are not one. Vercel prefills
+ * the environment variables of a new project from `.env.example`, so the
+ * documented placeholder can end up configured as if it were real.
+ */
+function isUsable(value: string | undefined): value is string {
+  if (!value) return false;
+  const v = value.trim();
+  if (!v.startsWith("postgres://") && !v.startsWith("postgresql://")) return false;
+  const placeholders = ["user:passwort@host", "user:password@host", "[YOUR-PASSWORD]", "passwort@host"];
+  return !placeholders.some((p) => v.toLowerCase().includes(p.toLowerCase()));
+}
+
+/**
+ * Finds a connection string among the environment variables.
+ *
+ * Besides the documented names this also accepts prefixed ones such as
+ * `STORAGE_DATABASE_URL`, because Vercel's database integrations let you
+ * choose a prefix and then create every variable with it.
+ */
+function findUrl(suffixes: string[]): string | undefined {
+  for (const suffix of suffixes) {
+    const direct = process.env[suffix];
+    if (isUsable(direct)) return direct;
+  }
+  for (const suffix of suffixes) {
+    for (const [name, value] of Object.entries(process.env)) {
+      if (name.endsWith(`_${suffix}`) && isUsable(value)) return value;
+    }
+  }
+  return undefined;
+}
+
+/**
  * The connection the app uses at runtime.
  *
  * `DATABASE_URL` is what the setup asks for. `POSTGRES_URL` is what Vercel's
- * Supabase and Neon integrations set automatically, so a one-click deployment
- * needs no manual configuration at all.
+ * database integrations set automatically, so a one-click deployment needs no
+ * manual configuration at all.
  */
 export function resolveDatabaseUrl(): string | undefined {
-  return (
-    process.env.DATABASE_URL ||
-    process.env.POSTGRES_URL ||
-    process.env.POSTGRES_URL_NON_POOLING ||
-    undefined
-  );
+  return findUrl(["DATABASE_URL", "POSTGRES_URL", "POSTGRES_URL_NON_POOLING", "DATABASE_URL_UNPOOLED"]);
 }
 
 /**
@@ -32,8 +60,7 @@ export function resolveDatabaseUrl(): string | undefined {
  */
 export function resolveDirectUrl(): string | undefined {
   return (
-    process.env.DIRECT_DATABASE_URL ||
-    process.env.POSTGRES_URL_NON_POOLING ||
+    findUrl(["DIRECT_DATABASE_URL", "POSTGRES_URL_NON_POOLING", "DATABASE_URL_UNPOOLED"]) ??
     resolveDatabaseUrl()
   );
 }

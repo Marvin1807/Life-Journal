@@ -18,13 +18,37 @@ import { migrate } from "drizzle-orm/postgres-js/migrator";
 config({ path: ".env.local", quiet: true });
 config({ path: ".env", quiet: true });
 
+/**
+ * Platzhalter aussortieren: Vercel übernimmt die Beispielwerte aus
+ * .env.example in ein neues Projekt, sodass der dokumentierte Platzhalter wie
+ * eine echte Verbindung aussehen kann.
+ */
+function isUsable(value) {
+  if (!value) return false;
+  const v = value.trim();
+  if (!v.startsWith("postgres://") && !v.startsWith("postgresql://")) return false;
+  const placeholders = ["user:passwort@host", "user:password@host", "[your-password]"];
+  return !placeholders.some((p) => v.toLowerCase().includes(p));
+}
+
+/** Findet eine Verbindung, auch wenn die Integration einen Präfix vergeben hat. */
+function findUrl(suffixes) {
+  for (const suffix of suffixes) {
+    if (isUsable(process.env[suffix])) return process.env[suffix];
+  }
+  for (const suffix of suffixes) {
+    for (const [name, value] of Object.entries(process.env)) {
+      if (name.endsWith(`_${suffix}`) && isUsable(value)) return value;
+    }
+  }
+  return undefined;
+}
+
 // Schemaänderungen brauchen eine direkte Verbindung: Ein Transaction-Pooler
 // lehnt manche DDL ab. Deshalb gewinnt hier die ungepoolte URL.
 const url =
-  process.env.DIRECT_DATABASE_URL ||
-  process.env.POSTGRES_URL_NON_POOLING ||
-  process.env.DATABASE_URL ||
-  process.env.POSTGRES_URL;
+  findUrl(["DIRECT_DATABASE_URL", "POSTGRES_URL_NON_POOLING", "DATABASE_URL_UNPOOLED"]) ||
+  findUrl(["DATABASE_URL", "POSTGRES_URL"]);
 
 if (!url) {
   console.log("Keine Datenbank konfiguriert — Migration übersprungen.");

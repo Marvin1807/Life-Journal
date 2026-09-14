@@ -12,7 +12,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node scripts/migrate.mjs",
     "db:push": "drizzle-kit push",
-    "test": "vitest run tests/planner.test.ts",
+    "test": "vitest run tests/planner.test.ts tests/env.test.ts",
     "test:all": "vitest run"
   },
   "dependencies": {
