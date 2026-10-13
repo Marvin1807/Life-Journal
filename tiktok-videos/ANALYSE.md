@@ -9,7 +9,7 @@ Suchergebnisse zu den Accounts und auf die Nische, in der sie posten.
 | Account | Gesichert | Offen |
 |---|---|---|
 | [@whatifworld99](https://www.tiktok.com/@whatifworld99) („WhatIfWorld“) | Animierte 3D-„What if“-Katastrophensimulationen, Untertitel „nur eine Animation, niemand wurde verletzt, zu Bildungszwecken“. Ein bekanntes Video: ein hypothetischer Flugzeug-Einschlag ins WTC, ca. 8.000 Likes. | Stimme, Länge, Schnitttempo, Musik |
-| [@man_ia_c](https://www.tiktok.com/@man_ia_c) | Nichts – die Suche findet den Account nicht. | Alles. Bitte kurz beschreiben, was dort läuft (siehe unten). |
+| [@man_ia_c](https://www.tiktok.com/@man_ia_c) | Anhand von drei Videos genau analysiert, siehe [REFERENZ_ANALYSE.md](REFERENZ_ANALYSE.md). Ganz anderes Format: ohne Stimme, Low-Poly-3D, eine durchgehende Kamerafahrt. | – |
 
 Vergleichbare Accounts in derselben Nische laut Suche: Clover Animations,
 Lizard Animation, Lunar Animation, disasterframe0 – alle mit Szenarien wie
