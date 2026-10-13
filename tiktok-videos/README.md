@@ -99,3 +99,36 @@ noch natürlichere Stimme lässt sich ElevenLabs anbinden – sag Bescheid.
   schon drin.
 - Keine fremden Videos oder Ausschnitte der Vorbild-Accounts verwenden – nur
   Format und Idee übernehmen.
+
+## HyperFrames (animierte Szenen aus HTML)
+
+[HyperFrames](https://github.com/heygen-com/hyperframes) von HeyGen rendert
+HTML/CSS/GSAP-Animationen zu MP4. Damit lassen sich Szenen bauen, die ein
+KI-Videogenerator schlecht kann: animierte Zeitachsen, Zähler („60.000
+Megatonnen“), Karten, Diagramme, Titelkarten. Das Ergebnis legst du einfach
+als `assets/<video-id>/NN.mp4` ab, `make_video.py` nimmt es dann als Szene.
+
+Eingerichtet ist:
+
+- **Claude-Code-Plugin** `hyperframes@hyperframes` für dieses Projekt
+  (`.claude/settings.json`). Jede Claude-Code-Sitzung in diesem Repo bietet
+  es an; danach z. B.:
+  > Mit /hyperframes:hyperframes: baue in `tiktok-videos/hyperframes` eine
+  > 6-Sekunden-Szene im Hochformat, ein Zähler läuft von 0 auf 60.000
+  > Megatonnen hoch, dunkler Hintergrund, gelbe Schrift.
+- **Projekt** `hyperframes/` im Hochformat 1080×1920. GSAP liegt lokal bei,
+  damit das Rendern auch ohne CDN funktioniert.
+
+Benötigt: Node.js 22+ und ffmpeg.
+
+```bash
+cd hyperframes
+npm run dev                         # Vorschau im Browser mit Live-Reload
+npm run check                       # Komposition prüfen
+npx hyperframes@0.8.154 render -o ../assets/asteroid-nordsee/03.mp4
+```
+
+Beim ersten Rendern lädt HyperFrames einen Headless-Chrome herunter
+(`npx hyperframes@0.8.154 browser ensure`). In der Claude-Cloud-Umgebung
+liegt schon einer bereit:
+`HYPERFRAMES_BROWSER_PATH=$(find /opt/pw-browsers -name chrome-headless-shell -type f | head -1)`.
