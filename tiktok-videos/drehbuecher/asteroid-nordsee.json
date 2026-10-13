@@ -1,0 +1,18 @@
+{
+  "id": "asteroid-nordsee",
+  "title": "Was wäre, wenn ein Asteroid in die Nordsee stürzt?",
+  "voice": "de-DE-ConradNeural",
+  "rate": "+6%",
+  "visual_style": "photorealistic 3D impact simulation render, cinematic, vertical 9:16, volumetric smoke, Unreal Engine 5",
+  "caption": "1 Kilometer Gestein mit 20 km/s in die Nordsee ☄️ Nur eine Simulation – niemand wurde verletzt. #wasWäreWenn #asteroid #simulation #nordsee #wissen #fürdich",
+  "scenes": [
+    {"label": "−10 SEK", "text": "Ein Asteroid, einen Kilometer groß, rast mit zwanzig Kilometern pro Sekunde auf die Nordsee zu.", "visual": "huge glowing asteroid entering the atmosphere above the North Sea, fiery trail"},
+    {"label": "0 SEK", "text": "Einschlag. Die Nordsee ist so flach, dass er fast direkt auf den Meeresboden trifft.", "visual": "massive impact explosion in a shallow sea, water and rock thrown kilometers into the sky"},
+    {"label": "1 SEK", "text": "Die Energie entspricht über sechzigtausend Megatonnen. Mehr als alle Atomwaffen der Welt zusammen.", "visual": "gigantic fireball and mushroom cloud rising above the sea, seen from a coastline far away"},
+    {"label": "5 MIN", "text": "Eine Druckwelle rollt über Dänemark, Norddeutschland und die Niederlande. Fenster zerbrechen hunderte Kilometer weit.", "visual": "shockwave shattering windows of a north german brick town, debris in the air"},
+    {"label": "1 STUNDE", "text": "Dann kommt der Tsunami. Wellen von dutzenden Metern treffen die flachen Küsten.", "visual": "giant tsunami wave approaching a flat coastline with a lighthouse and dikes"},
+    {"label": "3 STUNDEN", "text": "Hamburg, Amsterdam, Bremen. Das Wasser drückt weit ins Landesinnere, über jeden Deich hinweg.", "visual": "flooded harbor city with cranes and warehouses submerged, aerial drone view"},
+    {"label": "1 JAHR", "text": "Staub in der Atmosphäre dimmt das Sonnenlicht. Ernten in ganz Europa fallen aus.", "visual": "grey dim sky over failed crops in a european field, cold muted colors"},
+    {"label": "ENDE", "text": "Zum Glück kennen wir fast alle Asteroiden dieser Größe, und keiner ist auf Kollisionskurs. Wo würdest du hinfliehen?", "visual": "telescope observatory under a starry sky tracking an asteroid, calm atmosphere"}
+  ]
+}

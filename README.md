@@ -228,3 +228,7 @@ Damit klar ist, was die App kann und was nicht:
   frisch vom Server, damit nie veraltete Stände angezeigt werden.
 - **Passwort-Mails** werden nur mit konfiguriertem `SMTP_URL` verschickt. Ohne SMTP
   zeigt die App den Reset-Link direkt an.
+
+## TikTok-Videos
+
+Der Ordner [`tiktok-videos/`](tiktok-videos/README.md) enthält ein eigenständiges Werkzeug für deutsche „Was wäre wenn“-Kurzvideos. Es gehört nicht zur App.

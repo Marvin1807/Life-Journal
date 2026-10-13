@@ -1,0 +1,18 @@
+{
+  "id": "mond-verschwindet",
+  "title": "Was wäre, wenn der Mond verschwindet?",
+  "voice": "de-DE-ConradNeural",
+  "rate": "+6%",
+  "visual_style": "photorealistic 3D simulation render, cinematic lighting, vertical 9:16, Unreal Engine 5 look, epic scale",
+  "caption": "Was passiert, wenn der Mond einfach weg ist? 🌑 Nur eine Simulation – niemand wurde verletzt. #wasWäreWenn #simulation #mond #wissen #fürdich #fy",
+  "scenes": [
+    {"label": "0 SEK", "text": "Was wäre, wenn der Mond in diesem Moment einfach verschwindet?", "visual": "the full Moon in a night sky above a calm ocean, suddenly vanishing in a flash of light"},
+    {"label": "1 NACHT", "text": "Zuerst merkst du es nur am Himmel. Die Nächte werden viel dunkler als je zuvor.", "visual": "a city skyline at night under a pitch black sky, only stars visible, no moon"},
+    {"label": "6 STUNDEN", "text": "Dann kommen die Gezeiten. Ebbe und Flut schrumpfen auf etwa ein Drittel, denn nur die Sonne zieht noch am Wasser.", "visual": "aerial view of a North Sea mudflat coastline where the tide barely moves, boats stranded"},
+    {"label": "1 WOCHE", "text": "An den Küsten kippen ganze Ökosysteme. Krebse, Muscheln und Vögel, die vom Rhythmus der Flut leben, finden kein Futter mehr.", "visual": "dying tidal pool with crabs and shells on dry rocks, dramatic overcast light"},
+    {"label": "1 MONAT", "text": "Korallen, die nur bei Vollmond laichen, verpassen ihr Signal. Ganze Riffe hören auf, sich zu vermehren.", "visual": "underwater coral reef at night, dark water, no spawning, fading colors"},
+    {"label": "1000 JAHRE", "text": "Viel gefährlicher ist aber das, was du nicht siehst. Der Mond hält die Erdachse stabil. Ohne ihn beginnt sie zu taumeln.", "visual": "planet Earth in space seen from orbit, its axis visibly wobbling, glowing axis line"},
+    {"label": "MILLIONEN JAHRE", "text": "Die Neigung der Erde könnte stark schwanken. Mal Eiszeit bis zum Äquator, mal glühende Hitze an den Polen.", "visual": "split screen Earth: one half covered in ice sheets, other half scorched desert, from space"},
+    {"label": "ENDE", "text": "Der Mond ist also nicht nur schön. Ohne ihn wäre unser Leben komplett anders. Was glaubst du, würde die Menschheit überleben?", "visual": "the Moon reappearing slowly over Earth's horizon seen from space, hopeful golden light"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "menschen-verschwinden",
+  "title": "Was wäre, wenn alle Menschen verschwinden?",
+  "voice": "de-DE-ConradNeural",
+  "rate": "+6%",
+  "visual_style": "photorealistic 3D post-apocalyptic simulation render, cinematic, vertical 9:16, overgrown nature",
+  "caption": "Was bleibt von Berlin, wenn wir alle weg sind? 🏙️🌿 Nur eine Simulation. #wasWäreWenn #simulation #berlin #zukunft #wissen #fürdich",
+  "scenes": [
+    {"label": "0 SEK", "text": "Was wäre, wenn alle Menschen auf einen Schlag verschwinden?", "visual": "busy Berlin Alexanderplatz crowd fading away into empty square"},
+    {"label": "1 TAG", "text": "Kraftwerke schalten sich ab. Nach wenigen Stunden gehen in den Städten die Lichter aus.", "visual": "night view of Berlin with district lights going dark one by one"},
+    {"label": "1 WOCHE", "text": "Ohne Pumpen läuft Grundwasser in die U-Bahn-Tunnel. Viele Stationen stehen bald unter Wasser.", "visual": "flooded underground subway station with yellow trains half under water"},
+    {"label": "10 JAHRE", "text": "Pflanzen sprengen den Asphalt. Füchse, Wildschweine und Rehe ziehen durch die Straßen.", "visual": "wild boars and deer walking on a cracked overgrown Berlin boulevard"},
+    {"label": "100 JAHRE", "text": "Holzdächer sind eingestürzt. Aus Parks und Straßen werden junge Wälder.", "visual": "collapsed apartment blocks covered in trees and ivy, Brandenburg Gate overgrown"},
+    {"label": "1000 JAHRE", "text": "Von den meisten Gebäuden bleiben nur Ruinen unter einem dichten Wald.", "visual": "dense forest with concrete ruins and a broken TV tower peeking through"},
+    {"label": "ENDE", "text": "Plastik, Glas und Beton bleiben noch viel länger. Unsere Spuren verschwinden nie ganz. Welche Stadt soll ich als Nächstes zeigen?", "visual": "plastic bottle half buried in forest soil, macro shot, sunbeam"}
+  ]
+}

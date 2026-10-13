@@ -1,0 +1,17 @@
+{
+  "id": "sonne-verschwindet",
+  "title": "Was wäre, wenn die Sonne verschwindet?",
+  "voice": "de-DE-ConradNeural",
+  "rate": "+6%",
+  "visual_style": "photorealistic 3D space simulation render, cinematic, vertical 9:16, dramatic contrast",
+  "caption": "Die Sonne ist weg – und du merkst es 8 Minuten lang nicht ☀️ Nur eine Simulation. #wasWäreWenn #sonne #weltall #simulation #wissen #fürdich",
+  "scenes": [
+    {"label": "0 SEK", "text": "Was wäre, wenn die Sonne in genau dieser Sekunde verschwindet?", "visual": "the Sun in space suddenly collapsing into nothing, leaving black void"},
+    {"label": "8 MIN 20 SEK", "text": "Acht Minuten und zwanzig Sekunden lang merkst du gar nichts. So lange braucht ihr Licht bis zu uns.", "visual": "people enjoying a sunny day in a park, unaware, clock overlay feeling"},
+    {"label": "8 MIN 21 SEK", "text": "Dann wird es schlagartig Nacht. Und die Erde fliegt, ohne Anziehung, geradeaus ins All.", "visual": "Earth leaving its orbit, drifting into dark space, orbit line breaking"},
+    {"label": "1 WOCHE", "text": "Die Temperatur fällt unter minus fünfzehn Grad. Pflanzen hören auf zu wachsen.", "visual": "frozen city street at night with frost on cars and dead plants"},
+    {"label": "1 JAHR", "text": "Nach einem Jahr: um die minus siebzig Grad. Die Ozeane frieren an der Oberfläche zu.", "visual": "frozen ocean surface with cracks, ice sheet stretching to horizon under starlight"},
+    {"label": "TAUSENDE JAHRE", "text": "Doch unter dem Eis bleibt das Wasser flüssig. Und an heißen Quellen in der Tiefsee könnte Leben weiter existieren.", "visual": "deep sea hydrothermal vent glowing with tube worms and bacteria mats"},
+    {"label": "ENDE", "text": "Keine Sorge, die Sonne hat noch Milliarden Jahre vor sich. Aber wie lange würdest du durchhalten?", "visual": "the Sun rising again over Earth from orbit, warm glow, hopeful"}
+  ]
+}

@@ -1,0 +1,6 @@
+output/
+build/
+assets/*/
+assets/*.mp3
+assets/*.ttf
+.venv/

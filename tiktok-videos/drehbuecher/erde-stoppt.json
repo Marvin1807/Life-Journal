@@ -1,0 +1,17 @@
+{
+  "id": "erde-stoppt",
+  "title": "Was wäre, wenn die Erde aufhört, sich zu drehen?",
+  "voice": "de-DE-ConradNeural",
+  "rate": "+6%",
+  "visual_style": "photorealistic 3D disaster simulation render, cinematic, vertical 9:16, dramatic lighting, high detail",
+  "caption": "Die Erde bleibt für eine Sekunde stehen. Was passiert? 🌍 Nur eine Simulation. #wasWäreWenn #simulation #erde #physik #wissen #fürdich",
+  "scenes": [
+    {"label": "0 SEK", "text": "Was wäre, wenn die Erde plötzlich aufhört, sich zu drehen?", "visual": "planet Earth rotating in space, then abruptly freezing, shockwave ring around it"},
+    {"label": "1 SEK", "text": "Am Äquator bewegst du dich gerade mit über sechzehnhundert Kilometern pro Stunde. Die Erde stoppt. Du nicht.", "visual": "people, cars and trees being flung sideways eastward through a city street, motion blur"},
+    {"label": "10 SEK", "text": "Alles, was nicht fest verankert ist, fliegt nach Osten. Häuser, Autos, ganze Wälder.", "visual": "aerial view of a forest being ripped out of the ground and blown sideways by an enormous wind"},
+    {"label": "1 STUNDE", "text": "Die Ozeane rasen über die Küsten. Riesige Wellen fegen über die Kontinente.", "visual": "colossal ocean wave rolling over a coastal city, skyscrapers disappearing"},
+    {"label": "1 WOCHE", "text": "Ohne Fliehkraft wandert das Wasser zu den Polen. Am Äquator taucht ein neuer, riesiger Kontinent auf.", "visual": "Earth from space with oceans pooled at north and south poles and a dry land belt around the equator"},
+    {"label": "6 MONATE", "text": "Ein Tag dauert jetzt ein ganzes Jahr. Sechs Monate brennende Sonne, dann sechs Monate eisige Nacht.", "visual": "half of Earth scorched by sun, other half frozen in darkness, sharp day night line"},
+    {"label": "ENDE", "text": "Die gute Nachricht: Das kann physikalisch so nicht passieren. Aber würdest du die erste Sekunde überleben?", "visual": "Earth slowly starting to rotate again, sunrise over the horizon, calm music mood"}
+  ]
+}
