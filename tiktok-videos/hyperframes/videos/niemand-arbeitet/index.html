@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Was wäre, wenn niemand mehr arbeiten geht?</title>
+    <link rel="stylesheet" href="lib/ww.css" />
+    <style>
+      @font-face { font-family: "WW Serif"; font-style: normal; font-weight: 400; src: url("lib/fonts/eb-garamond-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "WW Serif"; font-style: italic; font-weight: 400; src: url("lib/fonts/eb-garamond-latin-400-italic.woff2") format("woff2"); }
+      @font-face { font-family: "WW Sans"; font-style: normal; font-weight: 500; src: url("lib/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "WW Sans"; font-style: normal; font-weight: 600; src: url("lib/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "WW Mono"; font-style: normal; font-weight: 400; src: url("lib/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="niemand-arbeitet" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+      <canvas id="scene" class="clip" data-start="0" data-duration="30" data-track-index="0"></canvas>
+      <div id="overlay" class="clip" data-start="0" data-duration="30" data-track-index="1" style="position:absolute;inset:0"></div>
+      <audio id="sound" src="audio/sound.wav" data-start="0" data-duration="30" data-track-index="2" data-volume="1"></audio>
+    </div>
+
+    <script src="lib/gsap.min.js"></script>
+    <script>
+      // Leere Root-Timeline: gibt HyperFrames die Länge vor; die Szene selbst hört auf hf-seek.
+      window.__timelines = window.__timelines || {};
+      window.__timelines["niemand-arbeitet"] = gsap.timeline({ paused: true }).set({}, {}, 30);
+    </script>
+    <script type="importmap">
+      { "imports": { "three": "./lib/three.module.min.js" } }
+    </script>
+    <script type="module">
+      import * as THREE_NS from "three";
+      import { THREE, rng, clamp, smooth, lerp, colorAt, valueAt, cameraPath, shake, createSky, createStars,
+               windowTextures, building, fernsehturm, crowd, car, streetLamp, glowTexture } from "./lib/lowpoly.js";
+      import { createOverlay, de, countdown, curve } from "./lib/ww-overlay.js";
+
+      const DURATION = 30;
+      const EVENT = 6;          // Um 8:00 Uhr geht niemand zur Arbeit
+      const BLACKOUT = 15.4;    // Strom fällt aus
+      const RETURN = 24;        // Alle gehen wieder arbeiten
+      const BLACK = 27.0;       // Schwarzbild
+      const END = 27.4;         // Endkarte
+
+      // ------------------------------------------------------------ Overlay ---
+      // Vergangene Tage seit 8:00 Uhr (Zeitraffer)
+      const days = (t) => curve([[EVENT, 0], [9, 0.5], [12, 2], [15, 4], [18, 6], [21, 12], [RETURN, 30]], t);
+      const overlay = createOverlay(document.getElementById("overlay"), {
+        title: { text: "Was wäre, wenn niemand mehr arbeiten geht?", accent: "arbeiten", accentColor: "#f2b84b", start: 0, end: 3.1 },
+        hud: [
+          { start: 0, end: EVENT, label: "Arbeitsbeginn in", value: (t) => countdown(EVENT - t),
+            sub: (t) => `Montag · 07:${String(54 + Math.floor(t)).padStart(2, "0")} Uhr · Berlin-Mitte`, fadeIn: 0.01 },
+          { start: EVENT, end: 9, label: "Niemand arbeitet seit", value: (t) => `${de(days(t), 3)} Tagen`, sub: "46 Mio. Menschen bleiben zu Hause", fadeIn: 0.01, fadeOut: 0.01 },
+          { start: 9, end: 12, label: "Niemand arbeitet seit", value: (t) => `${de(days(t), 3)} Tagen`, sub: "Lieferungen an Supermärkte: 0", fadeIn: 0.01, fadeOut: 0.01 },
+          { start: 12, end: 15, label: "Niemand arbeitet seit", value: (t) => `${de(days(t), 3)} Tagen`,
+            sub: (t) => `Müll auf den Straßen: ${de(Math.round(days(t) * 92) * 1000)} t`, fadeIn: 0.01, fadeOut: 0.01 },
+          { start: 15, end: 18, label: "Niemand arbeitet seit", value: (t) => `${de(days(t), 3)} Tagen`,
+            sub: (t) => `Stromnetz: ${de(Math.round(100 * (1 - smooth((t - BLACKOUT) / 1.6))))} %`, fadeIn: 0.01, fadeOut: 0.01 },
+          { start: 18, end: 21, label: "Niemand arbeitet seit", value: (t) => `${de(days(t), 3)} Tagen`,
+            sub: (t) => `Wasserdruck: ${de(Math.max(0, 4 * (1 - (t - 18) / 2)), 1)} bar`, fadeIn: 0.01, fadeOut: 0.01 },
+          { start: 21, end: RETURN, label: "Niemand arbeitet seit", value: (t) => `${de(days(t), 3)} Tagen`, sub: "Was du dir dafür kaufen kannst: nichts", fadeIn: 0.01, fadeOut: 0.01 },
+          { start: RETURN, end: BLACK, label: "Zurück an die Arbeit", value: () => "JETZT", sub: "Tag 31 · 06:00 Uhr", fadeIn: 0.01, fadeOut: 0.3 },
+        ],
+        subtitles: [
+          { start: 3.2, end: 6.0, text: "Du stehst auf einer Straße in Berlin-Mitte." },
+          { start: 6.2, end: 9.0, text: "Kein Bus fährt. Keine Bahn." },
+          { start: 9.1, end: 12.0, text: "Nach zwei Tagen sind die Regale leer." },
+          { start: 12.1, end: 15.0, text: "Der Müll bleibt einfach liegen." },
+          { start: 15.1, end: 18.0, text: "Dann fällt der Strom aus. Überall." },
+          { start: 18.1, end: 21.0, text: "Ohne Strom kommt kein Wasser mehr aus dem Hahn." },
+          { start: 21.1, end: 24.0, text: "Geld ist plötzlich nur noch Papier." },
+          { start: 24.1, end: 25.7, text: "Dann geht jeder wieder arbeiten.", fadeOut: 0.25 },
+          { start: 25.8, end: 27.0, text: "Nur ohne Chef.", fadeIn: 0.2, fadeOut: 0.3 },
+        ],
+        black: { start: BLACK, end: END },
+        endcard: { start: END, end: DURATION, lines: ["46 Millionen Menschen arbeiten in Deutschland", "zusammen über 61 Milliarden Stunden im Jahr"] },
+      });
+
+      // ----------------------------------------------------------- Renderer ---
+      const canvas = document.getElementById("scene");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(1080, 1920, false);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.Fog("#e8c9a8", 60, 620);
+      const camera = new THREE.PerspectiveCamera(52, 1080 / 1920, 0.1, 3000);
+
+      const sky = createSky();
+      scene.add(sky);
+      const stars = createStars();
+      scene.add(stars);
+
+      const hemi = new THREE.HemisphereLight("#cfe0ff", "#5a4a3a", 1.0);
+      scene.add(hemi);
+      const sun = new THREE.DirectionalLight("#ffd7a0", 2.4);
+      sun.castShadow = true;
+      sun.shadow.mapSize.set(2048, 2048);
+      sun.shadow.camera.left = -45; sun.shadow.camera.right = 45;
+      sun.shadow.camera.top = 45; sun.shadow.camera.bottom = -45;
+      sun.shadow.camera.near = 1; sun.shadow.camera.far = 400;
+      sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.04;
+      scene.add(sun); scene.add(sun.target);
+
+      // ------------------------------------------------------------- Straße ---
+      const R = rng(2024);
+      const ROAD = 8, WALK = 13.5;      // halbe Fahrbahn, Hauskante
+      const Z0 = 40, Z1 = -420;
+      const flat = (c) => new THREE.MeshStandardMaterial({ color: c, roughness: 1, flatShading: true });
+      const plane = (w, d, mat, x, y, z) => {
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), mat);
+        m.rotation.x = -Math.PI / 2; m.position.set(x, y, z); m.receiveShadow = true; scene.add(m); return m;
+      };
+      plane(2000, 2000, flat("#3a3836"), 0, -0.02, -300);              // Umland/Dächerebene
+      plane(ROAD * 2, Z0 - Z1, flat("#4b4b4e"), 0, 0, (Z0 + Z1) / 2);   // Fahrbahn
+      for (const s of [-1, 1]) {
+        const curb = new THREE.Mesh(new THREE.BoxGeometry(WALK - ROAD, 0.16, Z0 - Z1), flat("#b3ada3"));
+        curb.position.set(s * (ROAD + (WALK - ROAD) / 2), 0.08, (Z0 + Z1) / 2); curb.receiveShadow = true; scene.add(curb);
+      }
+      const markMat = new THREE.MeshStandardMaterial({ color: "#d8d6cf", roughness: 0.8 });
+      for (let z = Z0; z > Z1; z -= 9) plane(0.18, 4, markMat, 0, 0.012, z);
+      // Querstraßen im Hauptblock
+      for (const zc of [-95, -205, -315]) plane(400, 14, flat("#4b4b4e"), 0, 0.005, zc);
+
+      // ------------------------------------------------------------- Häuser ---
+      const texAlt = [windowTextures(11, "altbau"), windowTextures(12, "altbau"), windowTextures(13, "altbau")];
+      const texNeu = [windowTextures(21, "plattenbau"), windowTextures(22, "plattenbau")];
+      const FACADES = ["#e9dcc3", "#d9b48f", "#c98f73", "#e6e1d6", "#b9c2b0", "#d7c49a", "#cfa79a", "#bdbab3", "#e3cfae"];
+      const houses = []; // { material, offAt, onAt, dist }
+      function street(xSide, depth, seed, rowIndex) {
+        const r = rng(seed);
+        let z = Z0;
+        while (z > Z1) {
+          // Lücken für Querstraßen
+          if ([-95, -205, -315].some((zc) => Math.abs(z - 7 - zc) < 9)) { z -= 2; continue; }
+          const w = r.range(9, 15);
+          const h = rowIndex === 0 ? r.range(15, 22) : r.range(14, 30);
+          const tex = rowIndex === 0 ? r.pick(texAlt) : r.pick(r() < 0.5 ? texNeu : texAlt);
+          const { mesh, material } = building({ w: depth, h, d: w, color: r.pick(FACADES), tex });
+          mesh.position.set(xSide, 0, z - w / 2);
+          scene.add(mesh);
+          // Ladenmarkise im Erdgeschoss an der Straßenseite
+          if (rowIndex === 0 && r() < 0.55) {
+            const aw = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.12, w * 0.6), flat(r.pick(["#7a2b2b", "#2d4b3d", "#3a3f6b", "#a36a2a"])));
+            aw.position.set(xSide - Math.sign(xSide) * (depth / 2 + 0.6), 3.4, z - w / 2);
+            aw.rotation.z = Math.sign(xSide) * 0.18; aw.castShadow = true; scene.add(aw);
+          }
+          const dist = Math.abs(z - w / 2) + Math.abs(xSide) * 0.6;
+          houses.push({ material, offAt: BLACKOUT + 0.15 + clamp(dist / 420) * 1.3 + r() * 0.25, onAt: RETURN + 0.3 + r() * 1.6 });
+          z -= w + (rowIndex === 0 ? 0 : r.range(0, 3));
+        }
+      }
+      for (const s of [-1, 1]) {
+        street(s * (WALK + 7), 14, 100 + s, 0);
+        street(s * (WALK + 30), 16, 200 + s, 1);
+        street(s * (WALK + 55), 18, 300 + s, 2);
+        street(s * (WALK + 82), 18, 400 + s, 3);
+      }
+
+      const tower = fernsehturm();
+      tower.group.position.set(-38, 0, -470);
+      scene.add(tower.group);
+
+      // ------------------------------------------------------------ Lampen ---
+      const glow = glowTexture();
+      const lamps = [];
+      for (let z = 30; z > -300; z -= 24) for (const s of [-1, 1]) {
+        if (s > 0 && z + 12 > -14) continue; // nicht direkt vor der Kamera
+        const l = streetLamp(glow);
+        l.group.position.set(s * (ROAD + 0.6), 0, z + (s > 0 ? 12 : 0));
+        scene.add(l.group); lamps.push(l);
+      }
+
+      // ------------------------------------------------ Haltestelle & Café ---
+      {
+        const glassMat = new THREE.MeshStandardMaterial({ color: "#b9d3e0", transparent: true, opacity: 0.28, roughness: 0.1 });
+        const frame = flat("#3a3d42");
+        const add = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; scene.add(m); return m; };
+        // Wartehäuschen
+        add(new THREE.BoxGeometry(1.6, 0.12, 4.2), frame, 9.6, 2.5, -5);
+        add(new THREE.BoxGeometry(0.06, 2.4, 4.0), glassMat, 10.35, 1.25, -5);
+        add(new THREE.BoxGeometry(1.4, 2.4, 0.06), glassMat, 9.65, 1.25, -7.0);
+        add(new THREE.BoxGeometry(0.4, 0.06, 3.0), flat("#5a4a3a"), 10.1, 0.55, -5);
+        // Haltestellenschild (grüner Kreis, gelbes H)
+        add(new THREE.CylinderGeometry(0.05, 0.05, 3.0, 6), frame, 8.7, 1.5, -2.6);
+        const sign = add(new THREE.CylinderGeometry(0.32, 0.32, 0.05, 16), flat("#2e8b3a"), 8.7, 3.0, -2.6);
+        sign.rotation.z = Math.PI / 2;
+        const h = add(new THREE.BoxGeometry(0.06, 0.3, 0.3), flat("#f2c318"), 8.67, 3.0, -2.6);
+        // Café-Tische vor den Läden
+        for (let k = 0; k < 4; k++) {
+          const z = -16 - k * 2.4;
+          add(new THREE.CylinderGeometry(0.38, 0.38, 0.05, 10), flat("#d8d0c2"), 12.3, 0.75, z);
+          add(new THREE.CylinderGeometry(0.05, 0.05, 0.72, 6), frame, 12.3, 0.37, z);
+          for (const dz of [-0.6, 0.6]) add(new THREE.BoxGeometry(0.42, 0.45, 0.42), flat(k % 2 ? "#7a2b2b" : "#2d4b3d"), 12.3, 0.23, z + dz);
+        }
+      }
+
+      // ------------------------------------------------------------ Verkehr ---
+      const cars = [];
+      const lane = (dir) => (dir < 0 ? 3 : -3);
+      for (let i = 0; i < 14; i++) {
+        const dir = i % 2 === 0 ? -1 : 1;              // -1 = fährt weg (rechte Spur)
+        const kind = i === 3 ? "bus" : "car";
+        const g = car(500 + i, kind);
+        g.rotation.y = dir < 0 ? 0 : Math.PI;
+        scene.add(g);
+        cars.push({ g, dir, x: lane(dir), z0: dir < 0 ? R.range(-10, 25) - i * 9 : R.range(-160, -40) - i * 6,
+                    v: R.range(8, 12) * (kind === "bus" ? 0.7 : 1), stop: EVENT + R.range(0.1, 1.2), kind });
+      }
+      // Weg eines Fahrzeugs: fährt, bremst ab EVENT, steht; der Bus fährt bei RETURN wieder an.
+      function carZ(c, t) {
+        const brake = 1.4;
+        const tStop = c.stop;
+        let s;
+        if (t < tStop) s = c.v * t;
+        else s = c.v * tStop + c.v * (Math.min(t, tStop + brake) - tStop) - 0.5 * (c.v / brake) * Math.min(t - tStop, brake) ** 2;
+        if (c.kind === "bus" && t > RETURN + 0.6) { const u = t - (RETURN + 0.6); s += 0.5 * 2.2 * u * u; }
+        return c.z0 + c.dir * s;
+      }
+
+      // ------------------------------------------------------------ Menschen ---
+      const N = 90;
+      const people = crowd(N, 77);
+      scene.add(people.group);
+      const P = [];
+      const HERO = 22; // Menschen nah vor der Kamera (rechter Gehweg)
+      for (let i = 0; i < N; i++) {
+        const hero = i < HERO;
+        const waiting = i >= 2 && i < 6; // an der Haltestelle
+        const side = hero ? 1 : (i % 2 === 0 ? 1 : -1);
+        const dir = R() < 0.62 ? -1 : 1;
+        P.push({
+          side, dir: waiting ? (i % 2 ? 1 : -1) : hero ? -1 : dir,
+          x: waiting ? R.range(9.6, 10.6) : side * R.range(9.0, 12.4),
+          z0: waiting ? -3 - (i - 2) * 1.4 : hero ? R.range(-42, -4) : R.range(-150, 22),
+          v: waiting ? 0 : R.range(1.15, 1.6),
+          ph: R() * 6.28,
+          stop: EVENT + R.range(0.05, 0.9),
+          leave: R.range(8.0, 14.5),           // geht nach Hause (ins nächste Haus)
+          back: RETURN + R.range(0.1, 2.2),    // kommt wieder raus
+          turn: R() < 0.5,
+        });
+      }
+      const walkPos = (p, t) => {
+        // Strecke bis zum Stopp (mit kurzem Abbremsen)
+        const b = 0.6;
+        if (t < p.stop) return p.v * t;
+        return p.v * p.stop + p.v * Math.min(t - p.stop, b) - 0.5 * (p.v / b) * Math.min(t - p.stop, b) ** 2;
+      };
+      function personState(p, t) {
+        const wall = p.side * WALK;
+        if (t < p.leave) {
+          const s = walkPos(p, t);
+          const walking = t < p.stop + 0.6;
+          const k = walking ? 1 - smooth((t - p.stop) / 0.6) : 0;
+          const look = p.turn ? smooth((t - p.stop - 0.4) / 0.8) * (p.side > 0 ? -1.2 : 1.2) : 0;
+          return { x: p.x, z: p.z0 + p.dir * s, rotY: (p.dir < 0 ? Math.PI : 0) + look,
+                   swing: p.v > 0 ? Math.sin(t * p.v * 4.2 + p.ph) * 0.55 * k : 0, visible: true };
+        }
+        const zStill = p.z0 + p.dir * walkPos(p, p.leave);
+        if (t < p.back) {
+          // Zum Haus laufen und darin verschwinden
+          const u = t - p.leave;
+          const x = p.x + p.side * 1.4 * u;
+          if (Math.abs(x) > WALK - 0.2) return { visible: false };
+          return { x, z: zStill, rotY: p.side > 0 ? Math.PI / 2 : -Math.PI / 2, swing: Math.sin(u * 6 + p.ph) * 0.5, visible: true };
+        }
+        // Zurück: aus dem Haus kommen, dann Richtung Arbeit laufen
+        const u = t - p.back;
+        const out = Math.min(u, 2.2);
+        const x = wall - p.side * (0.3 + 1.4 * out);
+        const along = Math.max(0, u - 2.2) * 1.5;
+        return { x, z: zStill - along, rotY: u < 2.2 ? (p.side > 0 ? -Math.PI / 2 : Math.PI / 2) : Math.PI,
+                 swing: Math.sin(u * 6.5 + p.ph) * 0.55, visible: true };
+      }
+
+      // --------------------------------------------------------------- Müll ---
+      const BAGS = 160;
+      const bagGeo = new THREE.IcosahedronGeometry(0.42, 0);
+      const bags = new THREE.InstancedMesh(bagGeo, new THREE.MeshStandardMaterial({ roughness: 0.55, metalness: 0.1, flatShading: true }), BAGS);
+      bags.castShadow = true; bags.receiveShadow = true;
+      const bagData = [];
+      const bc = new THREE.Color();
+      for (let i = 0; i < BAGS; i++) {
+        const side = R() < 0.5 ? -1 : 1;
+        const cluster = Math.floor(R() * 26);
+        const zc = -6 - cluster * 9.5;
+        bagData.push({ x: side * R.range(8.4, 9.6), z: zc + R.range(-1.4, 1.4), y: R.range(0, 0.5), s: R.range(0.75, 1.35),
+                       at: 11.4 + (cluster / 26) * 2.6 + R() * 2.5, ry: R() * 6.28 });
+        bags.setColorAt(i, bc.set(R.pick(["#2a2c31", "#3a3d44", "#44523f", "#55585f", "#6e6250"])));
+      }
+      scene.add(bags);
+
+      // --------------------------------------------------------- Geldscheine ---
+      const BILLS = 240;
+      const bills = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.34, 0.17),
+        new THREE.MeshStandardMaterial({ side: THREE.DoubleSide, roughness: 0.8, emissive: "#4a4a4a" }), BILLS);
+      const billData = [];
+      for (let i = 0; i < BILLS; i++) {
+        billData.push({ x: R.range(-12, 12), y: R.range(0.5, 14), z: R.range(-70, -14), ph: R() * 6.28, sp: R.range(0.6, 1.4) });
+        bills.setColorAt(i, bc.set(R.pick(["#7fae86", "#6f95c4", "#e0a463", "#9ab3a0", "#c98a7a"])));
+      }
+      scene.add(bills);
+
+      // -------------------------------------------------------------- Kamera ---
+      const path = cameraPath([
+        { t: 0,   pos: [10.2, 1.7, 16],  look: [5.5, 1.9, -60] },
+        { t: 6,   pos: [10.0, 1.7, 12],  look: [4.5, 1.8, -60] },
+        { t: 10,  pos: [9.6, 1.75, 8.5], look: [2.5, 1.2, -50] },
+        { t: 14,  pos: [9.0, 1.85, 4.5], look: [1.5, 1.6, -50] },
+        { t: 17,  pos: [7.5, 2.6, 0],    look: [-8, 11, -46] },
+        { t: 20,  pos: [2.6, 7, -6],     look: [-2, 7, -90] },
+        { t: 23,  pos: [1.4, 16, -10],   look: [-1, 4, -120] },
+        { t: 26,  pos: [0.6, 30, -14],   look: [-14, 26, -400] },
+        { t: 30,  pos: [0.4, 33, -16],   look: [-16, 30, -420] },
+      ]);
+      const camPos = new THREE.Vector3(), camLook = new THREE.Vector3();
+
+      // ------------------------------------------------------ Licht & Himmel ---
+      // Morgen -> Mittag -> Abend -> Nacht (Blackout) -> Morgendämmerung
+      const SKY_TOP = [[0, "#87a6cf"], [6, "#87a6cf"], [10, "#9fb3c8"], [13, "#7f86a6"], [15, "#3c3f63"], [16.5, "#121c3a"], [23.6, "#101a36"], [25.5, "#37477a"], [27, "#6f8fc0"]];
+      const SKY_HOR = [[0, "#f3cfa6"], [6, "#f3cfa6"], [10, "#d6d3c8"], [13, "#e0a77a"], [15, "#c96a4a"], [16.5, "#2a3558"], [23.6, "#27325a"], [25.5, "#f0a46a"], [27, "#ffd29a"]];
+      const SUN_COL = [[0, "#ffd29a"], [10, "#fff1dc"], [13, "#ffb37a"], [15, "#ff8a55"], [16.5, "#9fb4e8"], [23.6, "#9fb4e8"], [25, "#ff9a5a"], [27, "#ffd09a"]];
+      const SUN_INT = [[0, 2.8], [10, 2.9], [13, 2.0], [15, 1.1], [16.5, 0.75], [23.6, 0.75], [25, 1.5], [27, 2.5]];
+      const HEMI_INT = [[0, 1.25], [10, 1.3], [13, 1.0], [15, 0.7], [16.5, 0.55], [23.6, 0.55], [25, 0.75], [27, 1.1]];
+      const NIGHT = [[0, 0], [14.5, 0], [16.2, 1], [23.6, 1], [25.6, 0]];
+      // Sonnenrichtung: morgens von Osten (vor uns, Turm), abends von hinten
+      // Richtung zur Sonne: a = Azimut (0 = hinter der Kamera, +z), el = Höhe
+      const SUN_DIR = (t) => {
+        const a = valueAt([[0, -0.7], [10, -0.1], [15, 0.3], [16.5, 0.6], [23.6, 0.3], [24.5, -2.7], [27, -2.6]], t);
+        const el = valueAt([[0, 0.35], [10, 0.8], [15, 0.2], [16.5, 0.7], [23.6, 0.7], [24.5, 0.1], [27, 0.25]], t);
+        return new THREE.Vector3(Math.sin(a), el, Math.cos(a)).normalize();
+      };
+      const grade = [[0, [1.05, 1.03]], [6, [1.05, 1.03]], [7, [0.88, 1.06]], [16, [0.8, 1.1]], [24, [0.8, 1.08]], [26, [1.08, 1.04]]];
+
+      // --------------------------------------------------------------- Frame ---
+      const dummy = new THREE.Object3D();
+      function renderAt(t) {
+        t = clamp(t, 0, DURATION);
+        overlay.update(t);
+
+        // Himmel & Licht
+        const night = valueAt(NIGHT, t);
+        sky.material.uniforms.top.value.copy(colorAt(SKY_TOP, t));
+        sky.material.uniforms.horizon.value.copy(colorAt(SKY_HOR, t));
+        sky.material.uniforms.bottom.value.copy(colorAt(SKY_HOR, t)).multiplyScalar(0.35);
+        const sd = SUN_DIR(t);
+        sky.material.uniforms.sunDir.value.copy(sd);
+        sky.material.uniforms.sunColor.value.copy(colorAt(SUN_COL, t));
+        sky.material.uniforms.sunGlow.value = 1 - night;
+        scene.fog.color.copy(colorAt(SKY_HOR, t)).multiplyScalar(lerp(0.95, 0.8, night));
+        scene.fog.far = lerp(620, 520, night);
+        sun.color.copy(colorAt(SUN_COL, t));
+        sun.intensity = valueAt(SUN_INT, t);
+        hemi.intensity = valueAt(HEMI_INT, t);
+        hemi.color.copy(colorAt(SKY_TOP, t)).lerp(new THREE.Color(night > 0.5 ? "#7f95d0" : "#ffffff"), 0.5);
+        stars.material.opacity = night * 0.9;
+        renderer.toneMappingExposure = lerp(1.0, 1.5, night);
+
+        // Kamera
+        path(t, camPos, camLook);
+        const jolt = Math.exp(-Math.max(0, t - EVENT) * 3) * (t >= EVENT ? 1 : 0);
+        const [sx, sy] = shake(t, 0.035 + jolt * 0.12);
+        camera.position.set(camPos.x + sx, camPos.y + sy, camPos.z);
+        camera.lookAt(camLook.x + sx * 2, camLook.y + sy * 2, camLook.z);
+        sun.position.copy(camPos).addScaledVector(sd, 200);
+        sun.target.position.set(camPos.x, 0, camPos.z - 30);
+
+        // Fensterlicht: abends an, beim Blackout aus, bei der Rückkehr wieder an
+        for (const h of houses) {
+          let on = 0;
+          const evening = smooth((t - 13.2) / 1.6);
+          if (t < h.offAt) on = evening;
+          else if (t < h.offAt + 0.3) on = evening * (Math.sin((t - h.offAt) * 90) > 0 ? 0.6 : 0.05);
+          if (t >= h.onAt) on = smooth((t - h.onAt) / 0.4) * (1 - smooth((t - 26) / 1)) + 0.0;
+          h.material.emissiveIntensity = on * 1.6;
+        }
+        const lampOn = (t < BLACKOUT + 0.4 ? smooth((t - 13.5) / 1.2) : 0) + (t > RETURN + 0.5 ? smooth((t - RETURN - 0.5) / 0.5) * (1 - smooth((t - 26.2) / 0.8)) : 0);
+        for (const l of lamps) { l.bulbMat.opacity = 0.25 + lampOn * 0.75; l.glowMat.opacity = lampOn * 0.85; }
+        tower.warnLightMaterial.opacity = t < BLACKOUT + 1.2 || t > RETURN + 0.4 ? (Math.sin(t * 3.2) > 0 ? 1 : 0.25) : 0.0;
+
+        // Autos
+        for (const c of cars) c.g.position.set(c.x, 0, carZ(c, t));
+
+        // Menschen
+        for (let i = 0; i < N; i++) people.set(i, personState(P[i], t));
+        people.commit();
+
+        // Müll wächst
+        for (let i = 0; i < BAGS; i++) {
+          const b = bagData[i];
+          const k = smooth((t - b.at) / 0.5) * (1 - smooth((t - 26.5) / 0.1) * 0);
+          dummy.position.set(b.x, 0.3 * b.s + b.y * k, b.z);
+          dummy.rotation.set(0.3, b.ry, 0.2);
+          dummy.scale.set(b.s * k, b.s * 0.8 * k, b.s * k);
+          dummy.updateMatrix();
+          bags.setMatrixAt(i, dummy.matrix);
+        }
+        bags.instanceMatrix.needsUpdate = true; bags.computeBoundingSphere();
+
+        // Geldscheine wehen durch die Straße (21–25 s)
+        for (let i = 0; i < BILLS; i++) {
+          const b = billData[i];
+          const u = t - 20.6;
+          const vis = u > 0 && t < 25.5;
+          const k = vis ? 1 : 0;
+          dummy.position.set(b.x + u * 2.4 * b.sp + Math.sin(u * 1.3 + b.ph) * 1.5,
+                             b.y + Math.sin(u * 2.1 + b.ph) * 0.8 - u * 0.25,
+                             b.z + u * 1.6 * b.sp + Math.cos(u * 0.9 + b.ph));
+          dummy.rotation.set(u * 3.1 * b.sp + b.ph, u * 2.3 + b.ph, u * 1.7);
+          dummy.scale.setScalar(k);
+          dummy.updateMatrix();
+          bills.setMatrixAt(i, dummy.matrix);
+        }
+        bills.instanceMatrix.needsUpdate = true; bills.computeBoundingSphere();
+
+        // Farblook (wie die Vorbilder: pro Phase eigene Stimmung)
+        const g = curve(grade.map(([k, v]) => [k, v[0]]), t), c = curve(grade.map(([k, v]) => [k, v[1]]), t);
+        canvas.style.filter = `saturate(${g}) contrast(${c})`;
+        canvas.style.opacity = t < BLACK ? 1 : 0;
+
+        renderer.render(scene, camera);
+      }
+
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      renderAt(window.__hfThreeTime || 0);
+    </script>
+  </body>
+</html>

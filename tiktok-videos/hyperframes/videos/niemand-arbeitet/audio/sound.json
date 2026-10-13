@@ -1,0 +1,30 @@
+{
+  "duration": 30,
+  "cues": [
+    { "type": "city", "at": 0, "dur": 6.0, "gain": 0.32, "seed": 1, "fadeIn": 0.3, "fadeOut": 0.02 },
+    { "type": "car", "at": 0.6, "dur": 3.2, "gain": 0.5, "seed": 2, "pan": -0.5 },
+    { "type": "car", "at": 2.9, "dur": 2.8, "gain": 0.45, "seed": 3, "pan": 0.6 },
+    { "type": "birds", "at": 0.0, "dur": 6.0, "gain": 0.05, "seed": 4, "density": 1.2 },
+    { "type": "chord", "at": 0.0, "dur": 6.0, "freqs": [220.0, 277.2, 330.0], "gain": 0.05, "attack": 5.5 },
+
+    { "type": "impact", "at": 6.0, "gain": 1.0, "seed": 5, "low": 40 },
+    { "type": "drone", "at": 6.0, "dur": 18.0, "freqs": [55.0, 110.0, 164.8, 220.5], "gain": 0.22, "seed": 6, "from": 0.6, "to": 1.0, "fadeIn": 0.05, "fadeOut": 0.05 },
+    { "type": "ticks", "at": 6.2, "dur": 17.8, "interval": [0.5, 0.14], "gain": 0.16, "seed": 7 },
+
+    { "type": "whoosh", "at": 9.1, "dur": 0.9, "gain": 0.18, "seed": 8 },
+    { "type": "whoosh", "at": 12.1, "dur": 0.9, "gain": 0.18, "seed": 9 },
+    { "type": "whoosh", "at": 15.1, "dur": 0.9, "gain": 0.16, "seed": 10 },
+    { "type": "powerdown", "at": 15.5, "dur": 1.9, "gain": 0.45 },
+    { "type": "impact", "at": 17.0, "gain": 0.35, "seed": 11, "low": 34 },
+    { "type": "whoosh", "at": 18.1, "dur": 0.9, "gain": 0.18, "seed": 12 },
+    { "type": "wind", "at": 20.4, "dur": 4.2, "gain": 0.2, "seed": 13 },
+    { "type": "whoosh", "at": 21.1, "dur": 0.9, "gain": 0.18, "seed": 14 },
+
+    { "type": "chord", "at": 24.0, "dur": 3.0, "freqs": [130.8, 196.0, 261.6, 329.6, 392.0], "gain": 0.16, "attack": 0.9 },
+    { "type": "birds", "at": 24.3, "dur": 2.7, "gain": 0.06, "seed": 15, "density": 2.5 },
+    { "type": "city", "at": 24.6, "dur": 2.4, "gain": 0.18, "seed": 16, "fadeIn": 1.2, "fadeOut": 0.02 },
+
+    { "type": "silence", "at": 27.0, "dur": 0.45 },
+    { "type": "bell", "at": 27.45, "dur": 2.55, "freqs": [130.8, 196.0], "gain": 0.12 }
+  ]
+}

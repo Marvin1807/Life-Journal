@@ -100,35 +100,33 @@ noch natürlichere Stimme lässt sich ElevenLabs anbinden – sag Bescheid.
 - Keine fremden Videos oder Ausschnitte der Vorbild-Accounts verwenden – nur
   Format und Idee übernehmen.
 
-## HyperFrames (animierte Szenen aus HTML)
+## HyperFrames: Videos im @man_ia_c-Stil (Hauptformat)
 
-[HyperFrames](https://github.com/heygen-com/hyperframes) von HeyGen rendert
-HTML/CSS/GSAP-Animationen zu MP4. Damit lassen sich Szenen bauen, die ein
-KI-Videogenerator schlecht kann: animierte Zeitachsen, Zähler („60.000
-Megatonnen“), Karten, Diagramme, Titelkarten. Das Ergebnis legst du einfach
-als `assets/<video-id>/NN.mp4` ab, `make_video.py` nimmt es dann als Szene.
+Die eigentlichen Videos entstehen komplett im Code: Low-Poly-3D mit Three.js,
+gerendert von [HyperFrames](https://github.com/heygen-com/hyperframes), ohne
+Sprecherstimme. Format und Look sind in
+[REFERENZ_ANALYSE.md](REFERENZ_ANALYSE.md) beschrieben. Der Claude-Skill
+`was-waere-wenn` (`.claude/skills/was-waere-wenn/SKILL.md`) enthält den
+kompletten Ablauf; in Claude Code reicht: „Mach ein Video: Was wäre, wenn …?“
 
-Eingerichtet ist:
-
-- **Claude-Code-Plugin** `hyperframes@hyperframes` für dieses Projekt
-  (`.claude/settings.json`). Jede Claude-Code-Sitzung in diesem Repo bietet
-  es an; danach z. B.:
-  > Mit /hyperframes:hyperframes: baue in `tiktok-videos/hyperframes` eine
-  > 6-Sekunden-Szene im Hochformat, ein Zähler läuft von 0 auf 60.000
-  > Megatonnen hoch, dunkler Hintergrund, gelbe Schrift.
-- **Projekt** `hyperframes/` im Hochformat 1080×1920. GSAP liegt lokal bei,
-  damit das Rendern auch ohne CDN funktioniert.
-
-Benötigt: Node.js 22+ und ffmpeg.
-
-```bash
-cd hyperframes
-npm run dev                         # Vorschau im Browser mit Live-Reload
-npm run check                       # Komposition prüfen
-npx hyperframes@0.8.154 render -o ../assets/asteroid-nordsee/03.mp4
+```
+hyperframes/
+  lib/                 gemeinsamer Baukasten (3D, Overlay, Schriften, Three.js, GSAP)
+  tools/               sounddesign.py, neues-video.sh
+  videos/<id>/         ein HyperFrames-Projekt pro Video
+  renders/             fertige MP4s (nicht im Git)
 ```
 
-Beim ersten Rendern lädt HyperFrames einen Headless-Chrome herunter
-(`npx hyperframes@0.8.154 browser ensure`). In der Claude-Cloud-Umgebung
-liegt schon einer bereit:
-`HYPERFRAMES_BROWSER_PATH=$(find /opt/pw-browsers -name chrome-headless-shell -type f | head -1)`.
+Ein Video selbst rendern (Node.js 22+ und ffmpeg nötig):
+
+```bash
+cd hyperframes/videos/niemand-arbeitet
+npx -y hyperframes@0.8.154 preview      # Vorschau im Browser
+npx -y hyperframes@0.8.154 render -o ../../renders/niemand-arbeitet.mp4
+```
+
+Neues Video anlegen: `bash hyperframes/tools/neues-video.sh <id>`.
+
+Das Claude-Code-Plugin `hyperframes@hyperframes` ist für dieses Repo aktiviert
+(`.claude/settings.json`). In der Claude-Cloud vor HyperFrames-Befehlen:
+`export HYPERFRAMES_BROWSER_PATH=$(find /opt/pw-browsers -name chrome-headless-shell -type f | head -1)`.
