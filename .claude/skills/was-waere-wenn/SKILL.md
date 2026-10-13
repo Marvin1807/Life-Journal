@@ -79,13 +79,25 @@ In der Claude-Cloud vor jedem HyperFrames-Befehl:
 
 Für 80 s: Ereignis bei 8 s, ein Satz alle ~4 s, Wende bei ~54 s, Endkarte ab 72 s.
 
-## Look-Regeln (nicht verhandelbar)
+## Vorgaben des Nutzers (haben Vorrang vor den Referenzen)
+
+- **Nur POV (Ich-Perspektive)** auf Augenhöhe, mit sichtbaren Händen, die etwas halten, das zur
+  Szene passt (Kaffeebecher, Handy mit passendem Bildschirmtext, Einkaufswagen, Müllsack,
+  Geldscheine, Hand am Wasserhahn). Keine Vogelperspektive, keine Kamerakräne.
+- **Pro Story-Beat eine eigene Szene**, die genau zeigt, was der Untertitel sagt
+  („Regale sind leer“ → man steht im Supermarktgang und sieht die Regale sich leeren;
+  „kein Wasser“ → Spüle, Hahn, der Strahl versiegt). Harte Schnitte mit 0,14 s Aufblende
+  aus Schwarz, ein Whoosh im Ton auf jedem Schnitt. Zeitraffer innerhalb der Szene.
+- Vorlage für diesen Aufbau: `videos/niemand-arbeitet/scene.js` (`SCENES`, `ENV`, `POSES`).
+
+## Look-Regeln
 
 - Low-Poly, flat shading, kantige Figuren ohne Gesichter, Häuser als Quader mit Fensterraster.
-- **Eine durchgehende Kamerafahrt**, keine Schnitte. Augenhöhe, langsam; später steigen oder
-  herauszoomen, wenn das Szenario größer wird. Leichtes Handkamera-Wackeln über `shake()`.
-- **Menschen im Vordergrund** (5–15 m vor der Kamera), sonst ist die untere Bildhälfte leer.
-  Nichts darf durch die Kamera laufen. Hindernisse (Masten, Säcke) nicht direkt vor die Linse.
+- Kamera ruhig mit leichtem Geh-Wippen (`walk`) und Handkamera-Wackeln über `shake()`;
+  beim Ereignis ein kurzer Ruck.
+- Jede Szene braucht etwas im Vordergrund (Hände, Menschen, Möbel), nie leere Flächen.
+  Nichts darf durch die Kamera laufen. Ärmel nach unten neigen (rotation.x > 0), sonst
+  füllen sie das Bild. Hände im Abstand 0,5–0,85 m vor der Kamera.
 - Licht kommt von hinten oder von der Seite, nicht frontal (sonst Gegenlicht = schwarze Flächen).
   Nachtszenen bleiben lesbar: blaues Mondlicht, Hemi ≥ 0,5, Belichtung hoch.
 - Text nur über `ww-overlay.js`: Titel oben (y ≈ 400), HUD links (y ≈ 815), Untertitel kursiv
@@ -99,6 +111,11 @@ Für 80 s: Ereignis bei 8 s, ein Satz alle ~4 s, Wende bei ~54 s, Endkarte ab 72
 - `building({ w, h, d, color, tex })` → `{ mesh, material }`; `material.emissiveIntensity`
   schaltet Fensterlicht (Blackout, Abend). Texturen: `windowTextures(seed, "altbau"|"plattenbau")`.
 - `crowd(n, seed)` → `set(i, { x, z, rotY, swing, armRaise, visible, scale })`, danach `commit()`.
+- POV/Sets in `lib/props.js`: `hand(side)` (+ `userData.curl(0..1)`), `coffeeCup()`, `phone()` +
+  `phoneScreen()`, `billFan()`, `trashBag()`, `shoppingCart()`, `supermarketAisle()`,
+  `trashCorner()`, `subwayPlatform()`, `livingRoom()`, `kitchenSink()`, `storefront()`,
+  `office()`, `textPanel()` für Schilder, `tileTexture()`, `cobbleTexture()`.
+- `crowd(...).set(i, { sit: true, armRaise })` für sitzende Figuren (Büro, Bahn).
 - `car(seed, "car"|"bus")`, `fernsehturm()`, `streetLamp(glowTexture())`, `createSky()`,
   `createStars()`, `cameraPath([{ t, pos, look }])`, `colorAt(keys, t)`, `valueAt(keys, t)`.
 - Overlay: `createOverlay(el, { title, hud, subtitles, black, endcard })`, Formatierer

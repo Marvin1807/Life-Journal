@@ -1,0 +1,537 @@
+// Requisiten für POV-Szenen: Hände, Handy, Becher, Geldscheine, Regale, Waren,
+// Mülltonnen, Spüle, Bahnsteig, Büro. Alles Low-Poly, flat shading, deterministisch.
+import * as THREE from "./three.module.min.js";
+import { rng, clamp, smooth, lerp, building, windowTextures } from "./lowpoly.js";
+
+export const mat = (color, extra = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.85, flatShading: true, ...extra });
+export const basic = (color, extra = {}) => new THREE.MeshBasicMaterial({ color, ...extra });
+
+export function box(w, h, d, material, x = 0, y = 0, z = 0, parent) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
+  m.position.set(x, y, z);
+  m.castShadow = true; m.receiveShadow = true;
+  if (parent) parent.add(m);
+  return m;
+}
+export function cyl(rt, rb, h, seg, material, x = 0, y = 0, z = 0, parent) {
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), material);
+  m.position.set(x, y, z);
+  m.castShadow = true; m.receiveShadow = true;
+  if (parent) parent.add(m);
+  return m;
+}
+
+// ------------------------------------------------------------- Texturen ---
+/** Canvas-Textur mit Zeichenfunktion draw(ctx, w, h). */
+export function canvasTexture(w, h, draw) {
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const ctx = c.getContext("2d");
+  draw(ctx, w, h);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  return { tex, ctx, canvas: c, redraw(fn) { fn(ctx, w, h); tex.needsUpdate = true; } };
+}
+
+export function tileTexture(color = "#e8e4da", grout = "#b9b3a6", n = 8, size = 512) {
+  const { tex } = canvasTexture(size, size, (g, w) => {
+    g.fillStyle = grout; g.fillRect(0, 0, w, w);
+    const s = w / n;
+    g.fillStyle = color;
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) g.fillRect(x * s + 2, y * s + 2, s - 4, s - 4);
+  });
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  return tex;
+}
+
+export function cobbleTexture(seed = 5, size = 512) {
+  const r = rng(seed);
+  const { tex } = canvasTexture(size, size, (g, w) => {
+    g.fillStyle = "#5c5853"; g.fillRect(0, 0, w, w);
+    const s = w / 16;
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const v = 95 + Math.floor(r() * 50);
+      g.fillStyle = `rgb(${v},${v - 4},${v - 10})`;
+      g.fillRect(x * s + (y % 2) * s / 2 + 2, y * s + 2, s - 4, s - 4);
+    }
+  });
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  return tex;
+}
+
+/** Fläche mit Text (Schilder, Anzeigen). lines = [{ text, size, color, y, font, align }] */
+export function textPanel(w, h, pxPerUnit, bg, lines) {
+  const { tex } = canvasTexture(Math.round(w * pxPerUnit), Math.round(h * pxPerUnit), (g, cw, ch) => {
+    g.fillStyle = bg; g.fillRect(0, 0, cw, ch);
+    for (const l of lines) {
+      g.fillStyle = l.color || "#fff";
+      g.font = `${l.weight || 600} ${l.size}px ${l.font || "Inter, Arial, sans-serif"}`;
+      g.textAlign = l.align || "center";
+      g.textBaseline = "middle";
+      const x = l.align === "left" ? (l.x ?? 0.06) * cw : l.align === "right" ? (l.x ?? 0.94) * cw : cw / 2;
+      g.fillText(l.text, x, l.y * ch);
+    }
+  });
+  return new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, toneMapped: false }));
+}
+
+// ---------------------------------------------------------------- Hände ---
+// Eine Hand = Ärmel + Handfläche + 4 Finger + Daumen. Ursprung am Handgelenk,
+// Finger zeigen nach -z. curl(0..1) krümmt die Finger.
+const SKIN = "#e9b892";
+export function hand(side = 1, sleeveColor = "#2d3340") {
+  const g = new THREE.Group();
+  const skin = mat(SKIN, { roughness: 0.7 });
+  const sleeve = mat(sleeveColor);
+  box(0.105, 0.1, 0.5, sleeve, 0, 0, 0.27, g);
+  box(0.095, 0.085, 0.03, mat("#1d2129"), 0, 0, 0.03, g); // Bündchen
+  const palm = box(0.085, 0.03, 0.095, skin, 0, 0, -0.045, g);
+  const fingers = [];
+  for (let i = 0; i < 4; i++) {
+    const pivot = new THREE.Group();
+    pivot.position.set((-0.03 + i * 0.02) * side, 0, -0.092);
+    const len = [0.058, 0.066, 0.062, 0.05][i];
+    box(0.017, 0.019, len, skin, 0, 0, -len / 2, pivot);
+    g.add(pivot); fingers.push(pivot);
+  }
+  const thumb = new THREE.Group();
+  thumb.position.set(0.045 * side, -0.005, -0.03);
+  box(0.02, 0.02, 0.055, skin, 0, 0, -0.027, thumb);
+  thumb.rotation.y = 0.55 * side;
+  g.add(thumb);
+  g.userData = {
+    curl(c) {
+      fingers.forEach((f, i) => { f.rotation.x = -c * (1.35 + i * 0.05); });
+      thumb.rotation.x = -c * 0.8;
+    },
+  };
+  g.userData.curl(0.2);
+  g.traverse((o) => { if (o.isMesh) { o.castShadow = false; o.receiveShadow = false; } });
+  return g;
+}
+
+// ------------------------------------------------------- Handgehaltenes ---
+export function coffeeCup() {
+  const g = new THREE.Group();
+  cyl(0.042, 0.032, 0.13, 10, mat("#f2efe8"), 0, 0, 0, g);
+  cyl(0.044, 0.04, 0.05, 10, mat("#9a6a3e"), 0, -0.005, 0, g);    // Papiermanschette
+  cyl(0.045, 0.045, 0.014, 10, mat("#2b2b2b"), 0, 0.071, 0, g);   // Deckel
+  return g;
+}
+
+/** Handy mit Bildschirm-Canvas (draw(ctx, w, h) zum Neuzeichnen). */
+export function phone() {
+  const g = new THREE.Group();
+  box(0.074, 0.152, 0.009, mat("#141518", { roughness: 0.3, metalness: 0.4 }), 0, 0, 0, g);
+  const screen = canvasTexture(296, 600, () => {});
+  const s = new THREE.Mesh(new THREE.PlaneGeometry(0.068, 0.145), new THREE.MeshBasicMaterial({ map: screen.tex, toneMapped: false }));
+  s.position.z = 0.0052; g.add(s);
+  g.userData.screen = screen;
+  return g;
+}
+
+export function phoneScreen(ctx, w, h, { time = "08:00", title = "", lines = [], bg = "#0d1117", accent = "#ff5b4a", battery = 64, net = true }) {
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = "#fff"; ctx.font = "600 22px Inter, Arial"; ctx.textAlign = "left"; ctx.textBaseline = "top";
+  ctx.fillText(time, 24, 18);
+  ctx.textAlign = "right";
+  ctx.fillText(net ? `▮▮▮  ${battery}%` : `Kein Netz  ${battery}%`, w - 20, 18);
+  ctx.textAlign = "center";
+  ctx.font = "600 34px Inter, Arial"; ctx.fillStyle = accent;
+  ctx.fillText(title, w / 2, h * 0.36);
+  ctx.font = "500 22px Inter, Arial"; ctx.fillStyle = "#c9d1d9";
+  lines.forEach((l, i) => ctx.fillText(l, w / 2, h * 0.46 + i * 34));
+}
+
+/** Fächer aus Euro-Scheinen. Gibt { group, bills[] } zurück. */
+export function billFan() {
+  const g = new THREE.Group();
+  const notes = [["50", "#e39a4e"], ["20", "#6f9bd1"], ["100", "#7fae86"], ["50", "#e39a4e"], ["10", "#d27a72"]];
+  const bills = notes.map(([v, c], i) => {
+    const { tex } = canvasTexture(256, 128, (x, w, h) => {
+      x.fillStyle = c; x.fillRect(0, 0, w, h);
+      x.fillStyle = "rgba(255,255,255,0.35)"; x.fillRect(16, 16, w - 32, h - 32);
+      x.fillStyle = "rgba(0,0,0,0.55)"; x.font = "700 54px Inter, Arial"; x.textBaseline = "middle";
+      x.fillText(v, 26, h / 2 + 2);
+      x.font = "600 18px Inter, Arial"; x.fillText("EURO", w - 92, h - 30);
+    });
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(0.15, 0.075), new THREE.MeshStandardMaterial({ map: tex, side: THREE.DoubleSide, roughness: 0.9 }));
+    const pivot = new THREE.Group();
+    m.position.set(0.0, 0.03, 0);
+    pivot.add(m);
+    pivot.rotation.z = -0.5 + i * 0.25;
+    pivot.position.z = i * 0.002;
+    g.add(pivot);
+    return pivot;
+  });
+  return { group: g, bills };
+}
+
+export function trashBag(scale = 1, color = "#1d1e21") {
+  const g = new THREE.Group();
+  const m = new THREE.Mesh(new THREE.IcosahedronGeometry(0.2 * scale, 0), mat(color, { roughness: 0.4, metalness: 0.1 }));
+  m.scale.set(1, 1.15, 1); g.add(m);
+  const knot = new THREE.Mesh(new THREE.ConeGeometry(0.05 * scale, 0.12 * scale, 5), mat(color, { roughness: 0.4 }));
+  knot.position.y = 0.24 * scale; g.add(knot);
+  return g;
+}
+
+// ------------------------------------------------------------ Supermarkt ---
+const PRODUCT_COLORS = ["#d94f3d", "#f2c94c", "#2f80ed", "#27ae60", "#f2994a", "#9b51e0", "#e0e0e0", "#eb5757", "#56ccf2", "#6fcf97", "#bb6bd9", "#f2f2f2", "#333333"];
+
+/**
+ * Gang mit Regalen links und rechts. Gibt { group, update(t) } zurück.
+ * emptyFrom/emptyTo: Zeitfenster, in dem die Waren verschwinden.
+ */
+export function supermarketAisle({ length = 18, emptyFrom = 9.3, emptyTo = 11.6, seed = 31 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(8, length + 10), new THREE.MeshStandardMaterial({ map: (() => { const t = tileTexture("#e9e6df", "#cfcac0", 8); t.repeat.set(4, (length + 10) / 2); return t; })(), roughness: 0.35 }));
+  floor.rotation.x = -Math.PI / 2; floor.position.z = -length / 2 + 2; floor.receiveShadow = true; g.add(floor);
+  const ceil = new THREE.Mesh(new THREE.PlaneGeometry(8, length + 10), mat("#d9d9d6"));
+  ceil.rotation.x = Math.PI / 2; ceil.position.set(0, 3.6, -length / 2 + 2); g.add(ceil);
+  for (let z = 1; z > -length; z -= 3) box(0.5, 0.04, 1.6, basic("#fffaf0"), 0, 3.57, z, g); // Lichtbänder
+  // Regale
+  const frameMat = mat("#c7cbd1", { metalness: 0.3, roughness: 0.5 });
+  const tagMat = mat("#f2d24b");
+  const levels = [0.12, 0.55, 0.98, 1.41, 1.84];
+  const slots = [];
+  for (const s of [-1, 1]) {
+    const x = s * 1.55;
+    box(0.06, 2.2, length, frameMat, x + s * 0.27, 1.1, -length / 2 + 1, g);
+    for (const y of levels) {
+      box(0.55, 0.035, length, frameMat, x, y, -length / 2 + 1, g);
+      box(0.02, 0.05, length, tagMat, x - s * 0.285, y + 0.01, -length / 2 + 1, g);
+    }
+    box(0.6, 0.12, length, mat("#9aa0a8"), x, 2.26, -length / 2 + 1, g);
+    for (const y of levels) {
+      let z = 0.8;
+      while (z > -length + 1.2) {
+        const kind = r() < 0.3 ? "can" : "box";
+        const w = kind === "can" ? 0.11 : r.range(0.12, 0.26);
+        const h = kind === "can" ? 0.15 : r.range(0.18, 0.36);
+        const color = r.pick(PRODUCT_COLORS);
+        const rows = 2;
+        for (let k = 0; k < rows; k++) {
+          slots.push({ kind, x: x - s * (0.15 - k * 0.2), y: y + 0.02 + h / 2, z: z - w / 2, w, h, d: kind === "can" ? 0.11 : 0.16, color,
+                       gone: r() < 0.92 ? lerp(emptyFrom, emptyTo, Math.pow(r(), 0.8)) : 1e9 });
+        }
+        z -= w + 0.015;
+      }
+    }
+  }
+  const boxes = slots.filter((p) => p.kind === "box");
+  const cans = slots.filter((p) => p.kind === "can");
+  const mkInst = (geo, list) => {
+    const m = new THREE.InstancedMesh(geo, mat("#ffffff", { roughness: 0.6 }), list.length);
+    const c = new THREE.Color();
+    list.forEach((p, i) => m.setColorAt(i, c.set(p.color)));
+    m.castShadow = false; m.receiveShadow = true;
+    g.add(m);
+    return m;
+  };
+  const boxMesh = mkInst(new THREE.BoxGeometry(1, 1, 1), boxes);
+  const canMesh = mkInst(new THREE.CylinderGeometry(0.5, 0.5, 1, 8), cans);
+  const d = new THREE.Object3D();
+  function place(mesh, list, t) {
+    list.forEach((p, i) => {
+      const k = t < p.gone ? 1 : 0;
+      d.position.set(p.x, p.y, p.z);
+      d.scale.set(p.d * k, p.h * k, p.w * k);
+      d.updateMatrix(); mesh.setMatrixAt(i, d.matrix);
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+  }
+  // Schild über dem Gang
+  const sign = textPanel(1.6, 0.36, 300, "#1f5f3a", [{ text: "Grundnahrungsmittel", size: 40, y: 0.5 }]);
+  sign.position.set(0, 2.95, -6); g.add(sign);
+  return { group: g, update(t) { place(boxMesh, boxes, t); place(canMesh, cans, t); } };
+}
+
+export function shoppingCart() {
+  const g = new THREE.Group();
+  const wire = new THREE.LineBasicMaterial({ color: "#b9bec6" });
+  const basketGeo = new THREE.BoxGeometry(0.5, 0.32, 0.75, 4, 3, 6);
+  g.add(new THREE.LineSegments(new THREE.EdgesGeometry(basketGeo, 1), wire));
+  const grid = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.PlaneGeometry(0.5, 0.75, 6, 9)), wire);
+  grid.rotation.x = -Math.PI / 2; grid.position.y = -0.16; g.add(grid);
+  const handle = cyl(0.018, 0.018, 0.56, 8, mat("#c0392b", { roughness: 0.5 }), 0, 0.2, 0.42, g);
+  handle.rotation.z = Math.PI / 2;
+  for (const x of [-0.24, 0.24]) box(0.02, 0.2, 0.02, mat("#b9bec6"), x, 0.1, 0.4, g);
+  return g;
+}
+
+// ------------------------------------------------------------- Hinterhof ---
+export function trashCorner({ seed = 41, growFrom = 12.2, growTo = 14.6 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.MeshStandardMaterial({ map: (() => { const t = cobbleTexture(); t.repeat.set(5, 5); return t; })(), roughness: 0.95 }));
+  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; g.add(ground);
+  const tex = windowTextures(51, "altbau");
+  const wall = building({ w: 14, h: 16, d: 1, color: "#cdb497", tex });
+  wall.mesh.position.set(0, 0, -3.2); g.add(wall.mesh);
+  const side = building({ w: 1, h: 16, d: 10, color: "#bfa98d", tex });
+  side.mesh.position.set(-4.2, 0, 1.5); g.add(side.mesh);
+  // Tonnen: BSR orange, grau, blau
+  const bins = [];
+  [["#e5701f", -1.6], ["#5a5f66", -0.7], ["#e5701f", 0.2], ["#2f5aa8", 1.1], ["#5a5f66", 2.0]].forEach(([c, x], i) => {
+    const bin = new THREE.Group();
+    box(0.68, 1.05, 0.72, mat(c, { roughness: 0.6 }), 0, 0.53, 0, bin);
+    const lid = new THREE.Group();
+    box(0.72, 0.06, 0.76, mat(c, { roughness: 0.6 }), 0, 0, 0.38, lid);
+    lid.position.set(0, 1.07, -0.37);
+    lid.rotation.x = -0.6 - r() * 0.7;
+    bin.add(lid);
+    box(0.6, 0.18, 0.6, mat("#222326"), 0, 1.08, 0, bin); // Müll guckt raus
+    bin.position.set(x, 0, -2.4); bin.rotation.y = r.range(-0.12, 0.12);
+    g.add(bin); bins.push(bin);
+  });
+  // wachsende Müllberge
+  const N = 70;
+  const bagMesh = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.22, 0), mat("#ffffff", { roughness: 0.4, metalness: 0.1 }), N);
+  const c = new THREE.Color();
+  const bags = [];
+  for (let i = 0; i < N; i++) {
+    bags.push({ x: r.range(-2.4, 2.6), z: r.range(-2.1, -0.4) + (i / N) * 0.6, s: r.range(0.8, 1.5), at: lerp(growFrom, growTo, i / N) + r() * 0.3, ry: r() * 6, stack: r() * 0.5 });
+    bagMesh.setColorAt(i, c.set(r.pick(["#1d1e21", "#2a2c31", "#3a3f2e", "#55585f", "#7a6e5a", "#2e3a4a"])));
+  }
+  g.add(bagMesh);
+  // Fliegen
+  const F = 40;
+  const flies = new THREE.InstancedMesh(new THREE.BoxGeometry(0.012, 0.012, 0.012), basic("#111111"), F);
+  g.add(flies);
+  const fd = []; for (let i = 0; i < F; i++) fd.push({ cx: r.range(-1.6, 1.8), cy: r.range(0.8, 1.6), cz: r.range(-2.3, -1.2), r: r.range(0.08, 0.3), sp: r.range(4, 9), ph: r() * 6 });
+  const d = new THREE.Object3D();
+  return {
+    group: g,
+    update(t) {
+      bags.forEach((b, i) => {
+        const k = smooth((t - b.at) / 0.25);
+        d.position.set(b.x, 0.2 * b.s + b.stack * k, b.z);
+        d.rotation.set(0.2, b.ry, 0.15);
+        d.scale.set(b.s * k, b.s * 0.85 * k, b.s * k);
+        d.updateMatrix(); bagMesh.setMatrixAt(i, d.matrix);
+      });
+      bagMesh.instanceMatrix.needsUpdate = true;
+      fd.forEach((f, i) => {
+        const a = t * f.sp + f.ph;
+        d.position.set(f.cx + Math.cos(a) * f.r, f.cy + Math.sin(a * 1.7) * 0.08, f.cz + Math.sin(a) * f.r);
+        d.rotation.set(0, 0, 0); d.scale.setScalar(t > 12.3 ? 1 : 0);
+        d.updateMatrix(); flies.setMatrixAt(i, d.matrix);
+      });
+      flies.instanceMatrix.needsUpdate = true;
+    },
+  };
+}
+
+// --------------------------------------------------------------- Bahnsteig ---
+export function subwayPlatform() {
+  const g = new THREE.Group();
+  const tiles = tileTexture("#e2cf8e", "#b9a76a", 10);
+  tiles.repeat.set(12, 2);
+  const wallMat = new THREE.MeshStandardMaterial({ map: tiles, roughness: 0.4 });
+  // Boden Bahnsteig (x 0..4), Gleisbett (x -4..0, tiefer)
+  box(4.4, 1.0, 60, mat("#8f8a82"), 2.2, -0.5, -20, g);
+  box(4.4, 0.02, 60, mat("#6f6a62"), -2.2, -1.0, -20, g);
+  box(0.3, 0.012, 60, mat("#f2c318"), 0.25, 0.006, -20, g); // Sicherheitslinie
+  for (const x of [-1.5, -2.9]) box(0.08, 0.12, 60, mat("#7b7f86", { metalness: 0.6, roughness: 0.4 }), x, -0.9, -20, g);
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(60, 4), wallMat);
+  wall.rotation.y = -Math.PI / 2; wall.position.set(4.4, 1.8, -20); g.add(wall);
+  const wall2 = new THREE.Mesh(new THREE.PlaneGeometry(60, 5), wallMat);
+  wall2.rotation.y = Math.PI / 2; wall2.position.set(-4.4, 1.5, -20); g.add(wall2);
+  box(9, 0.1, 60, mat("#5c5b58"), 0, 3.8, -20, g);
+  for (let z = 4; z > -48; z -= 4) box(0.15, 0.05, 1.8, basic("#f4f7ff"), 1.6, 3.73, z, g);
+  // Stationsschild
+  const sign = textPanel(3.2, 0.5, 200, "#1d3b8f", [{ text: "Alexanderplatz", size: 60, y: 0.52 }]);
+  sign.rotation.y = -Math.PI / 2; sign.position.set(4.37, 2.3, -7); g.add(sign);
+  // Zug (BVG gelb), Türen offen
+  const train = new THREE.Group();
+  const yellow = mat("#f2c318", { roughness: 0.5 });
+  const dark = mat("#20242a");
+  box(2.4, 2.6, 34, yellow, 0, 0.4, 0, train);
+  for (let z = -15; z < 16; z += 2.6) box(2.42, 0.9, 1.6, mat("#1b2229", { roughness: 0.2, metalness: 0.5 }), 0, 0.95, z, train);
+  for (const z of [-11, -3.4, 4.2, 11.8]) box(0.05, 1.9, 1.3, dark, 1.2, 0.1, z, train); // offene Türen (dunkel)
+  train.position.set(-2.2, -0.5, -18);
+  g.add(train);
+  // Anzeige
+  const board = new THREE.Group();
+  box(1.9, 0.62, 0.12, mat("#15171a"), 0, 0, 0, board);
+  const disp = canvasTexture(560, 180, () => {});
+  const dm = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 0.54), new THREE.MeshBasicMaterial({ map: disp.tex, toneMapped: false }));
+  dm.position.z = 0.065; board.add(dm);
+  cyl(0.02, 0.02, 0.9, 6, mat("#3a3d42"), -0.7, 0.75, 0, board);
+  cyl(0.02, 0.02, 0.9, 6, mat("#3a3d42"), 0.7, 0.75, 0, board);
+  board.position.set(2.0, 2.75, -5.5);
+  g.add(board);
+  return {
+    group: g,
+    update(t) {
+      disp.redraw((x, w, h) => {
+        x.fillStyle = "#0a0b0c"; x.fillRect(0, 0, w, h);
+        x.fillStyle = "#ffb43a"; x.textBaseline = "middle"; x.textAlign = "left";
+        x.font = "700 42px 'Courier New', monospace";
+        x.fillText("U2  Pankow", 24, 50);
+        x.textAlign = "right"; x.fillText("— —", w - 24, 50);
+        const blink = Math.floor(t * 2.5) % 2 === 0;
+        x.textAlign = "center"; x.font = "700 40px 'Courier New', monospace";
+        if (blink) x.fillText("ZUGAUSFALL", w / 2, 128);
+      });
+    },
+  };
+}
+
+// ------------------------------------------------------------- Wohnung ---
+export function livingRoom({ seed = 61 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  const wallMat = mat("#d8d2c6");
+  // Raum 6 x 3 x 5, Fensterwand bei z = -2.5
+  box(6, 0.05, 6, mat("#8a6a4a"), 0, 0, 0, g);              // Dielen
+  box(6, 0.05, 6, wallMat, 0, 3, 0, g);
+  box(0.05, 3, 6, wallMat, -3, 1.5, 0, g);
+  box(0.05, 3, 6, wallMat, 3, 1.5, 0, g);
+  // Fensterwand mit großem Fenster (Öffnung 3.2 x 2)
+  box(1.4, 3, 0.1, wallMat, -2.3, 1.5, -2.5, g);
+  box(1.4, 3, 0.1, wallMat, 2.3, 1.5, -2.5, g);
+  box(3.2, 0.6, 0.1, wallMat, 0, 0.3, -2.5, g);
+  box(3.2, 0.4, 0.1, wallMat, 0, 2.8, -2.5, g);
+  const frame = mat("#f1eee8");
+  box(3.2, 0.06, 0.12, frame, 0, 0.62, -2.5, g); box(3.2, 0.06, 0.12, frame, 0, 2.58, -2.5, g);
+  for (const x of [-1.6, 0, 1.6]) box(0.06, 2, 0.12, frame, x, 1.6, -2.5, g);
+  box(0.6, 2.6, 0.08, mat("#7a3b2e"), -1.95, 1.6, -2.35, g); // Vorhang
+  // Sofa-Rückenlehne im Vordergrund, Pflanze, Stehlampe
+  box(2.6, 0.5, 0.4, mat("#3f4a5a"), 0.4, 0.55, -0.4, g);
+  box(2.6, 0.3, 0.9, mat("#3f4a5a"), 0.4, 0.3, -0.95, g);
+  const pot = cyl(0.18, 0.14, 0.35, 8, mat("#b5653a"), 2.3, 0.18, -1.9, g);
+  for (let i = 0; i < 7; i++) { const l = box(0.06, 0.6, 0.2, mat("#3d6b3a"), 2.3, 0.6, -1.9, g); l.rotation.set(r.range(-0.5, 0.5), i, r.range(-0.6, 0.6)); }
+  const lampShade = cyl(0.22, 0.3, 0.3, 10, mat("#f4e6c8", { emissive: new THREE.Color("#ffcf8a"), emissiveIntensity: 0.8 }), -2.4, 1.7, -1.6, g);
+  cyl(0.02, 0.02, 1.6, 6, mat("#2b2b2b"), -2.4, 0.8, -1.6, g);
+  const ceilLamp = cyl(0.25, 0.25, 0.08, 12, basic("#fff2d6"), 0, 2.95, 0, g);
+  const roomLight = new THREE.PointLight("#ffd9a0", 6, 12, 1.5);
+  roomLight.position.set(0, 2.6, 0); g.add(roomLight);
+  const lampLight = new THREE.PointLight("#ffcf8a", 2.5, 6, 1.5);
+  lampLight.position.set(-2.4, 1.6, -1.6); g.add(lampLight);
+  // Skyline draußen
+  const sky = new THREE.Group();
+  const texs = [windowTextures(71, "plattenbau"), windowTextures(72, "altbau"), windowTextures(73, "plattenbau")];
+  const towers = [];
+  for (let i = 0; i < 70; i++) {
+    const dist = r.range(70, 320);
+    const x = r.range(-1, 1) * (20 + dist * 0.7);
+    const b = building({ w: r.range(10, 22), h: r.range(25, 70), d: r.range(10, 22), color: r.pick(["#9aa0a8", "#b6a99a", "#8d9097", "#c2b8a8"]), tex: r.pick(texs) });
+    b.mesh.position.set(x, -40, -dist - 6);
+    sky.add(b.mesh);
+    towers.push({ m: b.material, off: 15.5 + (1 - dist / 320) * 1.4 + r() * 0.15 });
+  }
+  g.add(sky);
+  return {
+    group: g,
+    update(t) {
+      for (const tw of towers) tw.m.emissiveIntensity = t < tw.off ? 1.7 : (t < tw.off + 0.12 ? 0.5 : 0);
+      const roomOn = t < 17.25 ? 1 : (t < 17.4 ? (Math.sin(t * 120) > 0 ? 0.6 : 0) : 0);
+      roomLight.intensity = 6 * roomOn; lampLight.intensity = 2.5 * roomOn;
+      ceilLamp.material.color.set(roomOn > 0.1 ? "#fff2d6" : "#3a3a3a");
+      lampShade.material.emissiveIntensity = 0.8 * roomOn;
+    },
+  };
+}
+
+// ---------------------------------------------------------------- Küche ---
+export function kitchenSink() {
+  const g = new THREE.Group();
+  const tiles = tileTexture("#e9eef0", "#b7c0c4", 6); tiles.repeat.set(4, 2);
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(4, 1.6), new THREE.MeshStandardMaterial({ map: tiles, roughness: 0.3 }));
+  back.position.set(0, 1.75, -0.65); g.add(back);
+  box(4, 0.06, 0.8, mat("#d8d2c4", { roughness: 0.4 }), 0, 0.92, -0.25, g);   // Arbeitsplatte
+  box(4, 0.9, 0.75, mat("#3f4d5c"), 0, 0.45, -0.25, g);                      // Schränke
+  box(4, 0.7, 0.4, mat("#3f4d5c"), 0, 2.35, -0.45, g);                       // Oberschränke
+  const steel = mat("#b9c0c6", { metalness: 0.75, roughness: 0.25 });
+  box(0.62, 0.02, 0.46, mat("#5f666c", { metalness: 0.6, roughness: 0.3 }), 0, 0.78, -0.22, g); // Beckenboden
+  box(0.66, 0.16, 0.03, steel, 0, 0.86, 0.02, g); box(0.66, 0.16, 0.03, steel, 0, 0.86, -0.46, g);
+  box(0.03, 0.16, 0.48, steel, -0.33, 0.86, -0.22, g); box(0.03, 0.16, 0.48, steel, 0.33, 0.86, -0.22, g);
+  // Wasserhahn
+  cyl(0.025, 0.03, 0.32, 8, steel, 0, 1.1, -0.48, g);
+  const spout = cyl(0.018, 0.018, 0.22, 8, steel, 0, 1.25, -0.38, g); spout.rotation.x = Math.PI / 2;
+  const lever = new THREE.Group(); lever.position.set(0, 1.27, -0.5);
+  box(0.02, 0.02, 0.14, steel, 0, 0.0, 0.07, lever); g.add(lever);
+  const water = cyl(0.012, 0.014, 0.42, 8, new THREE.MeshStandardMaterial({ color: "#bfe4ff", transparent: true, opacity: 0.7, emissive: "#335a7a", emissiveIntensity: 0.6, roughness: 0.1 }), 0, 1.03, -0.28, g);
+  const drops = [];
+  for (let i = 0; i < 6; i++) { const d = new THREE.Mesh(new THREE.SphereGeometry(0.01, 6, 4), water.material); g.add(d); drops.push(d); }
+  return {
+    group: g,
+    update(t) {
+      const open = smooth((t - 18.25) / 0.35);
+      lever.rotation.x = -0.6 * open;
+      const flow = open * (1 - smooth((t - 18.7) / 0.9));
+      water.visible = flow > 0.03;
+      water.scale.set(Math.max(flow, 0.05), 1, Math.max(flow, 0.05));
+      // Tropfen nach dem Versiegen
+      drops.forEach((d, i) => {
+        const start = 19.5 + i * 0.32;
+        const u = t - start;
+        d.visible = u > 0 && u < 0.45 && t < 21;
+        d.position.set(0, 1.23 - 0.5 * 9.8 * u * u, -0.28);
+      });
+    },
+  };
+}
+
+// --------------------------------------------------------- Späti-Front ---
+export function storefront() {
+  const g = new THREE.Group();
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(12, 12), mat("#77726b"));
+  ground.rotation.x = -Math.PI / 2; ground.position.z = 2; ground.receiveShadow = true; g.add(ground);
+  const tex = windowTextures(81, "altbau");
+  const b = building({ w: 1.5, h: 15, d: 12, color: "#c9a77f", tex });
+  b.mesh.rotation.y = Math.PI / 2; b.mesh.position.set(0, 0, -2.2); g.add(b.mesh);
+  box(3.6, 2.4, 0.2, mat("#2a2b2e"), -0.6, 1.3, -1.4, g);                          // Ladenfenster (dunkel)
+  const glass = box(3.4, 2.2, 0.05, mat("#16202a", { roughness: 0.1, metalness: 0.6 }), -0.6, 1.3, -1.28, g);
+  const shutter = box(3.5, 1.1, 0.06, mat("#8d9298", { metalness: 0.5, roughness: 0.5 }), -0.6, 1.95, -1.22, g);
+  const sign = textPanel(3.6, 0.6, 160, "#20252c", [{ text: "SPÄTI", size: 70, y: 0.52, color: "#5b6470" }]);
+  sign.position.set(-0.6, 2.85, -1.27); g.add(sign);
+  box(1.1, 2.2, 0.08, mat("#3a2e26"), 1.9, 1.1, -1.32, g);                          // Tür
+  const note = textPanel(0.42, 0.3, 500, "#f4f1e8", [{ text: "Geschlossen", size: 42, y: 0.42, color: "#222", font: "Georgia, serif", weight: 700 }, { text: "bis auf Weiteres", size: 22, y: 0.74, color: "#555", font: "Georgia, serif" }]);
+  note.position.set(1.9, 1.45, -1.27); g.add(note);
+  return { group: g };
+}
+
+// ----------------------------------------------------------------- Büro ---
+export function office({ seed = 91 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  box(16, 0.04, 20, mat("#5d6a78"), 0, 0, -6, g);                     // Teppich
+  box(16, 0.05, 20, mat("#e9e9e6"), 0, 3.2, -6, g);
+  for (let z = 2; z > -15; z -= 3) for (const x of [-3, 0, 3]) box(1.2, 0.03, 0.6, basic("#fbfbf8"), x, 3.17, z, g);
+  // Fensterfront rechts (hell)
+  const win = new THREE.Mesh(new THREE.PlaneGeometry(20, 3), basic("#f6e2bf"));
+  win.rotation.y = -Math.PI / 2; win.position.set(6, 1.6, -6); g.add(win);
+  for (let z = 4; z > -16; z -= 2) box(0.1, 3.2, 0.12, mat("#2b2e33"), 5.95, 1.6, z, g);
+  box(0.1, 3.2, 20, mat("#e3e0da"), -6, 1.6, -6, g);
+  const seats = [];
+  const deskMat = mat("#f2f1ec"), legMat = mat("#3a3d42");
+  for (let row = 0; row < 4; row++) for (const x of [-3.4, -1.6, 1.6, 3.4]) {
+    const z = -2 - row * 2.6;
+    box(1.5, 0.05, 0.8, deskMat, x, 0.74, z, g);
+    for (const dx of [-0.7, 0.7]) box(0.04, 0.72, 0.7, legMat, x + dx, 0.37, z, g);
+    box(0.55, 0.36, 0.04, mat("#1b1d21"), x, 1.0, z - 0.25, g);
+    const screen = box(0.5, 0.31, 0.01, basic(r.pick(["#8fb4e8", "#a9d4c4", "#d9e4f2", "#9cc0f0"])), x, 1.0, z - 0.225, g);
+    screen.rotation.y = Math.PI;
+    seats.push({ x, z: z + 0.55 });
+  }
+  // Chefbüro (Glas) hinten
+  const glassMat = new THREE.MeshStandardMaterial({ color: "#cfe3ee", transparent: true, opacity: 0.25, roughness: 0.05 });
+  box(5, 3.1, 0.05, glassMat, 0, 1.55, -14, g);
+  box(0.06, 3.1, 0.06, mat("#2b2e33"), -2.5, 1.55, -14, g); box(0.06, 3.1, 0.06, mat("#2b2e33"), 2.5, 1.55, -14, g);
+  const door = textPanel(0.9, 0.32, 300, "#1f2328", [{ text: "CHEF", size: 66, y: 0.55, color: "#e9e4d8", weight: 700 }]);
+  door.position.set(0.9, 1.75, -13.96); g.add(door);
+  box(2.2, 0.06, 1.0, mat("#5a3b28"), 0, 0.76, -16, g);               // Chefschreibtisch
+  const chair = new THREE.Group();
+  box(0.7, 0.12, 0.65, mat("#151515", { roughness: 0.4 }), 0, 0.5, 0, chair);
+  box(0.7, 0.95, 0.12, mat("#151515", { roughness: 0.4 }), 0, 1.0, 0.3, chair);
+  cyl(0.04, 0.04, 0.45, 6, legMat, 0, 0.22, 0, chair);
+  chair.position.set(0, 0, -15.2); g.add(chair);
+  const plant = cyl(0.2, 0.16, 0.4, 8, mat("#b5653a"), 2.0, 0.2, -16.2, g);
+  box(0.2, 0.9, 0.2, mat("#3d6b3a"), 2.0, 0.85, -16.2, g);
+  return { group: g, seats, chair };
+}

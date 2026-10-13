@@ -161,6 +161,13 @@ def powerdown(dur=1.8):
     return (s + buzz) * np.exp(-t * 1.2)
 
 
+def drip():
+    n = int(0.25 * SR)
+    t = np.arange(n) / SR
+    f = 900 + 1400 * np.exp(-t * 40)
+    return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 28)
+
+
 def wind(dur, seed):
     g = rng(seed)
     n = int(dur * SR)
@@ -225,6 +232,8 @@ def build(cfg):
             m.add(whoosh(seed, dur), at - dur * 0.6, gain, c.get("pan", 0))
         elif kind == "powerdown":
             m.add(powerdown(dur), at, gain)
+        elif kind == "drip":
+            m.add(drip(), at, gain, c.get("pan", 0))
         elif kind == "wind":
             w = wind(dur, seed)
             m.add(w * env(len(w), 0.8, 0.8), at, gain, 0.2)

@@ -257,13 +257,14 @@ export function crowd(count, seed = 11) {
   const q = new THREE.Quaternion(), e = new THREE.Euler(), v = new THREE.Vector3(), one = new THREE.Vector3(1, 1, 1);
   const zero = new THREE.Matrix4().makeScale(0, 0, 0);
 
-  /** state: { x, y, z, rotY, swing (Bein-/Armwinkel), armRaise, visible, scale } */
+  /** state: { x, y, z, rotY, swing (Bein-/Armwinkel), armRaise, sit, visible, scale } (Front zeigt nach +z) */
   function set(i, s) {
     if (!s.visible) { meshes.forEach((m) => m.setMatrixAt(i, zero)); return; }
     const sc = s.scale ?? 1;
     mRoot.compose(v.set(s.x, s.y ?? 0, s.z), q.setFromEuler(e.set(0, s.rotY, 0)), one.clone().setScalar(sc));
     const sw = s.swing || 0, raise = s.armRaise || 0;
-    const angles = { legL: sw, legR: -sw, armL: -sw * 0.8 - raise, armR: sw * 0.8 - raise, torso: 0, head: 0, hair: 0 };
+    const legs = s.sit ? -1.45 : null;
+    const angles = { legL: legs ?? sw, legR: legs ?? -sw, armL: -sw * 0.8 - raise, armR: sw * 0.8 - raise, torso: 0, head: 0, hair: 0 };
     PARTS.forEach(([name, , pivot, off], p) => {
       mJoint.compose(v.set(...pivot), q.setFromEuler(e.set(angles[name], 0, 0)), one.set(1, 1, 1));
       mOff.makeTranslation(...off);
