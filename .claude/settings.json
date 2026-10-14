@@ -2,7 +2,10 @@
   "enabledPlugins": {
     "hyperframes@hyperframes": true,
     "savvy-progress@claude-kit": true,
-    "savvy-flow@claude-kit": true
+    "savvy-flow@claude-kit": true,
+    "render-monitor@was-waere-wenn-mods": true,
+    "video-pipeline@was-waere-wenn-mods": true,
+    "regel-waechter@was-waere-wenn-mods": true
   },
   "extraKnownMarketplaces": {
     "hyperframes": {
@@ -15,6 +18,12 @@
       "source": {
         "source": "github",
         "repo": "JohnnyVizz/claude-kit"
+      }
+    },
+    "was-waere-wenn-mods": {
+      "source": {
+        "source": "directory",
+        "path": "/home/user/Life-Journal/tiktok-videos/claude-mods"
       }
     }
   }

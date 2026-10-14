@@ -35,6 +35,17 @@ tiktok-videos/hyperframes/
 
 Erstes fertiges Video und Vorlage: `videos/niemand-arbeitet/`.
 
+Claude-Code-Mods (`tiktok-videos/claude-mods/`, im Projekt aktiviert):
+- **regel-waechter** prüft vor jedem `hyperframes render` scene.js, index.html und sound.json gegen
+  die Regeln unten. Bei Fehlern (z. B. wiederholter Ort, Länge ≠ sound.json, sound.wav veraltet)
+  stoppt er den Render einmal; derselbe Befehl erneut läuft trotzdem. `/regeln [id]` prüft auf Zuruf.
+- **render-monitor** zeigt über der Eingabe Fortschritt, Restzeit und die Stelle im Video, die
+  gerade gerendert wird (Schätzung aus der gemessenen Renderzeit pro Videosekunde).
+- **video-pipeline**: `/videos` öffnet die Liste mit Status (Drehbuch, Ton, gerendert, fertig,
+  gepostet). `/videos ton <id>` baut sound.wav neu und mischt sie in die fertigen MP4s,
+  `/videos rendern <id>` rendert im Hintergrund und komprimiert nach `tiktok-videos/output/`,
+  `/videos gepostet <id>` markiert, `/videos neu <id> [vorlage]` legt einen Ordner an.
+
 ## Ablauf für ein neues Video
 
 1. **Thema klären.** Nur nachfragen, wenn kein Thema genannt ist. Ideen und Hook-Regeln

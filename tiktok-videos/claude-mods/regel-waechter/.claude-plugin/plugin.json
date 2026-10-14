@@ -1,0 +1,1 @@
+{ "name": "regel-waechter", "version": "0.1.0", "description": "Prüft scene.js und sound.json vor jedem HyperFrames-Render gegen die Was-wäre-wenn-Regeln; /regeln prüft auf Zuruf." }

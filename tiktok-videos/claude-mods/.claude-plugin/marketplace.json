@@ -1,0 +1,10 @@
+{
+  "name": "was-waere-wenn-mods",
+  "owner": { "name": "Marvin" },
+  "description": "Claude-Code-Mods für die Was-wäre-wenn-Videos (HyperFrames)",
+  "plugins": [
+    { "name": "render-monitor", "source": "./render-monitor", "description": "Fortschritt, Restzeit und aktuelle Stelle eines laufenden HyperFrames-Renders über der Eingabe." },
+    { "name": "video-pipeline", "source": "./video-pipeline", "description": "Panel mit allen Videos und ihrem Status; /videos rendert, mischt Ton neu, markiert Gepostetes." },
+    { "name": "regel-waechter", "source": "./regel-waechter", "description": "Prüft scene.js und sound.json vor jedem Render gegen die Was-wäre-wenn-Regeln; /regeln." }
+  ]
+}

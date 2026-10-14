@@ -1,0 +1,1 @@
+{ "name": "render-monitor", "version": "0.1.0", "description": "Band über der Eingabe: Fortschritt, Restzeit und aktuelle Stelle eines laufenden HyperFrames-Renders.", "types": "./types/index.d.ts" }
