@@ -38,12 +38,14 @@ Erstes fertiges Video und Vorlage: `videos/niemand-arbeitet/`.
 ## Ablauf für ein neues Video
 
 1. **Thema klären.** Nur nachfragen, wenn kein Thema genannt ist. Ideen und Hook-Regeln
-   (Zeitfenster im Titel, deutscher Ort, echte Zahl früh) stehen in `tiktok-videos/THEMEN_RECHERCHE.md`. Länge: Standard 30 s,
-   wenn der Nutzer nichts sagt (die Vorbilder sind 80 s; dann die Zeiten unten strecken).
+   (Zeitfenster im Titel, deutscher Ort, echte Zahl früh) stehen in `tiktok-videos/THEMEN_RECHERCHE.md`. **Länge: Standard 75 s**
+   (60–80 s wie die Vorbilder), damit die Geschichte Zeit hat. Kürzer nur auf ausdrücklichen Wunsch.
 2. **Drehbuch schreiben** (im Chat kurz zeigen, dann direkt bauen):
    - Titel: „Was wäre, wenn …?“ mit einem Schlüsselwort in Akzentfarbe.
    - Ort: ein konkreter deutscher Alltagsort mit Menschen.
-   - 6–8 Untertitel: zweite Person, Präsens, ein Fakt pro Satz, 3–9 Wörter.
+   - 14–18 Untertitel (bei 75 s): zweite Person, Präsens, ein Fakt pro Satz, 3–9 Wörter,
+     als **Kette** („Dann …“, „Und noch …“), jede Zeile ist die Folge der vorigen.
+     Story-Regeln siehe Abschnitt „Story (Pflicht)“ und `tiktok-videos/STORY_ANALYSE.md`.
      Muster: Ort → Körper/Alltag → Zahl → Alltag kippt → überraschende Folge →
      Steigerung → Wende → Pointe (kurz, trocken, gern mit Witz).
    - HUD-Phasen: vor dem Ereignis ein Countdown („X IN 0:05,999“), danach eine laufende
@@ -61,36 +63,58 @@ Erstes fertiges Video und Vorlage: `videos/niemand-arbeitet/`.
    Dann `snapshot --at …` an jedem Phasenwechsel, Kontaktbogen ansehen und gegen die
    Regeln unten prüfen. Erst danach rendern.
 6. **Rendern:** `npx -y hyperframes@0.8.154 render -o ../../renders/<id>.mp4 --quiet`
-   (dauert in der Cloud etwa 10–15 min für 30 s, also im Hintergrund laufen lassen).
-   Danach 6–8 Frames per ffmpeg ziehen und ansehen; das Video mit SendUserFile schicken.
+   im Hintergrund (Bash `run_in_background`, `timeout: 7200000`). Dauer in der Cloud ≈ 22 s pro
+   Videosekunde, also ~28 min für 75 s. Vorher in `index.html` `data-duration` (Root, Canvas,
+   Overlay, Audio) und die GSAP-Timeline (`.set({}, {}, 75)`) sowie `"duration"` in
+   `audio/sound.json` auf die Videolänge setzen.
+   Danach 8–10 Frames per ffmpeg ziehen und ansehen; das Video mit SendUserFile schicken
+   (vorher mit `-crf 20` unter 30 MB bringen).
 7. **Committen und pushen** (ohne `renders/`).
 
 In der Claude-Cloud vor jedem HyperFrames-Befehl:
 `export HYPERFRAMES_BROWSER_PATH=$(find /opt/pw-browsers -name chrome-headless-shell -type f | head -1)`
 
-## Zeitraster (30 s)
+## Zeitraster (75 s, Standard)
 
-| Zeit | Phase |
-|---|---|
-| 0–3,1 | Titel über friedlicher Alltagsszene, Countdown läuft |
-| 3,2–6 | Untertitel nennt den Ort |
-| 6 | Ereignis: harter Toneinschnitt (impact + drone + Ticken), HUD springt um, Kamera ruckt |
-| 6–24 | alle ~3 s ein Satz; Eskalation; Farbwelt und Licht wechseln pro Phase |
-| 24–27 | Wende + Pointe, neue HUD-Größe bzw. Wort |
-| 27–27,4 | Schwarz, Ton still |
-| 27,4–30 | Endkarte #141414 |
+| Zeit | Akt | Inhalt |
+|---|---|---|
+| 0–3,5 | Hook | Titel über friedlicher Alltagsszene; Countdown startet |
+| 3,5–20 | 1 · Ironie | Das Ereignis ist schon passiert oder steht fest, aber noch merkt es keiner. Countdown läuft weiter. 3–4 Sätze („Du merkst nichts.“ / „Es ist schon unterwegs.“) |
+| ~20 | Auslöser | Countdown erreicht 0: Toneinschnitt, Kamera ruckt, HUD wechselt auf Messgröße 1 |
+| 20–42 | 2 · Eskalation | Messgröße 1 wächst stark (×4, ×16, ×75 …). 5–6 Sätze als Kette |
+| 42–60 | 3 · Steigerung | neue Messgröße (Temperatur, Höhe, Opfer an Ort X …), der Ort verwandelt sich weiter |
+| 60–68 | Höhepunkt | eine Entfernung/Zeit läuft auf dich zu → „HIER“; ein letzter Satz („Es gibt keinen Ort zum Verstecken.“) |
+| 68–70 | Nachklang | Bild steht/zerfällt, Ton bricht ab |
+| 70–70,5 | Schwarz | Stille |
+| 70,5–75 | Endkarte | Titel + Zeile 1 Aufklärung/Mythos („Die Sonne ist zu klein, um zu explodieren“) + Zeile 2 echter Fakt; darunter Frage an die Community |
 
-Für 80 s: Ereignis bei 8 s, ein Satz alle ~4 s, Wende bei ~54 s, Endkarte ab 72 s.
+Bei ausdrücklich gewünschten 30 s: Auslöser bei 6 s, ein Satz alle ~3 s, Höhepunkt bei 24 s, Endkarte ab 27,4 s.
+
+## Story (Pflicht)
+
+1. **Ein Countdown oder eine zulaufende Entfernung trägt das ganze Video** bis zum Höhepunkt.
+2. **Dramatische Ironie im ersten Akt:** Der Zuschauer weiß mehr als die Menschen im Bild.
+3. **Pro Akt eine Messgröße**, die sichtbar und stark wächst; am Ende ein Wort statt einer Zahl.
+4. **Untertitel als Kette** mit „Dann …“/„Und …“; trockene Kurzsätze als Pointen
+   („Es explodiert. Natürlich.“ / „Berlin hat keine Vulkane.“).
+5. **HUD-Unterzeile darf ein eigener Running Gag sein** (bei leichten Themen).
+6. **Das Ende greift den Hook auf** (Ironie oder Auflösung), die Endkarte klärt auf und endet mit
+   einer Frage an die Zuschauer („Was soll als Nächstes schiefgehen? Schreib es in die Kommentare.“).
+7. **Ton:** Orts-Atmo läuft durch; statt vieler Musikwechsel ein langer, stetiger Anstieg
+   (`riser`/`pad` mit `from`→`to`) bis zum Höhepunkt, dann Schnitt auf Rumpeln, Endkarte still.
 
 ## Vorgaben des Nutzers (haben Vorrang vor den Referenzen)
 
 - **Nur POV (Ich-Perspektive)** auf Augenhöhe, mit sichtbaren Händen, die etwas halten, das zur
   Szene passt (Kaffeebecher, Handy mit passendem Bildschirmtext, Einkaufswagen, Müllsack,
   Geldscheine, Hand am Wasserhahn). Keine Vogelperspektive, keine Kamerakräne.
-- **Pro Story-Beat eine eigene Szene**, die genau zeigt, was der Untertitel sagt
-  („Regale sind leer“ → man steht im Supermarktgang und sieht die Regale sich leeren;
-  „kein Wasser“ → Spüle, Hahn, der Strahl versiegt). Harte Schnitte mit 0,14 s Aufblende
-  aus Schwarz, ein Whoosh im Ton auf jedem Schnitt. Zeitraffer innerhalb der Szene.
+- **Was der Untertitel sagt, muss man sehen** („Regale sind leer“ → Supermarktgang, die Regale
+  leeren sich; „kein Wasser“ → Spüle, der Strahl versiegt). Zeitraffer innerhalb der Szene.
+- **Kein Clip, kein Ort, keine Einstellung darf sich wiederholen.** Nie zum Anfangsort
+  zurückspringen, keine Rückblende, kein zweites Mal dieselbe Straße. Lieber **eine Hauptszene,
+  die sich verwandelt**; ein neuer Ort nur, wenn die Geschichte dorthin weiterzieht (du gehst
+  weiter, die Folge breitet sich aus), jeder Ort genau einmal, höchstens 4–5 Orte in 75 s.
+  Schnitte: 0,14 s Aufblende aus Schwarz + Whoosh.
 - Vorlage für diesen Aufbau: `videos/niemand-arbeitet/scene.js` (`SCENES`, `ENV`, `POSES`).
 
 ## Look-Regeln
