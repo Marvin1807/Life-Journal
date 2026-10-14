@@ -1,0 +1,458 @@
+{
+ "duration": 75,
+ "cues": [
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 0,
+   "dur": 20.0,
+   "gain": 0.32,
+   "seed": 1,
+   "fadeIn": 0.4,
+   "fadeOut": 0.03
+  },
+  {
+   "type": "ambience",
+   "preset": "beach",
+   "at": 0,
+   "dur": 20.0,
+   "gain": 0.14,
+   "seed": 2,
+   "lp": 700,
+   "fadeIn": 0.4,
+   "fadeOut": 0.03
+  },
+  {
+   "type": "birds",
+   "at": 0,
+   "dur": 20.0,
+   "gain": 0.04,
+   "seed": 3,
+   "density": 1.0
+  },
+  {
+   "type": "footsteps",
+   "surface": "street",
+   "at": 0.1,
+   "dur": 11.4,
+   "rate": 1.85,
+   "gain": 0.22,
+   "seed": 4,
+   "verb": 0.15
+  },
+  {
+   "type": "crackle",
+   "at": 0,
+   "dur": 20.0,
+   "gain": 0.22,
+   "seed": 5,
+   "density": 30
+  },
+  {
+   "type": "crackle",
+   "at": 1.0,
+   "dur": 0.35,
+   "gain": 0.25,
+   "seed": 6,
+   "density": 80
+  },
+  {
+   "type": "ambience",
+   "preset": "subway",
+   "at": 2.0,
+   "dur": 15.0,
+   "gain": 0.22,
+   "seed": 7,
+   "lp": 1400,
+   "fadeIn": 2.5,
+   "fadeOut": 3.0
+  },
+  {
+   "type": "car",
+   "at": 4.5,
+   "dur": 2.5,
+   "gain": 0.1,
+   "seed": 8
+  },
+  {
+   "type": "car",
+   "at": 9.5,
+   "dur": 2.5,
+   "gain": 0.1,
+   "seed": 9
+  },
+  {
+   "type": "car",
+   "at": 14.0,
+   "dur": 2.5,
+   "gain": 0.1,
+   "seed": 10
+  },
+  {
+   "type": "car",
+   "at": 17.5,
+   "dur": 2.5,
+   "gain": 0.1,
+   "seed": 11
+  },
+  {
+   "type": "pad",
+   "at": 0,
+   "dur": 20.0,
+   "freqs": [
+    130.8,
+    164.8,
+    196.0,
+    261.6
+   ],
+   "gain": 0.07,
+   "seed": 12,
+   "fadeIn": 4,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "ticks",
+   "at": 8.0,
+   "dur": 12.0,
+   "interval": [
+    1.0,
+    0.25
+   ],
+   "gain": 0.09,
+   "seed": 13
+  },
+  {
+   "type": "riser",
+   "at": 20.0,
+   "dur": 8.0,
+   "f0": 120,
+   "f1": 1800,
+   "gain": 0.35,
+   "seed": 14,
+   "verb": 0.3
+  },
+  {
+   "type": "impact",
+   "at": 20.0,
+   "gain": 0.75,
+   "seed": 15,
+   "low": 45,
+   "verb": 0.55
+  },
+  {
+   "type": "drop",
+   "at": 20.0,
+   "dur": 2.5,
+   "f0": 900,
+   "f1": 60,
+   "gain": 0.25,
+   "verb": 0.5
+  },
+  {
+   "type": "tinnitus",
+   "at": 20.0,
+   "dur": 3.8,
+   "freq": 4000,
+   "gain": 0.05
+  },
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 20.0,
+   "dur": 4.0,
+   "gain": 0.16,
+   "seed": 16,
+   "lp": 500,
+   "fadeOut": 3.0
+  },
+  {
+   "type": "powerdown",
+   "at": 20.4,
+   "dur": 2.0,
+   "gain": 0.22,
+   "lp": 1200
+  },
+  {
+   "type": "ice_crack",
+   "at": 24.0,
+   "gain": 0.35,
+   "seed": 17,
+   "lp": 1800,
+   "verb": 0.2
+  },
+  {
+   "type": "tinnitus",
+   "at": 24.0,
+   "dur": 3.5,
+   "freq": 5200,
+   "gain": 0.04
+  },
+  {
+   "type": "wind",
+   "at": 27.8,
+   "dur": 1.8,
+   "gain": 0.12,
+   "seed": 18,
+   "lp": 900
+  },
+  {
+   "type": "sub",
+   "at": 20.0,
+   "dur": 30.0,
+   "freq": 42,
+   "gain": 0.42,
+   "seed": 19,
+   "from": 0.3,
+   "to": 1.0
+  },
+  {
+   "type": "pad",
+   "at": 20.0,
+   "dur": 30.0,
+   "freqs": [
+    110.0,
+    130.8,
+    164.8,
+    220.0
+   ],
+   "gain": 0.17,
+   "seed": 20,
+   "fadeIn": 3,
+   "fadeOut": 0.2
+  },
+  {
+   "type": "ticks",
+   "at": 20.0,
+   "dur": 30.0,
+   "interval": [
+    1.3,
+    0.3
+   ],
+   "gain": 0.09,
+   "seed": 21
+  },
+  {
+   "type": "heartbeat",
+   "at": 27.0,
+   "dur": 35.0,
+   "bpm": 72,
+   "gain": 0.3,
+   "seed": 22
+  },
+  {
+   "type": "ambience",
+   "preset": "beach",
+   "at": 20.0,
+   "dur": 30.0,
+   "gain": 0.07,
+   "seed": 23,
+   "lp": 350,
+   "fadeIn": 1,
+   "fadeOut": 0.5
+  },
+  {
+   "type": "powerdown",
+   "at": 35.4,
+   "dur": 3.0,
+   "gain": 0.18,
+   "lp": 900
+  },
+  {
+   "type": "ambience",
+   "preset": "subway",
+   "at": 36.0,
+   "dur": 14.0,
+   "gain": 0.2,
+   "seed": 24,
+   "lp": 650,
+   "fadeIn": 3,
+   "fadeOut": 0.2
+  },
+  {
+   "type": "chime",
+   "at": 46.8,
+   "dur": 3.5,
+   "freq": 392.0,
+   "gain": 0.13,
+   "verb": 0.7,
+   "lp": 1500
+  },
+  {
+   "type": "reverse",
+   "at": 50.0,
+   "dur": 1.2,
+   "gain": 0.35,
+   "seed": 25
+  },
+  {
+   "type": "chord",
+   "at": 50.0,
+   "dur": 4.0,
+   "freqs": [
+    196.0,
+    246.9,
+    293.7,
+    392.0
+   ],
+   "gain": 0.18,
+   "verb": 0.6,
+   "attack": 0.6
+  },
+  {
+   "type": "riser",
+   "at": 62.0,
+   "dur": 8.0,
+   "f0": 150,
+   "f1": 2600,
+   "gain": 0.45,
+   "seed": 26,
+   "verb": 0.3
+  },
+  {
+   "type": "wind",
+   "at": 55.0,
+   "dur": 7.0,
+   "gain": 0.3,
+   "seed": 27
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 57.0,
+   "dur": 5.0,
+   "gain": 0.35,
+   "seed": 28,
+   "fadeIn": 4,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "impact",
+   "at": 62.0,
+   "gain": 1.0,
+   "seed": 29,
+   "low": 38,
+   "verb": 0.6
+  },
+  {
+   "type": "impact",
+   "at": 62.25,
+   "gain": 0.55,
+   "seed": 30,
+   "low": 30,
+   "verb": 0.8
+  },
+  {
+   "type": "splat",
+   "at": 62.05,
+   "gain": 0.5,
+   "seed": 31
+  },
+  {
+   "type": "water",
+   "at": 62.0,
+   "dur": 3.0,
+   "gain": 0.55,
+   "seed": 32,
+   "fadeOut": 2.0
+  },
+  {
+   "type": "flutter",
+   "at": 62.1,
+   "dur": 2.5,
+   "gain": 0.25,
+   "seed": 33
+  },
+  {
+   "type": "beep",
+   "at": 62.3,
+   "dur": 0.08,
+   "freq": 3700,
+   "gain": 0.07,
+   "verb": 0.45
+  },
+  {
+   "type": "beep",
+   "at": 62.55,
+   "dur": 0.08,
+   "freq": 4300,
+   "gain": 0.07,
+   "verb": 0.45
+  },
+  {
+   "type": "beep",
+   "at": 62.9,
+   "dur": 0.08,
+   "freq": 3300,
+   "gain": 0.07,
+   "verb": 0.45
+  },
+  {
+   "type": "beep",
+   "at": 63.3,
+   "dur": 0.08,
+   "freq": 4900,
+   "gain": 0.07,
+   "verb": 0.45
+  },
+  {
+   "type": "ambience",
+   "preset": "beach",
+   "at": 62.0,
+   "dur": 8.0,
+   "gain": 0.3,
+   "seed": 34,
+   "fadeIn": 0.05,
+   "fadeOut": 2.5
+  },
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 64.5,
+   "dur": 5.5,
+   "gain": 0.16,
+   "seed": 35,
+   "fadeIn": 1.5,
+   "fadeOut": 1.5
+  },
+  {
+   "type": "chime",
+   "at": 65.2,
+   "dur": 4.5,
+   "freq": 196.0,
+   "gain": 0.14,
+   "verb": 0.8,
+   "lp": 1200
+  },
+  {
+   "type": "silence",
+   "at": 70.0,
+   "dur": 0.5
+  },
+  {
+   "type": "pad",
+   "at": 70.5,
+   "dur": 4.5,
+   "freqs": [
+    130.8,
+    164.8,
+    196.0,
+    261.6
+   ],
+   "gain": 0.07,
+   "seed": 36,
+   "fadeIn": 0.8,
+   "fadeOut": 1.5
+  },
+  {
+   "type": "bell",
+   "at": 70.6,
+   "dur": 4.4,
+   "freqs": [
+    130.8,
+    196.0
+   ],
+   "gain": 0.1,
+   "verb": 0.5
+  }
+ ]
+}
