@@ -462,6 +462,25 @@ def water(d, s):
     return x + lp(noise(d, s + 2), 300) * 0.5
 
 
+def radio_static(d, s):
+    """Röhrenradio: Rauschen, Pfeifen beim Senderwechsel, ferne Musik-/Sprachfetzen."""
+    t = tt(d)
+    hiss = bp(noise(d, s), 300, 4000) * (0.6 + 0.4 * slow(d, 8, s + 1))
+    tune = 900 + 700 * np.sin(2 * np.pi * 0.35 * t)
+    whistle = np.sin(2 * np.pi * np.cumsum(tune) / SR) * 0.12 * (slow(d, 1.5, s + 2) > 0.6)
+    voice = bp(noise(d, s + 3), 300, 2500) * np.clip(lp(noise(d, s + 4), 6), 0, None) * 2.5 * (slow(d, 0.7, s + 5) > 0.5)
+    return hiss + whistle + voice * 0.5
+
+
+def creak(d, s):
+    """Knarren (Schaukel, Holz): rauer, langsam gleitender Ton."""
+    t = tt(d)
+    f = 320 + 140 * np.sin(np.linspace(0, np.pi, N(d)))
+    tone = np.sin(2 * np.pi * np.cumsum(f) / SR)
+    grit = (rng(s).random(N(d)) > 0.55).astype(float)
+    return bp(tone * (0.5 + grit), 200, 2500) * np.sin(np.linspace(0, np.pi, N(d))) ** 2
+
+
 def drip_sound():
     t = tt(0.25)
     f = 900 + 1400 * np.exp(-t * 40)
@@ -620,6 +639,10 @@ def render_cue(c):
         return norm(flicker(d, s))
     if k == "drip":
         return drip_sound()
+    if k == "static":
+        return norm(radio_static(d, s)) * env(N(d), c.get("fadeIn", 0.05), c.get("fadeOut", 0.1))
+    if k == "creak":
+        return norm(creak(d, s))
     if k == "water":
         return norm(water(d, s)) * env(N(d), c.get("fadeIn", 0.05), c.get("fadeOut", 0.5))
     if k == "ticks":
@@ -699,7 +722,7 @@ if __name__ == "__main__":
         print("Atmos:", ", ".join(AMBIENCES))
         print("Typen: ambience, sub, pad, tinnitus, heartbeat, riser, drop, reverse, shimmer, chime, ticks, impact, whoosh,"
               " powerdown, chord, bell, footsteps(surface: " + ", ".join(SURFACES) + "), ice_crack, crackle, splat,"
-              " flutter, rattle, squeak, beep, ding, flicker, drip, wind, birds, city, car, drone, silence")
+              " flutter, rattle, squeak, beep, ding, flicker, drip, water, static, creak, wind, birds, city, car, drone, silence")
         sys.exit(0)
     if len(sys.argv) != 3:
         sys.exit(__doc__)

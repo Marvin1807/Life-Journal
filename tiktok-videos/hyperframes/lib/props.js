@@ -802,3 +802,163 @@ export function deepSeaVents({ seed = 161 } = {}) {
     },
   };
 }
+
+// ======================================================================
+// Bausteine für Alternativgeschichte / Dystopie (ohne jede NS-Symbolik)
+// ======================================================================
+
+/** Große Kuppelhalle (Größenordnung Speer-Planung, 290 m) für Fernsicht. */
+export function greatDome() {
+  const g = new THREE.Group();
+  const stone = mat("#b9b3a6", { roughness: 0.95 });
+  box(315, 74, 315, stone, 0, 37, 0, g);                                   // Sockelbau
+  for (let i = -6; i <= 6; i++) box(5, 60, 5, mat("#a7a196"), i * 22, 30, 160, g); // Säulenfront
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(125, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), mat("#7f8a86", { roughness: 0.6, metalness: 0.2 }));
+  dome.position.y = 74; dome.scale.y = 1.55; g.add(dome);
+  const lantern = cyl(10, 14, 22, 10, stone, 0, 74 + 125 * 1.55 + 8, 0, g);
+  g.traverse((o) => { if (o.isMesh) { o.castShadow = false; o.receiveShadow = false; } });
+  return g;
+}
+
+/** Breite Prachtachse mit kolossalen, grauen Steinbauten links und rechts. */
+export function monumentalAxis({ seed = 171 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 2000), mat("#8f8a82", { roughness: 1 }));
+  ground.rotation.x = -Math.PI / 2; ground.position.z = -800; ground.receiveShadow = true; g.add(ground);
+  const road = new THREE.Mesh(new THREE.PlaneGeometry(90, 2000), mat("#5d5b58"));
+  road.rotation.x = -Math.PI / 2; road.position.set(0, 0.01, -800); road.receiveShadow = true; g.add(road);
+  const stone = mat("#c4bdb0", { roughness: 0.95 }), pillar = mat("#b3ac9f");
+  for (const s of [-1, 1]) {
+    let z = 20;
+    while (z > -1100) {
+      const w = r.range(60, 110), h = r.range(38, 60);
+      const b = box(40, h, w, stone, s * 85, h / 2, z - w / 2, g);
+      for (let k = 0; k < Math.floor(w / 8); k++) box(2.4, h * 0.8, 2.4, pillar, s * 64, h * 0.4, z - 4 - k * 8, g);
+      box(44, 3, w + 2, mat("#9d968a"), s * 85, h + 1.5, z - w / 2, g);
+      z -= w + 20;
+    }
+  }
+  // kleiner Reichstag zum Größenvergleich
+  const rt = new THREE.Group();
+  box(40, 22, 28, mat("#c9bea8"), 0, 11, 0, rt);
+  for (const x of [-18, 18]) for (const zz of [-12, 12]) box(6, 30, 6, mat("#c9bea8"), x, 15, zz, rt);
+  rt.position.set(-75, 0, -330); rt.rotation.y = 0.3; g.add(rt);
+  // Menschen als winzige Punkte auf dem Platz
+  const P = 400;
+  const dots = new THREE.InstancedMesh(new THREE.BoxGeometry(0.5, 1.7, 0.4), mat("#3b3d42"), P);
+  const d = new THREE.Object3D();
+  for (let i = 0; i < P; i++) { d.position.set(r.range(-40, 40), 0.85, r.range(-500, -40)); d.updateMatrix(); dots.setMatrixAt(i, d.matrix); }
+  g.add(dots);
+  const dome = greatDome(); dome.position.set(0, 0, -1250); g.add(dome);
+  return { group: g, dome };
+}
+
+/** Grauer Ausweis (ohne Symbole). */
+export function idCard() {
+  const g = new THREE.Group();
+  const { tex } = canvasTexture(400, 256, (x, w, h) => {
+    x.fillStyle = "#cfcac0"; x.fillRect(0, 0, w, h);
+    x.fillStyle = "#8a857c"; x.fillRect(20, 60, 110, 140);                    // Foto
+    x.fillStyle = "#3a3a3a"; x.font = "700 30px Georgia, serif"; x.fillText("KENNKARTE", 150, 46);
+    x.font = "400 20px Georgia, serif";
+    ["Name: ________", "Geb.: ________", "Wohnort: Berlin", "Nr. 0 471 233"].forEach((l, i) => x.fillText(l, 150, 96 + i * 34));
+  });
+  const card = new THREE.Mesh(new THREE.PlaneGeometry(0.1, 0.064), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.8, side: THREE.DoubleSide }));
+  g.add(card);
+  return g;
+}
+
+/** Kontrollpunkt: Schlagbaum, Häuschen, Scheinwerfer, Kamera. */
+export function checkpoint() {
+  const g = new THREE.Group();
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(60, 120), mat("#4a4a4c"));
+  ground.rotation.x = -Math.PI / 2; ground.position.z = -30; ground.receiveShadow = true; g.add(ground);
+  const tex = windowTextures(181, "plattenbau");
+  for (const s of [-1, 1]) for (let i = 0; i < 6; i++) {
+    const b = building({ w: 14, h: 24, d: 16, color: "#8d8f93", tex });
+    b.mesh.position.set(s * 18, 0, -i * 17 + 4); g.add(b.mesh);
+  }
+  const booth = new THREE.Group();
+  box(2.2, 2.6, 2.2, mat("#5d6066"), 0, 1.3, 0, booth);
+  box(2.0, 0.8, 0.05, basic("#e8e2c8"), 0, 1.8, 1.11, booth);
+  booth.position.set(3.6, 0, -6); g.add(booth);
+  // Schlagbaum rot-weiß
+  const boom = new THREE.Group();
+  for (let i = 0; i < 8; i++) box(0.75, 0.14, 0.14, mat(i % 2 ? "#e9e6dd" : "#b8302a"), -i * 0.75 - 0.4, 0, 0, boom);
+  boom.position.set(2.4, 1.05, -5); g.add(boom);
+  cyl(0.12, 0.15, 1.1, 8, mat("#3a3d42"), 2.4, 0.55, -5, g);
+  // Scheinwerfer + Lichtkegel
+  const flood = new THREE.SpotLight("#f4f1e4", 140, 40, 0.6, 0.5, 1.2);
+  flood.position.set(4.5, 6, -7); flood.target.position.set(0.3, 0.8, -3.2); g.add(flood); g.add(flood.target);
+  box(0.6, 0.4, 0.5, basic("#fffbe8"), 4.5, 6, -7, g);
+  cyl(0.06, 0.08, 6, 6, mat("#2b2e33"), 4.5, 3, -7.2, g);
+  // Überwachungskameras
+  for (const [x, z] of [[-6, -3], [6.5, -12], [-6, -20]]) {
+    cyl(0.05, 0.07, 4, 6, mat("#2b2e33"), x, 2, z, g);
+    const cam = box(0.45, 0.22, 0.22, mat("#d9d9d4"), x - Math.sign(x) * 0.3, 4.0, z, g);
+    cam.rotation.y = Math.sign(x) * 0.6;
+    box(0.04, 0.04, 0.04, basic("#ff3020"), x - Math.sign(x) * 0.52, 4.05, z + 0.08, g);
+  }
+  return { group: g, boom };
+}
+
+/** Altes Röhrenradio mit leuchtender Skala; Decke als dunkle Höhle darüber. */
+export function radioUnderBlanket() {
+  const g = new THREE.Group();
+  const wood = mat("#5a3a24", { roughness: 0.7 });
+  box(0.42, 0.3, 0.22, wood, 0, 0, 0, g);
+  box(0.2, 0.2, 0.01, mat("#c9b48a"), -0.08, 0.0, 0.112, g);                 // Lautsprecherstoff
+  const dial = box(0.13, 0.06, 0.01, basic("#ffcf7a"), 0.12, 0.05, 0.112, g);
+  for (const x of [0.07, 0.17]) { const k = cyl(0.018, 0.018, 0.02, 10, mat("#2a1d14"), x, -0.07, 0.115, g); k.rotation.x = Math.PI / 2; }
+  const glow = new THREE.PointLight("#ffb35a", 1.6, 2.5, 1.6); glow.position.set(0.1, 0.05, 0.3); g.add(glow);
+  // Decke: halbe Röhre aus Stoff rund um die Szene
+  const blanket = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 2.4, 14, 1, true, 0, Math.PI), new THREE.MeshStandardMaterial({ color: "#3d4a5c", roughness: 1, side: THREE.DoubleSide, flatShading: true }));
+  blanket.rotation.z = Math.PI / 2; blanket.rotation.y = Math.PI / 2; blanket.position.set(0, -0.15, 0.2);
+  const sheet = new THREE.Mesh(new THREE.PlaneGeometry(2, 2.4), mat("#6e6a62"));
+  sheet.rotation.x = -Math.PI / 2; sheet.position.set(0, -0.16, 0.2);
+  const set = new THREE.Group(); set.add(blanket); set.add(sheet);
+  return { radio: g, set, dial, glow };
+}
+
+/** Verlassenes Dorf mit Holzhäusern, hohem Gras und einer Schaukel. */
+export function emptyVillage({ seed = 191 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), mat("#5d6b4a", { roughness: 1 }));
+  ground.rotation.x = -Math.PI / 2; ground.position.z = -100; ground.receiveShadow = true; g.add(ground);
+  const path = new THREE.Mesh(new THREE.PlaneGeometry(4, 300), mat("#7a6a52"));
+  path.rotation.x = -Math.PI / 2; path.position.set(0, 0.01, -100); g.add(path);
+  for (let i = 0; i < 14; i++) {
+    const s = i % 2 ? 1 : -1, z = -i * 9 - 6;
+    const h = new THREE.Group();
+    box(6, 3.2, 5, mat(r.pick(["#6b5a46", "#7a6650", "#5d4f40"])), 0, 1.6, 0, h);
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(4.6, 2.6, 4), mat("#4a3f36"));
+    roof.position.y = 4.4; roof.rotation.y = Math.PI / 4; roof.scale.set(1.05, 1, 0.85); h.add(roof);
+    for (const x of [-1.5, 1.5]) box(0.9, 0.9, 0.05, mat("#14171b"), x, 1.9, 2.52, h);  // dunkle Fenster
+    box(1.0, 1.9, 0.05, mat("#2a221b"), 0, 0.95, 2.52, h);
+    h.position.set(s * r.range(7, 10), 0, z); h.rotation.y = s > 0 ? -Math.PI / 2 : Math.PI / 2; h.rotation.z = r.range(-0.03, 0.03);
+    g.add(h);
+  }
+  const grass = new THREE.InstancedMesh(new THREE.ConeGeometry(0.06, 0.6, 3), mat("#6f7d52"), 1500);
+  const d = new THREE.Object3D();
+  for (let i = 0; i < 1500; i++) { d.position.set(r.range(-30, 30), 0.3, r.range(-120, 6)); if (Math.abs(d.position.x) < 2.2) d.position.x += 4; d.rotation.set(r.range(-0.3, 0.3), 0, r.range(-0.3, 0.3)); d.scale.setScalar(r.range(0.6, 1.6)); d.updateMatrix(); grass.setMatrixAt(i, d.matrix); }
+  g.add(grass);
+  // kahle Bäume
+  for (let i = 0; i < 18; i++) {
+    const t = new THREE.Group(); const trunk = mat("#3a3029");
+    cyl(0.15, 0.25, 5, 5, trunk, 0, 2.5, 0, t);
+    for (let k = 0; k < 4; k++) { const b = cyl(0.04, 0.08, 2, 4, trunk, 0, 4 + k * 0.4, 0, t); b.rotation.set(r.range(-0.9, 0.9), k, r.range(-0.9, 0.9)); }
+    t.position.set(r.range(-40, 40), 0, r.range(-130, -20)); if (Math.abs(t.position.x) < 12) t.position.x += 14 * Math.sign(t.position.x || 1); g.add(t);
+  }
+  // Schaukel
+  const swing = new THREE.Group();
+  const frame = mat("#4a3f36");
+  for (const x of [-1, 1]) { const p = cyl(0.06, 0.06, 2.6, 5, frame, x, 1.3, 0, swing); p.rotation.z = x * 0.12; }
+  const beam = cyl(0.06, 0.06, 2.3, 5, frame, 0, 2.55, 0, swing); beam.rotation.z = Math.PI / 2;
+  const seat = new THREE.Group(); seat.position.y = 2.5;
+  for (const x of [-0.3, 0.3]) cyl(0.01, 0.01, 1.9, 3, mat("#8a8378"), x, -0.95, 0, seat);
+  box(0.75, 0.05, 0.3, mat("#6b5a46"), 0, -1.9, 0, seat);
+  swing.add(seat); swing.position.set(2.4, 0, -6); g.add(swing);
+  return { group: g, seat };
+}
