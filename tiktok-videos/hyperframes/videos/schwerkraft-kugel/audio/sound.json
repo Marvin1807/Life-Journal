@@ -1,0 +1,330 @@
+{
+ "duration": 75,
+ "cues": [
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 0,
+   "dur": 20.0,
+   "gain": 0.4,
+   "seed": 1,
+   "fadeIn": 0.4,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "ambience",
+   "preset": "street",
+   "at": 0,
+   "dur": 20.0,
+   "gain": 0.3,
+   "seed": 2,
+   "fadeIn": 0.4,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "birds",
+   "at": 0,
+   "dur": 20,
+   "gain": 0.06,
+   "seed": 4,
+   "density": 1.4
+  },
+  {
+   "type": "pad",
+   "at": 0,
+   "dur": 20.0,
+   "freqs": [
+    130.8,
+    164.8,
+    196.0,
+    261.6
+   ],
+   "gain": 0.08,
+   "seed": 5,
+   "fadeIn": 4,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "footsteps",
+   "surface": "tile",
+   "at": 0.1,
+   "dur": 19.9,
+   "rate": 1.85,
+   "gain": 0.28,
+   "seed": 3,
+   "verb": 0.2
+  },
+  {
+   "type": "ticks",
+   "at": 8.0,
+   "dur": 12.0,
+   "interval": [
+    1.0,
+    0.25
+   ],
+   "gain": 0.1,
+   "seed": 6
+  },
+  {
+   "type": "shimmer",
+   "at": 10.0,
+   "dur": 1.4,
+   "gain": 0.07,
+   "seed": 40
+  },
+  {
+   "type": "riser",
+   "at": 20.0,
+   "dur": 8.0,
+   "f0": 120,
+   "f1": 1800,
+   "gain": 0.4,
+   "seed": 7,
+   "verb": 0.3
+  },
+  {
+   "type": "drop",
+   "at": 20.0,
+   "dur": 2.5,
+   "f0": 60,
+   "f1": 900,
+   "gain": 0.25,
+   "verb": 0.6
+  },
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 20.0,
+   "dur": 5.0,
+   "gain": 0.2,
+   "seed": 8,
+   "lp": 900,
+   "fadeOut": 2.0
+  },
+  {
+   "type": "pad",
+   "at": 20.0,
+   "dur": 30.0,
+   "freqs": [
+    82.4,
+    98.0,
+    123.5,
+    164.8
+   ],
+   "gain": 0.2,
+   "seed": 9,
+   "fadeIn": 3,
+   "fadeOut": 0.2
+  },
+  {
+   "type": "sub",
+   "at": 20.0,
+   "dur": 30.0,
+   "freq": 41,
+   "gain": 0.45,
+   "seed": 10,
+   "from": 0.3,
+   "to": 1.0
+  },
+  {
+   "type": "shimmer",
+   "at": 24.0,
+   "dur": 3.0,
+   "gain": 0.1,
+   "seed": 13
+  },
+  {
+   "type": "wind",
+   "at": 26.0,
+   "dur": 24.0,
+   "gain": 0.5,
+   "seed": 11
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 28.0,
+   "dur": 22.0,
+   "gain": 0.45,
+   "seed": 12,
+   "fadeIn": 4,
+   "fadeOut": 0.1
+  },
+  {
+   "type": "heartbeat",
+   "at": 36.0,
+   "dur": 27.0,
+   "bpm": 84,
+   "gain": 0.3,
+   "seed": 14
+  },
+  {
+   "type": "tinnitus",
+   "at": 40.7,
+   "dur": 3.5,
+   "freq": 4200,
+   "gain": 0.06
+  },
+  {
+   "type": "shimmer",
+   "at": 41.0,
+   "dur": 1.4,
+   "gain": 0.07,
+   "seed": 41
+  },
+  {
+   "type": "reverse",
+   "at": 50.0,
+   "dur": 1.2,
+   "gain": 0.4,
+   "seed": 15
+  },
+  {
+   "type": "drop",
+   "at": 50.0,
+   "dur": 13.0,
+   "f0": 1600,
+   "f1": 60,
+   "gain": 0.3,
+   "verb": 0.3
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 50.0,
+   "dur": 12.99258786576182,
+   "gain": 0.6,
+   "seed": 16,
+   "fadeIn": 3,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "riser",
+   "at": 62.99258786576182,
+   "dur": 2.007,
+   "f0": 300,
+   "f1": 3000,
+   "gain": 0.4,
+   "seed": 17,
+   "fadeOut": 0.15
+  },
+  {
+   "type": "impact",
+   "at": 62.99258786576182,
+   "gain": 1.0,
+   "seed": 18,
+   "low": 50,
+   "verb": 0.5
+  },
+  {
+   "type": "splat",
+   "at": 62.99258786576182,
+   "gain": 0.8,
+   "seed": 19
+  },
+  {
+   "type": "water",
+   "at": 62.99258786576182,
+   "dur": 1.6,
+   "gain": 0.6,
+   "seed": 20,
+   "fadeOut": 1.2
+  },
+  {
+   "type": "ambience",
+   "preset": "underwater",
+   "at": 63.19258786576182,
+   "dur": 1.807,
+   "gain": 0.6,
+   "seed": 21,
+   "fadeIn": 0.3,
+   "fadeOut": 0.15
+  },
+  {
+   "type": "whoosh",
+   "at": 65.0,
+   "dur": 1.2,
+   "gain": 0.55,
+   "seed": 42
+  },
+  {
+   "type": "ambience",
+   "preset": "room",
+   "at": 65.0,
+   "dur": 5.0,
+   "gain": 0.35,
+   "seed": 43,
+   "fadeIn": 0.3,
+   "fadeOut": 0.3
+  },
+  {
+   "type": "shimmer",
+   "at": 65.2,
+   "dur": 4.6,
+   "gain": 0.12,
+   "seed": 44
+  },
+  {
+   "type": "chime",
+   "at": 65.6,
+   "dur": 4.2,
+   "freq": 523.3,
+   "gain": 0.09,
+   "verb": 0.6
+  },
+  {
+   "type": "chime",
+   "at": 66.4,
+   "dur": 3.5,
+   "freq": 392.0,
+   "gain": 0.08,
+   "verb": 0.6
+  },
+  {
+   "type": "rattle",
+   "at": 67.3,
+   "dur": 2.0,
+   "gain": 0.35,
+   "seed": 45
+  },
+  {
+   "type": "water",
+   "at": 67.3,
+   "dur": 2.3,
+   "gain": 0.4,
+   "seed": 46,
+   "fadeOut": 0.8
+  },
+  {
+   "type": "silence",
+   "at": 70.0,
+   "dur": 0.5
+  },
+  {
+   "type": "pad",
+   "at": 70.5,
+   "dur": 4.5,
+   "freqs": [
+    130.8,
+    164.8,
+    196.0,
+    261.6
+   ],
+   "gain": 0.07,
+   "seed": 22,
+   "fadeIn": 0.8,
+   "fadeOut": 1.5
+  },
+  {
+   "type": "bell",
+   "at": 70.6,
+   "dur": 4.4,
+   "freqs": [
+    130.8,
+    196.0
+   ],
+   "gain": 0.1,
+   "verb": 0.5
+  }
+ ]
+}

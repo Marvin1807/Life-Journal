@@ -1,0 +1,400 @@
+{
+ "duration": 75,
+ "cues": [
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 0,
+   "dur": 16.4,
+   "gain": 0.4,
+   "seed": 1,
+   "fadeIn": 0.4,
+   "fadeOut": 0.15
+  },
+  {
+   "type": "ambience",
+   "preset": "street",
+   "at": 0,
+   "dur": 16.4,
+   "gain": 0.3,
+   "seed": 2,
+   "fadeIn": 0.4,
+   "fadeOut": 0.15
+  },
+  {
+   "type": "birds",
+   "at": 0,
+   "dur": 16.4,
+   "gain": 0.06,
+   "seed": 4,
+   "density": 1.4,
+   "fadeOut": 0.15
+  },
+  {
+   "type": "pad",
+   "at": 0,
+   "dur": 16.4,
+   "freqs": [
+    130.8,
+    164.8,
+    196.0,
+    261.6
+   ],
+   "gain": 0.08,
+   "seed": 5,
+   "fadeIn": 4,
+   "fadeOut": 0.15
+  },
+  {
+   "type": "footsteps",
+   "surface": "tile",
+   "at": 0.1,
+   "dur": 16.3,
+   "rate": 1.85,
+   "gain": 0.28,
+   "seed": 3,
+   "verb": 0.2,
+   "fadeOut": 0.15
+  },
+  {
+   "type": "ticks",
+   "at": 8.0,
+   "dur": 8.4,
+   "interval": [
+    1.0,
+    0.25
+   ],
+   "gain": 0.1,
+   "seed": 6,
+   "fadeOut": 0.15
+  },
+  {
+   "type": "whoosh",
+   "at": 16.4,
+   "dur": 0.6,
+   "gain": 0.4,
+   "seed": 50
+  },
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 16.4,
+   "dur": 3.5,
+   "gain": 0.12,
+   "seed": 51,
+   "lp": 500,
+   "fadeIn": 0.2,
+   "fadeOut": 0.2
+  },
+  {
+   "type": "sub",
+   "at": 16.4,
+   "dur": 3.5,
+   "freq": 38,
+   "gain": 0.3,
+   "seed": 52,
+   "from": 0.4,
+   "to": 1.0
+  },
+  {
+   "type": "heartbeat",
+   "at": 16.599999999999998,
+   "dur": 3.3,
+   "bpm": 72,
+   "gain": 0.35,
+   "seed": 53
+  },
+  {
+   "type": "ticks",
+   "at": 16.7,
+   "dur": 3.1,
+   "interval": [
+    0.6,
+    0.6
+   ],
+   "gain": 0.12,
+   "seed": 54
+  },
+  {
+   "type": "ding",
+   "at": 19.0,
+   "gain": 0.3
+  },
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 19.9,
+   "dur": 3.6,
+   "gain": 0.4,
+   "seed": 1,
+   "fadeIn": 0.25,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "ambience",
+   "preset": "street",
+   "at": 19.9,
+   "dur": 3.6,
+   "gain": 0.3,
+   "seed": 2,
+   "fadeIn": 0.25,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "footsteps",
+   "surface": "tile",
+   "at": 19.9,
+   "dur": 3.6,
+   "rate": 1.85,
+   "gain": 0.28,
+   "seed": 3,
+   "verb": 0.2,
+   "fadeIn": 0.25
+  },
+  {
+   "type": "birds",
+   "at": 19.9,
+   "dur": 3.6,
+   "gain": 0.06,
+   "seed": 4,
+   "density": 1.4,
+   "fadeIn": 0.25
+  },
+  {
+   "type": "pad",
+   "at": 19.9,
+   "dur": 3.6,
+   "freqs": [
+    130.8,
+    164.8,
+    196.0,
+    261.6
+   ],
+   "gain": 0.08,
+   "seed": 5,
+   "fadeIn": 0.25,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "ticks",
+   "at": 19.9,
+   "dur": 3.6,
+   "interval": [
+    0.5,
+    0.25
+   ],
+   "gain": 0.1,
+   "seed": 6,
+   "fadeIn": 0.25
+  },
+  {
+   "type": "reverse",
+   "at": 19.9,
+   "dur": 0.5,
+   "gain": 0.3,
+   "seed": 55
+  },
+  {
+   "type": "riser",
+   "at": 23.5,
+   "dur": 8.0,
+   "f0": 120,
+   "f1": 1800,
+   "gain": 0.4,
+   "seed": 7,
+   "verb": 0.3
+  },
+  {
+   "type": "drop",
+   "at": 23.5,
+   "dur": 2.5,
+   "f0": 60,
+   "f1": 900,
+   "gain": 0.25,
+   "verb": 0.6
+  },
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 23.5,
+   "dur": 5.0,
+   "gain": 0.2,
+   "seed": 8,
+   "lp": 900,
+   "fadeOut": 2.0
+  },
+  {
+   "type": "pad",
+   "at": 23.5,
+   "dur": 30.0,
+   "freqs": [
+    82.4,
+    98.0,
+    123.5,
+    164.8
+   ],
+   "gain": 0.2,
+   "seed": 9,
+   "fadeIn": 3,
+   "fadeOut": 0.2
+  },
+  {
+   "type": "sub",
+   "at": 23.5,
+   "dur": 30.0,
+   "freq": 41,
+   "gain": 0.45,
+   "seed": 10,
+   "from": 0.3,
+   "to": 1.0
+  },
+  {
+   "type": "shimmer",
+   "at": 27.5,
+   "dur": 3.0,
+   "gain": 0.1,
+   "seed": 13
+  },
+  {
+   "type": "wind",
+   "at": 29.5,
+   "dur": 24.0,
+   "gain": 0.5,
+   "seed": 11
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 31.5,
+   "dur": 22.0,
+   "gain": 0.45,
+   "seed": 12,
+   "fadeIn": 4,
+   "fadeOut": 0.1
+  },
+  {
+   "type": "heartbeat",
+   "at": 39.5,
+   "dur": 27.0,
+   "bpm": 84,
+   "gain": 0.3,
+   "seed": 14
+  },
+  {
+   "type": "tinnitus",
+   "at": 44.2,
+   "dur": 3.5,
+   "freq": 4200,
+   "gain": 0.06
+  },
+  {
+   "type": "reverse",
+   "at": 53.5,
+   "dur": 1.2,
+   "gain": 0.4,
+   "seed": 15
+  },
+  {
+   "type": "drop",
+   "at": 53.5,
+   "dur": 13.0,
+   "f0": 1600,
+   "f1": 60,
+   "gain": 0.3,
+   "verb": 0.3
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 53.5,
+   "dur": 12.99258786576182,
+   "gain": 0.6,
+   "seed": 16,
+   "fadeIn": 3,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "riser",
+   "at": 66.493,
+   "dur": 3.507,
+   "f0": 300,
+   "f1": 3000,
+   "gain": 0.4,
+   "seed": 17,
+   "fadeOut": 0.3
+  },
+  {
+   "type": "impact",
+   "at": 66.493,
+   "gain": 1.0,
+   "seed": 18,
+   "low": 50,
+   "verb": 0.5
+  },
+  {
+   "type": "splat",
+   "at": 66.493,
+   "gain": 0.8,
+   "seed": 19
+  },
+  {
+   "type": "water",
+   "at": 66.493,
+   "dur": 1.6,
+   "gain": 0.6,
+   "seed": 20,
+   "fadeOut": 1.2
+  },
+  {
+   "type": "ambience",
+   "preset": "underwater",
+   "at": 66.693,
+   "dur": 3.307,
+   "gain": 0.6,
+   "seed": 21,
+   "fadeIn": 0.3,
+   "fadeOut": 0.3
+  },
+  {
+   "type": "chime",
+   "at": 68.093,
+   "dur": 1.907,
+   "freq": 196.0,
+   "gain": 0.18,
+   "verb": 0.8,
+   "lp": 1200,
+   "fadeOut": 0.3
+  },
+  {
+   "type": "silence",
+   "at": 70.0,
+   "dur": 0.5
+  },
+  {
+   "type": "pad",
+   "at": 70.5,
+   "dur": 4.5,
+   "freqs": [
+    130.8,
+    164.8,
+    196.0,
+    261.6
+   ],
+   "gain": 0.07,
+   "seed": 22,
+   "fadeIn": 0.8,
+   "fadeOut": 1.5
+  },
+  {
+   "type": "bell",
+   "at": 70.6,
+   "dur": 4.4,
+   "freqs": [
+    130.8,
+    196.0
+   ],
+   "gain": 0.1,
+   "verb": 0.5
+  }
+ ]
+}
