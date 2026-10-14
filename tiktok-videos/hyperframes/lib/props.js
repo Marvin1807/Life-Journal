@@ -962,3 +962,68 @@ export function emptyVillage({ seed = 191 } = {}) {
   swing.add(seat); swing.position.set(2.4, 0, -6); g.add(swing);
   return { group: g, seat };
 }
+
+// ======================================================================
+// Alexanderplatz: Platz, Weltzeituhr, Neptunbrunnen, Plattenbauten, Tauben
+// ======================================================================
+export function alexanderplatz({ seed = 201 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  const tiles = tileTexture("#d8d3c8", "#b9b2a5", 6); tiles.repeat.set(60, 60);
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ map: tiles, roughness: 0.9 }));
+  ground.rotation.x = -Math.PI / 2; ground.position.z = -60; ground.receiveShadow = true; g.add(ground);
+  // Plattenbauten rund um den Platz
+  const texs = [windowTextures(211, "plattenbau"), windowTextures(212, "plattenbau"), windowTextures(213, "altbau")];
+  const ring = [];
+  for (let i = 0; i < 16; i++) {
+    const a = (i / 16) * Math.PI * 2 + 0.2, d = r.range(70, 95);
+    const b = building({ w: r.range(30, 50), h: r.range(22, 45), d: 18, color: r.pick(["#c9c4ba", "#b8bcc0", "#d6cdbd", "#a9adb3"]), tex: r.pick(texs) });
+    b.mesh.position.set(Math.cos(a) * d, 0, Math.sin(a) * d - 40); b.mesh.rotation.y = -a + Math.PI / 2; g.add(b.mesh); ring.push(b);
+  }
+  // Weltzeituhr
+  const clock = new THREE.Group();
+  const steel = mat("#b9c0c6", { metalness: 0.6, roughness: 0.3 });
+  cyl(0.35, 0.45, 5, 10, steel, 0, 2.5, 0, clock);
+  const drum = cyl(1.6, 1.6, 1.4, 24, mat("#e9e6dc", { roughness: 0.5 }), 0, 5.8, 0, clock);
+  for (let k = 0; k < 24; k++) { const f = box(0.04, 1.3, 0.3, mat("#2a2d33"), Math.cos(k / 24 * Math.PI * 2) * 1.62, 5.8, Math.sin(k / 24 * Math.PI * 2) * 1.62, clock); f.rotation.y = -k / 24 * Math.PI * 2; }
+  cyl(1.7, 1.7, 0.12, 24, steel, 0, 6.55, 0, clock);
+  const atom = new THREE.Group(); atom.position.y = 8;
+  for (let k = 0; k < 3; k++) { const o = new THREE.Mesh(new THREE.TorusGeometry(0.9, 0.04, 6, 24), steel); o.rotation.set(k * 1.0, k * 0.6, 0); atom.add(o); }
+  cyl(0.06, 0.06, 1.4, 6, steel, 0, -0.9, 0, atom);
+  clock.add(atom);
+  clock.position.set(-9, 0, -16); g.add(clock);
+  // Neptunbrunnen (Becken mit Wasser und Figurengruppe)
+  const fountain = new THREE.Group();
+  const stone = mat("#b58e6e", { roughness: 0.8 });
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(9, 0.45, 8, 40), stone); rim.rotation.x = Math.PI / 2; rim.position.y = 0.45; fountain.add(rim);
+  const water = new THREE.Mesh(new THREE.CircleGeometry(9, 40), new THREE.MeshStandardMaterial({ color: "#5b8fa8", roughness: 0.15, metalness: 0.2 }));
+  water.rotation.x = -Math.PI / 2; water.position.y = 0.55; fountain.add(water);
+  cyl(2.2, 2.6, 1.6, 12, stone, 0, 1.1, 0, fountain);
+  const bronze = mat("#4d5a4c", { roughness: 0.5, metalness: 0.4 });
+  cyl(0.7, 0.9, 2.2, 8, bronze, 0, 3.0, 0, fountain);
+  const head = new THREE.Mesh(new THREE.IcosahedronGeometry(0.55, 0), bronze); head.position.y = 4.5; fountain.add(head);
+  const trident = cyl(0.05, 0.05, 3, 4, bronze, 0.8, 4.2, 0, fountain); trident.rotation.z = -0.2;
+  fountain.position.set(14, 0, -48); g.add(fountain);
+  // Fernsehturm in der Nähe
+  return { group: g, clock, atom, fountain, water, fountainPos: new THREE.Vector3(14, 0, -48), ring };
+}
+
+/** Tauben (instanziert). update(t, lift) – lift 0..1 lässt sie hochtreiben. */
+export function pigeons(n = 40, seed = 221) {
+  const r = rng(seed);
+  const body = new THREE.InstancedMesh(new THREE.BoxGeometry(0.22, 0.16, 0.32), mat("#7d8590"), n);
+  const d = []; for (let i = 0; i < n; i++) d.push({ x: r.range(-14, 22), z: r.range(-40, 4), ph: r() * 6, sp: r.range(0.6, 1.4), spin: r.range(-2, 2) });
+  const o = new THREE.Object3D();
+  return {
+    mesh: body,
+    update(t, y0fn) {
+      d.forEach((p, i) => {
+        const y = y0fn ? y0fn(p, i) : 0.1;
+        o.position.set(p.x + Math.sin(t * 0.7 + p.ph) * 0.3, y + 0.08 + Math.abs(Math.sin(t * 6 + p.ph)) * 0.03, p.z);
+        o.rotation.set(y > 0.5 ? t * p.spin * 0.3 : 0, p.ph + (y > 0.5 ? t * 0.5 : 0), 0);
+        o.updateMatrix(); body.setMatrixAt(i, o.matrix);
+      });
+      body.instanceMatrix.needsUpdate = true;
+    },
+  };
+}
