@@ -52,8 +52,10 @@ Erstes fertiges Video und Vorlage: `videos/niemand-arbeitet/`.
    - **Fakten prüfen** (Websuche), Zahlen deutsch formatieren. Unsicheres weglassen.
 3. **Ordner anlegen:** `bash tiktok-videos/hyperframes/tools/neues-video.sh <id>` und dann
    `index.html` umschreiben: Overlay-Config, Szene, Kamerapfad, Licht-Keyframes.
-4. **Ton:** `audio/sound.json` an die Zeiten anpassen, dann
+4. **Ton (Pflicht, nach dem Rezept unten):** `audio/sound.json` Szene für Szene schreiben, dann
    `python3 tools/sounddesign.py videos/<id>/audio/sound.json videos/<id>/audio/sound.wav`.
+   Das Skript meldet RMS (Ziel ≈ −17 dB) und Peak. Nur den Ton geändert? Nicht neu rendern,
+   sondern mit ffmpeg die Tonspur im fertigen MP4 ersetzen (`-map 0:v -map 1:a`).
 5. **Prüfen** (im Videoordner): `npx -y hyperframes@0.8.154 lint` muss 0 Fehler melden.
    Dann `snapshot --at …` an jedem Phasenwechsel, Kontaktbogen ansehen und gegen die
    Regeln unten prüfen. Erst danach rendern.
@@ -102,9 +104,37 @@ Für 80 s: Ereignis bei 8 s, ein Satz alle ~4 s, Wende bei ~54 s, Endkarte ab 72
   Nachtszenen bleiben lesbar: blaues Mondlicht, Hemi ≥ 0,5, Belichtung hoch.
 - Text nur über `ww-overlay.js`: Titel oben (y ≈ 400), HUD links (y ≈ 815), Untertitel kursiv
   mittig (y ≈ 1250), Endkarte zentriert. Keine Emojis, keine Wort-für-Wort-Untertitel.
-- Kein Sprecher. Ton: Atmo vor dem Ereignis, danach Drone und Ticken, Whooshes bei
-  Satzwechseln, Effekte passend zur Handlung (powerdown, impact, wind, chord, bell).
+- Kein Sprecher. Ton nach dem Sound-Rezept (nächster Abschnitt).
 - Deterministisch: kein `Math.random()`, kein `Date.now()`; nur `rng(seed)` und `t`.
+
+## Sound-Rezept (Pflicht für jedes Video)
+
+Abgeleitet aus den Spektrogrammen der drei @man_ia_c-Videos: keine Stimme, viel Sub-Bass,
+Glissandi, Einschläge mit Hall, Glocken, Funkeln, leise Endkarte. Lautheit ≈ −17 dB RMS
+(macht `tools/sounddesign.py` automatisch). `python3 tools/sounddesign.py --list` zeigt alle Typen.
+Vollständige Beispiele: `videos/sonne-weg/audio/sound.json`, `videos/niemand-arbeitet/audio/sound.json`.
+
+Drei Schichten, immer alle drei:
+
+1. **Atmo pro Szene** (`ambience` mit `preset`): exakt von Schnitt zu Schnitt, harte Kanten.
+   Presets: beach, street, subway, supermarket, backyard, room, storm, underwater, office,
+   night, crowd. Fehlt eine passende, neues Preset in `sounddesign.py` ergänzen.
+2. **Musik/Spannung**
+   - vor dem Ereignis: leises Dur-`pad` + `riser`, der genau auf das Ereignis zuläuft
+   - Ereignis: `impact` (verb 0.5–0.6) + `tinnitus` (3–4 s, leise) + Atmo bricht ab
+   - danach bis zur Wende: `sub` (40–50 Hz) + Moll-`pad` + `ticks` (werden schneller);
+     ab der Mitte zusätzlich `heartbeat`
+   - jeder Schnitt: `whoosh` (gain ≈ 0.33, verb 0.3)
+   - dramatische Momente: `drop` (fallendes Glissando, z. B. Licht geht aus), `chime` (Glocke,
+     z. B. 392 Hz bei einer Erkenntnis), `shimmer` (Funkeln bei Magie/Leben/Erlösung)
+   - vor der Wende: `reverse` auf die Wende, dann Dur-`chord` mit Hall
+   - Schwarzbild: `silence`; Endkarte: sehr leises `pad` + `bell`
+3. **Foley zu allem, was man sieht** (synchron zum Bild):
+   - Gehen → `footsteps` mit passendem `surface` (sand, snow, street, tile, wood, ice), rate 1.85
+   - Hände: Wasserhahn `squeak` + `water` + `drip`; Geld/Papier `flutter`; Wagen `rattle`;
+     Eis `ice_crack`; Kälte/Feuer `crackle`; Strom aus `flicker` + `powerdown`;
+     Durchsage `ding`; Kasse `beep`; Aufprall/Pointe `splat`
+   - Zeitpunkte aus `scene.js` übernehmen (dieselben Sekunden wie die Animation).
 
 ## Baukasten (Kurzreferenz)
 

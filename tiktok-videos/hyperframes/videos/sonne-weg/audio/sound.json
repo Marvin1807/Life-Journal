@@ -1,33 +1,406 @@
 {
  "duration": 30,
  "cues": [
-  {"type": "city", "at": 0, "dur": 6.0, "gain": 0.16, "seed": 1, "fadeIn": 0.3, "fadeOut": 0.02},
-  {"type": "wind", "at": 0, "dur": 6.0, "gain": 0.12, "seed": 2},
-  {"type": "birds", "at": 0, "dur": 6.0, "gain": 0.08, "seed": 3, "density": 2.2},
-  {"type": "chord", "at": 0, "dur": 6.0, "freqs": [261.6, 329.6, 392.0], "gain": 0.05, "attack": 5.5},
-
-  {"type": "impact", "at": 6.0, "gain": 1.0, "seed": 4, "low": 36},
-  {"type": "drone", "at": 6.0, "dur": 18.0, "freqs": [49.0, 98.0, 146.8, 196.5], "gain": 0.22, "seed": 5, "from": 0.6, "to": 1.0},
-  {"type": "ticks", "at": 6.3, "dur": 17.6, "interval": [0.55, 0.16], "gain": 0.14, "seed": 6},
-
-  {"type": "whoosh", "at": 9.05, "dur": 0.8, "gain": 0.2, "seed": 7},
-  {"type": "powerdown", "at": 9.9, "dur": 1.2, "gain": 0.25},
-  {"type": "whoosh", "at": 12.05, "dur": 0.8, "gain": 0.2, "seed": 8},
-  {"type": "wind", "at": 12.0, "dur": 3.0, "gain": 0.3, "seed": 9},
-  {"type": "whoosh", "at": 15.05, "dur": 0.8, "gain": 0.18, "seed": 10},
-  {"type": "whoosh", "at": 18.05, "dur": 0.8, "gain": 0.2, "seed": 11},
-  {"type": "wind", "at": 18.0, "dur": 3.0, "gain": 0.38, "seed": 12},
-  {"type": "impact", "at": 19.2, "gain": 0.25, "seed": 13, "low": 30},
-  {"type": "whoosh", "at": 21.05, "dur": 0.8, "gain": 0.2, "seed": 14},
-  {"type": "drip", "at": 21.6, "gain": 0.12}, {"type": "drip", "at": 22.1, "gain": 0.1, "pan": 0.2},
-  {"type": "drip", "at": 22.7, "gain": 0.12, "pan": -0.2}, {"type": "drip", "at": 23.3, "gain": 0.1},
-
-  {"type": "chord", "at": 24.0, "dur": 3.0, "freqs": [130.8, 196.0, 261.6, 329.6, 392.0], "gain": 0.16, "attack": 0.6},
-  {"type": "birds", "at": 24.1, "dur": 2.9, "gain": 0.08, "seed": 15, "density": 2.5},
-  {"type": "wind", "at": 24.0, "dur": 3.0, "gain": 0.1, "seed": 16},
-  {"type": "impact", "at": 26.55, "gain": 0.18, "seed": 17, "low": 70},
-
-  {"type": "silence", "at": 27.0, "dur": 0.45},
-  {"type": "bell", "at": 27.45, "dur": 2.55, "freqs": [130.8, 196.0], "gain": 0.12}
+  {
+   "type": "ambience",
+   "preset": "beach",
+   "at": 0,
+   "dur": 6.0,
+   "gain": 0.55,
+   "seed": 1,
+   "fadeIn": 0.3,
+   "fadeOut": 0.01
+  },
+  {
+   "type": "footsteps",
+   "surface": "sand",
+   "at": 0.2,
+   "dur": 5.8,
+   "rate": 1.2,
+   "gain": 0.22,
+   "seed": 2
+  },
+  {
+   "type": "birds",
+   "at": 0,
+   "dur": 6,
+   "gain": 0.08,
+   "seed": 3,
+   "density": 1.5,
+   "pan": 0.4
+  },
+  {
+   "type": "pad",
+   "at": 0,
+   "dur": 6.0,
+   "freqs": [
+    261.6,
+    329.6,
+    392.0,
+    523.3
+   ],
+   "gain": 0.1,
+   "seed": 4,
+   "fadeIn": 2.5,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "riser",
+   "at": 6.0,
+   "dur": 2.6,
+   "gain": 0.45,
+   "seed": 5,
+   "verb": 0.3
+  },
+  {
+   "type": "impact",
+   "at": 6.0,
+   "gain": 1.0,
+   "seed": 6,
+   "low": 32,
+   "verb": 0.6
+  },
+  {
+   "type": "tinnitus",
+   "at": 6.0,
+   "dur": 4.0,
+   "freq": 3800,
+   "gain": 0.05
+  },
+  {
+   "type": "sub",
+   "at": 6.0,
+   "dur": 18.0,
+   "freq": 44,
+   "gain": 0.55,
+   "seed": 7,
+   "from": 0.7,
+   "to": 1.0
+  },
+  {
+   "type": "pad",
+   "at": 6.0,
+   "dur": 18.0,
+   "freqs": [
+    110.0,
+    130.8,
+    164.8
+   ],
+   "gain": 0.2,
+   "seed": 8,
+   "fadeIn": 0.8,
+   "fadeOut": 0.1
+  },
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 6.3,
+   "dur": 2.7,
+   "gain": 0.22,
+   "seed": 9,
+   "lp": 1200,
+   "fadeIn": 0.6
+  },
+  {
+   "type": "ambience",
+   "preset": "night",
+   "at": 6.0,
+   "dur": 3.0,
+   "gain": 0.2,
+   "seed": 10
+  },
+  {
+   "type": "ticks",
+   "at": 6.4,
+   "dur": 17.6,
+   "interval": [
+    0.6,
+    0.18
+   ],
+   "gain": 0.1,
+   "seed": 11
+  },
+  {
+   "type": "whoosh",
+   "at": 9,
+   "dur": 0.8,
+   "gain": 0.35,
+   "seed": 20,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 12,
+   "dur": 0.8,
+   "gain": 0.35,
+   "seed": 21,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 15,
+   "dur": 0.8,
+   "gain": 0.35,
+   "seed": 22,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 18,
+   "dur": 0.8,
+   "gain": 0.35,
+   "seed": 23,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 21,
+   "dur": 0.8,
+   "gain": 0.35,
+   "seed": 24,
+   "verb": 0.3
+  },
+  {
+   "type": "ambience",
+   "preset": "night",
+   "at": 9,
+   "dur": 3,
+   "gain": 0.35,
+   "seed": 30
+  },
+  {
+   "type": "drop",
+   "at": 9.9,
+   "dur": 1.5,
+   "f0": 1200,
+   "f1": 60,
+   "gain": 0.35,
+   "verb": 0.4
+  },
+  {
+   "type": "chime",
+   "at": 10.0,
+   "dur": 3.0,
+   "freq": 392.0,
+   "gain": 0.22,
+   "verb": 0.6
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 12,
+   "dur": 3,
+   "gain": 0.6,
+   "seed": 31
+  },
+  {
+   "type": "footsteps",
+   "surface": "snow",
+   "at": 12.1,
+   "dur": 2.9,
+   "rate": 1.85,
+   "gain": 0.38,
+   "seed": 32
+  },
+  {
+   "type": "crackle",
+   "at": 12,
+   "dur": 3,
+   "gain": 0.1,
+   "seed": 33,
+   "density": 20
+  },
+  {
+   "type": "heartbeat",
+   "at": 12.0,
+   "dur": 12.0,
+   "bpm": 68,
+   "gain": 0.32,
+   "seed": 34
+  },
+  {
+   "type": "ambience",
+   "preset": "room",
+   "at": 15,
+   "dur": 3,
+   "gain": 0.3,
+   "seed": 35
+  },
+  {
+   "type": "crackle",
+   "at": 15,
+   "dur": 3,
+   "gain": 0.08,
+   "seed": 36,
+   "density": 12
+  },
+  {
+   "type": "drop",
+   "at": 15.6,
+   "dur": 2.2,
+   "f0": 700,
+   "f1": 90,
+   "gain": 0.22,
+   "verb": 0.5
+  },
+  {
+   "type": "shimmer",
+   "at": 15.0,
+   "dur": 3.0,
+   "gain": 0.1,
+   "seed": 37,
+   "density": 25
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 18,
+   "dur": 3,
+   "gain": 0.55,
+   "seed": 38
+  },
+  {
+   "type": "footsteps",
+   "surface": "ice",
+   "at": 18.1,
+   "dur": 2.9,
+   "rate": 1.6,
+   "gain": 0.3,
+   "seed": 39
+  },
+  {
+   "type": "ice_crack",
+   "at": 18.6,
+   "gain": 0.5,
+   "seed": 40,
+   "verb": 0.5,
+   "pan": -0.3
+  },
+  {
+   "type": "ice_crack",
+   "at": 19.7,
+   "gain": 0.75,
+   "seed": 41,
+   "verb": 0.5,
+   "pan": 0.2
+  },
+  {
+   "type": "ice_crack",
+   "at": 20.5,
+   "gain": 0.4,
+   "seed": 42,
+   "verb": 0.5,
+   "pan": 0.4
+  },
+  {
+   "type": "ambience",
+   "preset": "underwater",
+   "at": 21,
+   "dur": 3,
+   "gain": 0.7,
+   "seed": 44
+  },
+  {
+   "type": "shimmer",
+   "at": 22.0,
+   "dur": 2.0,
+   "gain": 0.14,
+   "seed": 45,
+   "density": 30
+  },
+  {
+   "type": "chime",
+   "at": 22.2,
+   "dur": 2.5,
+   "freq": 196.0,
+   "gain": 0.18,
+   "verb": 0.7,
+   "lp": 1500
+  },
+  {
+   "type": "reverse",
+   "at": 24.0,
+   "dur": 1.3,
+   "gain": 0.45,
+   "seed": 46
+  },
+  {
+   "type": "chord",
+   "at": 24.0,
+   "dur": 3.0,
+   "freqs": [
+    130.8,
+    164.8,
+    196.0,
+    261.6,
+    329.6,
+    392.0
+   ],
+   "gain": 0.32,
+   "attack": 0.4,
+   "verb": 0.5
+  },
+  {
+   "type": "ambience",
+   "preset": "beach",
+   "at": 24.0,
+   "dur": 3.0,
+   "gain": 0.5,
+   "seed": 47,
+   "fadeIn": 0.2,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "shimmer",
+   "at": 24.0,
+   "dur": 1.6,
+   "gain": 0.18,
+   "seed": 48
+  },
+  {
+   "type": "drop",
+   "at": 26.25,
+   "dur": 0.4,
+   "f0": 900,
+   "f1": 250,
+   "gain": 0.12
+  },
+  {
+   "type": "splat",
+   "at": 26.65,
+   "gain": 0.55,
+   "seed": 49
+  },
+  {
+   "type": "silence",
+   "at": 27.0,
+   "dur": 0.42
+  },
+  {
+   "type": "pad",
+   "at": 27.4,
+   "dur": 2.6,
+   "freqs": [
+    130.8,
+    164.8,
+    196.0,
+    261.6
+   ],
+   "gain": 0.07,
+   "seed": 50,
+   "fadeIn": 0.6,
+   "fadeOut": 1.0
+  },
+  {
+   "type": "bell",
+   "at": 27.45,
+   "dur": 2.55,
+   "freqs": [
+    130.8,
+    196.0
+   ],
+   "gain": 0.1,
+   "verb": 0.5
+  }
  ]
 }
