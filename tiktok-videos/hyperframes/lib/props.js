@@ -535,3 +535,270 @@ export function office({ seed = 91 } = {}) {
   box(0.2, 0.9, 0.2, mat("#3d6b3a"), 2.0, 0.85, -16.2, g);
   return { group: g, seats, chair };
 }
+
+// ======================================================================
+// Bausteine für "Sonne verschwindet" (und alles, was Natur/Kälte zeigt)
+// ======================================================================
+
+/** Eiswaffel mit zwei Kugeln. userData.top = obere Kugel (zum Runterrutschen). */
+export function iceCream() {
+  const g = new THREE.Group();
+  const cone = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.13, 8), mat("#d4a25e"));
+  cone.rotation.x = Math.PI; cone.position.y = -0.04; g.add(cone);
+  const s1 = new THREE.Mesh(new THREE.IcosahedronGeometry(0.04, 1), mat("#f3e7c9", { roughness: 0.6 }));
+  s1.position.y = 0.035; g.add(s1);
+  const s2 = new THREE.Mesh(new THREE.IcosahedronGeometry(0.037, 1), mat("#ef8fa3", { roughness: 0.6 }));
+  s2.position.y = 0.095; g.add(s2);
+  g.userData.top = s2;
+  return g;
+}
+
+/** Digitales Thermometer. setTemp(°C) zeichnet die Anzeige neu. */
+export function thermometer() {
+  const g = new THREE.Group();
+  box(0.07, 0.15, 0.022, mat("#e9e9e4", { roughness: 0.5 }), 0, 0, 0, g);
+  const disp = canvasTexture(240, 150, () => {});
+  const d = new THREE.Mesh(new THREE.PlaneGeometry(0.058, 0.036), new THREE.MeshBasicMaterial({ map: disp.tex, toneMapped: false }));
+  d.position.set(0, 0.035, 0.0115); g.add(d);
+  box(0.02, 0.06, 0.02, mat("#b8b8b2"), 0, -0.1, 0, g);
+  g.userData.setTemp = (c) => disp.redraw((x, w, h) => {
+    x.fillStyle = "#b9c7b4"; x.fillRect(0, 0, w, h);
+    x.fillStyle = "#1c2420"; x.font = "700 62px 'Courier New', monospace"; x.textAlign = "right"; x.textBaseline = "middle";
+    const v = (c < 0 ? "-" : "") + Math.abs(c).toFixed(1).replace(".", ",");
+    x.fillText(v, w - 52, h / 2 + 4);
+    x.font = "700 34px Arial"; x.fillText("°C", w - 8, h / 2 - 18);
+  });
+  g.userData.setTemp(20);
+  return g;
+}
+
+export function diveLamp() {
+  const g = new THREE.Group();
+  const body = cyl(0.03, 0.026, 0.16, 10, mat("#f2c318", { roughness: 0.4 }), 0, 0, 0, g);
+  body.rotation.x = Math.PI / 2;
+  const lens = cyl(0.033, 0.033, 0.01, 12, basic("#cfc8a8"), 0, 0, -0.085, g);
+  lens.rotation.x = Math.PI / 2;
+  return g;
+}
+
+/** Topfpflanze; update(k) lässt sie welken (0 = frisch, 1 = tot). */
+export function pottedPlant(seed = 7) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  cyl(0.075, 0.06, 0.11, 10, mat("#b5653a"), 0, 0.055, 0, g);
+  cyl(0.07, 0.07, 0.01, 10, mat("#3b2a1d"), 0, 0.108, 0, g);
+  const leaves = [];
+  const green = new THREE.Color("#4f9a3c"), brown = new THREE.Color("#6b4f2a");
+  for (let i = 0; i < 14; i++) {
+    const stem = new THREE.Group();
+    stem.position.set(r.range(-0.03, 0.03), 0.11, r.range(-0.03, 0.03));
+    stem.rotation.y = r() * 6.28;
+    const m = new THREE.MeshStandardMaterial({ color: green.clone(), roughness: 0.8, flatShading: true, side: THREE.DoubleSide });
+    const leaf = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.008, 0.06), m);
+    const h = r.range(0.05, 0.16);
+    leaf.position.set(0, h, 0.03);
+    stem.add(leaf);
+    const stalk = cyl(0.003, 0.003, h, 4, mat("#3e7a30"), 0, h / 2, 0, stem);
+    g.add(stem);
+    leaves.push({ stem, leaf, m, base: r.range(-0.5, -0.2), h });
+  }
+  return {
+    group: g,
+    update(k) {
+      for (const l of leaves) {
+        l.stem.rotation.x = lerp(l.base, 1.2, smooth(k));
+        l.m.color.copy(green).lerp(brown, smooth(k * 1.3));
+        l.leaf.scale.set(1, 1, lerp(1, 0.6, k));
+      }
+    },
+  };
+}
+
+/** Strandbad: Sand, See, Strandkörbe, Schirme, Bäume am Ufer gegenüber. */
+export function beach({ seed = 111 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  const sand = new THREE.Mesh(new THREE.PlaneGeometry(200, 120), mat("#e6d3a3", { roughness: 1 }));
+  sand.rotation.x = -Math.PI / 2; sand.position.z = 30; sand.receiveShadow = true; g.add(sand);
+  const water = new THREE.Mesh(new THREE.PlaneGeometry(1200, 600), new THREE.MeshStandardMaterial({ color: "#4f86a8", roughness: 0.25, metalness: 0.3, flatShading: true }));
+  water.rotation.x = -Math.PI / 2; water.position.set(0, -0.05, -330); g.add(water);
+  // Ufer gegenüber mit Bäumen
+  const shore = new THREE.Mesh(new THREE.PlaneGeometry(1200, 80), mat("#4d6b3a"));
+  shore.rotation.x = -Math.PI / 2; shore.position.set(0, 0.02, -470); g.add(shore);
+  const treeMat = mat("#3f6a35");
+  for (let i = 0; i < 120; i++) {
+    const t = new THREE.Mesh(new THREE.ConeGeometry(r.range(4, 7), r.range(12, 22), 6), treeMat);
+    t.position.set(r.range(-450, 450), 8, r.range(-440, -500)); g.add(t);
+  }
+  // Segelboote
+  for (let i = 0; i < 6; i++) {
+    const b = new THREE.Group();
+    box(4, 0.8, 1.4, mat("#f2f2ee"), 0, 0.4, 0, b);
+    const sail = new THREE.Mesh(new THREE.ConeGeometry(2.2, 8, 3), mat("#fbfbf6"));
+    sail.position.y = 4.8; sail.scale.z = 0.15; b.add(sail);
+    b.position.set(r.range(-120, 120), 0, r.range(-120, -300)); b.rotation.y = r() * 3; g.add(b);
+  }
+  // Strandkörbe und Schirme
+  const wicker = mat("#d9c39a"), stripe = [mat("#2f6fb0"), mat("#d24a3a"), mat("#e8b23a")];
+  for (let i = 0; i < 22; i++) {
+    const x = r.range(-22, 22), z = r.range(-26, -2);
+    if (Math.abs(x) < 2.5 && z > -8) continue;
+    if (r() < 0.5) {
+      const k = new THREE.Group();
+      box(1.3, 1.0, 0.9, wicker, 0, 0.5, 0, k);
+      box(1.3, 0.7, 0.2, wicker, 0, 1.35, 0.35, k);
+      box(1.32, 0.12, 0.9, r.pick(stripe), 0, 1.7, 0.1, k);
+      k.position.set(x, 0, z); k.rotation.y = r.range(2.6, 3.6); g.add(k);
+    } else {
+      const u = new THREE.Group();
+      cyl(0.03, 0.03, 2.2, 5, mat("#eeeeee"), 0, 1.1, 0, u);
+      const top = new THREE.Mesh(new THREE.ConeGeometry(1.2, 0.5, 8), r.pick(stripe));
+      top.position.y = 2.3; top.castShadow = true; u.add(top);
+      u.position.set(x, 0, z); g.add(u);
+    }
+    const towel = box(0.8, 0.02, 1.8, r.pick(stripe), x + r.range(-1.5, 1.5), 0.01, z + 1.6, g);
+  }
+  return { group: g, water };
+}
+
+/** Balkon mit Geländer; Blick auf eine Stadt. */
+export function balcony({ seed = 121 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  box(3.2, 0.12, 1.6, mat("#8d8780"), 0, 0, -0.4, g);
+  const rail = mat("#2b2e33", { metalness: 0.4 });
+  box(3.2, 0.05, 0.05, rail, 0, 1.0, -1.18, g);
+  for (let x = -1.55; x <= 1.56; x += 0.16) box(0.02, 1.0, 0.02, rail, x, 0.5, -1.18, g);
+  for (const x of [-1.6, 1.6]) box(0.05, 1.0, 1.6, rail, x, 0.5, -0.4, g);
+  const pot = cyl(0.14, 0.11, 0.25, 8, mat("#b5653a"), 1.3, 0.18, -0.9, g);
+  const city = new THREE.Group();
+  const texs = [windowTextures(131, "plattenbau"), windowTextures(132, "altbau")];
+  const blocks = [];
+  for (let i = 0; i < 90; i++) {
+    const dist = r.range(30, 380);
+    const b = building({ w: r.range(10, 24), h: r.range(14, 50), d: r.range(10, 24), color: r.pick(["#9aa0a8", "#b6a99a", "#c2b8a8"]), tex: r.pick(texs) });
+    b.mesh.position.set(r.range(-1, 1) * (30 + dist * 0.9), -22, -dist - 10);
+    city.add(b.mesh); blocks.push(b.material);
+  }
+  g.add(city);
+  return { group: g, blocks };
+}
+
+/** Zugefrorener Fluss mit Backsteinbrücke (Oberbaumbrücke-artig). */
+export function frozenRiver({ seed = 141 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  const { tex } = canvasTexture(512, 512, (x, w, h) => {
+    x.fillStyle = "#cfe0ea"; x.fillRect(0, 0, w, h);
+    x.strokeStyle = "rgba(255,255,255,0.8)"; x.lineWidth = 2;
+    for (let i = 0; i < 40; i++) { x.beginPath(); let px = r() * w, py = r() * h; x.moveTo(px, py); for (let k = 0; k < 5; k++) { px += r.range(-60, 60); py += r.range(-60, 60); x.lineTo(px, py); } x.stroke(); }
+  });
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(8, 16);
+  const ice = new THREE.Mesh(new THREE.PlaneGeometry(60, 400), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.2, metalness: 0.1 }));
+  ice.rotation.x = -Math.PI / 2; ice.position.z = -150; ice.receiveShadow = true; g.add(ice);
+  for (const s of [-1, 1]) {
+    box(20, 3, 400, mat("#8d877d"), s * 40, 1.0, -150, g);                  // Kaimauern
+    for (let i = 0; i < 14; i++) {
+      const b = building({ w: 18, h: r.range(16, 30), d: 16, color: r.pick(["#9aa0a8", "#b6a99a"]), tex: windowTextures(150 + i, "plattenbau") });
+      b.mesh.position.set(s * r.range(45, 60), 2.5, -i * 28 + 10); g.add(b.mesh);
+    }
+  }
+  // Brücke
+  const brick = mat("#9a4a32"), roof = mat("#3f5f55");
+  const bridge = new THREE.Group();
+  box(60, 2.2, 10, brick, 0, 7.5, 0, bridge);
+  for (let i = -3; i <= 3; i++) { box(2.2, 6.4, 10, brick, i * 8.6, 3.2, 0, bridge); }
+  for (const x of [-4.3, 4.3]) {
+    box(3, 14, 3, brick, x, 15, 0, bridge);
+    const cap = new THREE.Mesh(new THREE.ConeGeometry(2.3, 4, 4), roof); cap.position.set(x, 24, 0); cap.rotation.y = Math.PI / 4; bridge.add(cap);
+  }
+  bridge.position.z = -70; g.add(bridge);
+  // eingefrorene Boote
+  for (let i = 0; i < 3; i++) {
+    const b = new THREE.Group();
+    box(3.4, 1.2, 9, mat(r.pick(["#e9e6dd", "#3a5a7a"])), 0, 0.3, 0, b);
+    box(2.6, 1.0, 4, mat("#d8d4c8"), 0, 1.3, -1, b);
+    b.position.set(r.range(-14, 14), -0.3, -25 - i * 14); b.rotation.set(0.04, r.range(-0.4, 0.4), r.range(-0.08, 0.08)); g.add(b);
+  }
+  // Schnee
+  const S = 500;
+  const snow = new THREE.InstancedMesh(new THREE.BoxGeometry(0.04, 0.04, 0.04), basic("#ffffff"), S);
+  const sd = []; for (let i = 0; i < S; i++) sd.push({ x: r.range(-15, 15), y: r.range(0, 12), z: r.range(-25, 4), sp: r.range(0.6, 1.4), ph: r() * 6 });
+  g.add(snow);
+  const d = new THREE.Object3D();
+  return {
+    group: g,
+    update(t) {
+      sd.forEach((s, i) => {
+        d.position.set(s.x + Math.sin(t * 0.8 + s.ph) * 0.4, ((s.y - t * s.sp) % 12 + 12) % 12, s.z);
+        d.updateMatrix(); snow.setMatrixAt(i, d.matrix);
+      });
+      snow.instanceMatrix.needsUpdate = true;
+    },
+  };
+}
+
+/** Tiefsee mit schwarzen Rauchern, Röhrenwürmern, Krebsen und Blasen. */
+export function deepSeaVents({ seed = 161 } = {}) {
+  const r = rng(seed);
+  const g = new THREE.Group();
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(80, 80, 30, 30), mat("#2b3036", { roughness: 1 }));
+  floor.rotation.x = -Math.PI / 2;
+  const pa = floor.geometry.attributes.position;
+  for (let i = 0; i < pa.count; i++) pa.setZ(i, r.range(-0.4, 0.4));
+  floor.geometry.computeVertexNormals(); g.add(floor);
+  for (let i = 0; i < 40; i++) {
+    const rock = new THREE.Mesh(new THREE.IcosahedronGeometry(r.range(0.3, 1.5), 0), mat("#23272c"));
+    rock.position.set(r.range(-20, 20), 0, r.range(-30, 2)); rock.rotation.set(r() * 3, r() * 3, 0); g.add(rock);
+  }
+  const vents = [];
+  const chimneyMat = mat("#1b1c1e", { roughness: 1 });
+  [[-1.2, -5, 3.2], [1.6, -7.5, 4.5], [-3.5, -10, 2.4], [3.8, -12, 3.8]].forEach(([x, z, h]) => {
+    const c = new THREE.Group();
+    let y = 0;
+    for (let k = 0; k < 5; k++) { const seg = h / 5; cyl(0.45 - k * 0.07, 0.55 - k * 0.07, seg, 7, chimneyMat, r.range(-0.06, 0.06), y + seg / 2, 0, c); y += seg; }
+    const glow = new THREE.PointLight("#ff7a2a", 3, 4, 2); glow.position.y = 0.4; c.add(glow);
+    const ember = cyl(0.5, 0.6, 0.15, 7, basic("#ff8a3a"), 0, 0.05, 0, c);
+    c.position.set(x, 0, z); g.add(c);
+    vents.push({ x, z, top: h });
+  });
+  // Rauchsäulen als Partikel
+  const P = 360;
+  const smoke = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.22, 0), new THREE.MeshStandardMaterial({ color: "#121314", roughness: 1, transparent: true, opacity: 0.85 }), P);
+  const pd = []; for (let i = 0; i < P; i++) pd.push({ v: i % vents.length, ph: r(), sp: r.range(0.6, 1.0), dx: r.range(-0.3, 0.3), s: r.range(0.6, 1.6) });
+  g.add(smoke);
+  // Röhrenwürmer
+  const W = 160;
+  const tubes = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.035, 0.04, 1, 6), mat("#ece6da"), W);
+  const plumes = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.06, 0), mat("#d42c2c", { emissive: "#5a0a0a" }), W);
+  const wd = []; for (let i = 0; i < W; i++) { const v = vents[i % vents.length]; const a = r() * 6.28, rr = r.range(0.7, 2.0); wd.push({ x: v.x + Math.cos(a) * rr, z: v.z + Math.sin(a) * rr, h: r.range(0.4, 1.2), ph: r() * 6 }); }
+  g.add(tubes); g.add(plumes);
+  // Blasen
+  const B = 36;
+  const bubbles = new THREE.InstancedMesh(new THREE.SphereGeometry(0.018, 6, 4), new THREE.MeshBasicMaterial({ color: "#bfe6ff", transparent: true, opacity: 0.6 }), B);
+  const bd = []; for (let i = 0; i < B; i++) bd.push({ x: r.range(-1.5, 1.5), z: r.range(-3, 0.5), y: r.range(0, 4), sp: r.range(0.5, 1.2) });
+  g.add(bubbles);
+  const d = new THREE.Object3D();
+  return {
+    group: g,
+    update(t) {
+      pd.forEach((p, i) => {
+        const v = vents[p.v];
+        const u = ((t * 0.35 * p.sp + p.ph) % 1);
+        d.position.set(v.x + p.dx * u * 3 + Math.sin(t + i) * 0.1, v.top + u * 6, v.z + p.dx * u);
+        d.scale.setScalar(p.s * (0.5 + u * 2)); d.rotation.set(i, t * 0.3, 0);
+        d.updateMatrix(); smoke.setMatrixAt(i, d.matrix);
+      });
+      smoke.instanceMatrix.needsUpdate = true;
+      wd.forEach((w, i) => {
+        const sway = Math.sin(t * 1.4 + w.ph) * 0.08;
+        d.position.set(w.x, w.h / 2, w.z); d.rotation.set(sway, 0, sway * 0.5); d.scale.set(1, w.h, 1);
+        d.updateMatrix(); tubes.setMatrixAt(i, d.matrix);
+        d.position.set(w.x + sway * w.h * 0.5, w.h + 0.03, w.z + sway * w.h * 0.5); d.scale.setScalar(1); d.updateMatrix(); plumes.setMatrixAt(i, d.matrix);
+      });
+      tubes.instanceMatrix.needsUpdate = true; plumes.instanceMatrix.needsUpdate = true;
+      bd.forEach((b, i) => { d.position.set(b.x + Math.sin(t * 2 + i) * 0.05, ((b.y + t * b.sp) % 4), b.z); d.scale.setScalar(1); d.updateMatrix(); bubbles.setMatrixAt(i, d.matrix); });
+      bubbles.instanceMatrix.needsUpdate = true;
+    },
+  };
+}

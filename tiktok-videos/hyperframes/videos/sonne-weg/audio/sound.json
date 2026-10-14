@@ -1,0 +1,33 @@
+{
+ "duration": 30,
+ "cues": [
+  {"type": "city", "at": 0, "dur": 6.0, "gain": 0.16, "seed": 1, "fadeIn": 0.3, "fadeOut": 0.02},
+  {"type": "wind", "at": 0, "dur": 6.0, "gain": 0.12, "seed": 2},
+  {"type": "birds", "at": 0, "dur": 6.0, "gain": 0.08, "seed": 3, "density": 2.2},
+  {"type": "chord", "at": 0, "dur": 6.0, "freqs": [261.6, 329.6, 392.0], "gain": 0.05, "attack": 5.5},
+
+  {"type": "impact", "at": 6.0, "gain": 1.0, "seed": 4, "low": 36},
+  {"type": "drone", "at": 6.0, "dur": 18.0, "freqs": [49.0, 98.0, 146.8, 196.5], "gain": 0.22, "seed": 5, "from": 0.6, "to": 1.0},
+  {"type": "ticks", "at": 6.3, "dur": 17.6, "interval": [0.55, 0.16], "gain": 0.14, "seed": 6},
+
+  {"type": "whoosh", "at": 9.05, "dur": 0.8, "gain": 0.2, "seed": 7},
+  {"type": "powerdown", "at": 9.9, "dur": 1.2, "gain": 0.25},
+  {"type": "whoosh", "at": 12.05, "dur": 0.8, "gain": 0.2, "seed": 8},
+  {"type": "wind", "at": 12.0, "dur": 3.0, "gain": 0.3, "seed": 9},
+  {"type": "whoosh", "at": 15.05, "dur": 0.8, "gain": 0.18, "seed": 10},
+  {"type": "whoosh", "at": 18.05, "dur": 0.8, "gain": 0.2, "seed": 11},
+  {"type": "wind", "at": 18.0, "dur": 3.0, "gain": 0.38, "seed": 12},
+  {"type": "impact", "at": 19.2, "gain": 0.25, "seed": 13, "low": 30},
+  {"type": "whoosh", "at": 21.05, "dur": 0.8, "gain": 0.2, "seed": 14},
+  {"type": "drip", "at": 21.6, "gain": 0.12}, {"type": "drip", "at": 22.1, "gain": 0.1, "pan": 0.2},
+  {"type": "drip", "at": 22.7, "gain": 0.12, "pan": -0.2}, {"type": "drip", "at": 23.3, "gain": 0.1},
+
+  {"type": "chord", "at": 24.0, "dur": 3.0, "freqs": [130.8, 196.0, 261.6, 329.6, 392.0], "gain": 0.16, "attack": 0.6},
+  {"type": "birds", "at": 24.1, "dur": 2.9, "gain": 0.08, "seed": 15, "density": 2.5},
+  {"type": "wind", "at": 24.0, "dur": 3.0, "gain": 0.1, "seed": 16},
+  {"type": "impact", "at": 26.55, "gain": 0.18, "seed": 17, "low": 70},
+
+  {"type": "silence", "at": 27.0, "dur": 0.45},
+  {"type": "bell", "at": 27.45, "dur": 2.55, "freqs": [130.8, 196.0], "gain": 0.12}
+ ]
+}

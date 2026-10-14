@@ -15,10 +15,12 @@ mkdir -p "videos/$id/audio"
 cp "videos/$template/index.html" "videos/$template/hyperframes.json" "videos/$template/package.json" \
    "videos/$template/.gitignore" "videos/$id/"
 cp "videos/$template/audio/sound.json" "videos/$id/audio/"
+[[ -f "videos/$template/scene.js" ]] && cp "videos/$template/scene.js" "videos/$id/"
 ln -s ../../lib "videos/$id/lib"
 printf '{ "id": "%s", "name": "%s" }\n' "$id" "$id" > "videos/$id/meta.json"
 sed -i "s/\"name\": \"$template\"/\"name\": \"$id\"/" "videos/$id/package.json"
 sed -i "s/$template/$id/g" "videos/$id/index.html"
+[[ -f "videos/$id/scene.js" ]] && sed -i "s/$template/$id/g" "videos/$id/scene.js"
 
 echo "✔ videos/$id angelegt (Kopie von $template)."
 echo "  Nächste Schritte: index.html anpassen, audio/sound.json anpassen, dann"
