@@ -1,13 +1,21 @@
 {
+  "enabledPlugins": {
+    "hyperframes@hyperframes": true,
+    "savvy-progress@claude-kit": true,
+    "savvy-flow@claude-kit": true
+  },
   "extraKnownMarketplaces": {
     "hyperframes": {
       "source": {
         "source": "github",
         "repo": "heygen-com/hyperframes"
       }
+    },
+    "claude-kit": {
+      "source": {
+        "source": "github",
+        "repo": "JohnnyVizz/claude-kit"
+      }
     }
-  },
-  "enabledPlugins": {
-    "hyperframes@hyperframes": true
   }
 }
