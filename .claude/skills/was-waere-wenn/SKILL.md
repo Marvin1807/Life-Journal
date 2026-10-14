@@ -37,7 +37,8 @@ Erstes fertiges Video und Vorlage: `videos/niemand-arbeitet/`.
 
 ## Ablauf für ein neues Video
 
-1. **Thema klären.** Nur nachfragen, wenn kein Thema genannt ist. Länge: Standard 30 s,
+1. **Thema klären.** Nur nachfragen, wenn kein Thema genannt ist. Ideen und Hook-Regeln
+   (Zeitfenster im Titel, deutscher Ort, echte Zahl früh) stehen in `tiktok-videos/THEMEN_RECHERCHE.md`. Länge: Standard 30 s,
    wenn der Nutzer nichts sagt (die Vorbilder sind 80 s; dann die Zeiten unten strecken).
 2. **Drehbuch schreiben** (im Chat kurz zeigen, dann direkt bauen):
    - Titel: „Was wäre, wenn …?“ mit einem Schlüsselwort in Akzentfarbe.
