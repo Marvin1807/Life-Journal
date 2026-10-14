@@ -21,7 +21,8 @@ export const isRenderCommand = (command: string): boolean =>
 
 // Die Video-ID steht im Befehl (videos/<id>) oder im Arbeitsordner.
 export const findVideoId = (command: string, cwd: string): string | null => {
-  const inCommand = /videos\/([a-z0-9][a-z0-9-]*)/i.exec(command)
+  // "tiktok-videos/hyperframes" ist kein Video: vor "videos/" darf kein Buchstabe oder Bindestrich stehen
+  const inCommand = /(?<![\w-])videos\/([a-z0-9][a-z0-9-]*)/i.exec(command)
   if (inCommand?.[1]) return inCommand[1]
   const inCwd = /\/videos\/([a-z0-9][a-z0-9-]*)\/?$/i.exec(cwd)
   return inCwd?.[1] ?? null

@@ -65,4 +65,6 @@ test('render commands and video ids are recognised', async () => {
   expect(findVideoId('cd videos/sonne-weg && npx hyperframes render', '/x')).toBe('sonne-weg')
   expect(findVideoId('npx hyperframes render', '/r/tiktok-videos/hyperframes/videos/schwerkraft-aus')).toBe('schwerkraft-aus')
   expect(findVideoId('npx hyperframes render', '/r')).toBe(null)
+  expect(findVideoId('cd /h/tiktok-videos/hyperframes && npx hyperframes render', '/r')).toBe(null)
+  expect(findVideoId('cd /h/tiktok-videos/hyperframes/videos/mond && npx hyperframes render', '/r')).toBe('mond')
 })

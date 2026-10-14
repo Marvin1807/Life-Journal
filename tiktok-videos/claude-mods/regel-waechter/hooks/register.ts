@@ -54,7 +54,10 @@ export const register: Register = on => {
     const id = findVideoId(e.command, '') ?? findVideoId('', await $.session.cwd())
     if (id === null) return next(e)
 
-    const findings = check(await load($, id))
+    const sources = await load($, id)
+    // Kein Videoordner (z. B. pgrep/grep-Muster, die "hyperframes render" nur erwähnen): nichts prüfen
+    if (sources.scene === null && sources.index === null) return next(e)
+    const findings = check(sources)
     const report = format(id, findings)
     const errors = findings.filter(f => f.level === 'fehler').length
 
