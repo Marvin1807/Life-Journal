@@ -258,8 +258,8 @@ export function hauptbahnhof() {
     for (const dx of [-0.75, 0.75]) box(0.12, 0.15, len + 400, mat("#5a554f", { metalness: 0.5 }), x + dx, 0.1, cz - 200, g);
   }
   // Außengleis an der Südseite (hier rollt der Regionalzug aus)
-  box(4.2, 0.25, 520, mat("#6a625a"), -89, 0.12, -60, g);
-  for (const dx of [-0.75, 0.75]) box(0.12, 0.16, 520, mat("#8a857e", { metalness: 0.6, roughness: 0.4 }), -89 + dx, 0.3, -60, g);
+  box(4.2, 0.25, 412, mat("#6a625a"), -89, 0.12, -114, g);
+  for (const dx of [-0.75, 0.75]) box(0.12, 0.16, 412, mat("#8a857e", { metalness: 0.6, roughness: 0.4 }), -89 + dx, 0.3, -114, g);
   // Bahndamm Richtung Brücke (Osten)
   box(50, 10.4, 160, mat("#8a6f5a"), -133, 5.2, -200, g);
   return { group: g, glass, glassFront };
@@ -642,6 +642,24 @@ export function hohenzollernbruecke({ seed = 801, camZ = -420 } = {}) {
     lockMesh.instanceColor.needsUpdate = slockMesh.instanceColor.needsUpdate = true;
   }
   rustLocks(0);
+  // Schlösser fallen ab: ein Teil rutscht vom Gitter und landet auf dem Gehweg
+  const _p = new THREE.Vector3(), _q = new THREE.Quaternion(), _s = new THREE.Vector3();
+  const LD = LOCKS.map((m, i) => { m.decompose(_p, _q, _s); return { p: _p.clone(), q: _q.clone(), s: _s.clone(), thr: lockRust[i], floor: DECK_Y + 0.02 }; });
+  const SD = SLOCKS.map((m, i) => { m.decompose(_p, _q, _s); return { p: _p.clone(), q: _q.clone(), s: _s.clone(), thr: slockRust[i], floor: 0.02 }; });
+  const flatQ = new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
+  const _m = new THREE.Matrix4();
+  function dropLocks(k) {
+    for (const [list, mesh] of [[LD, lockMesh], [SD, slockMesh]]) {
+      list.forEach((L, i) => {
+        const d = L.thr < 0.7 ? clamp((k * 1.2 - L.thr) * 3) : 0;
+        _p.copy(L.p); _p.y = lerp(L.p.y, L.floor, d * d);
+        _p.x += d * (L.thr - 0.35) * 1.2;
+        _q.copy(L.q).slerp(flatQ, d);
+        _m.compose(_p, _q, L.s); mesh.setMatrixAt(i, _m);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+    }
+  }
   // Bewuchs auf Gehweg und Gleisen
   const weedsN = 900;
   const weeds = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.55, 0), new THREE.MeshStandardMaterial({ roughness: 0.9, flatShading: true }), weedsN);
@@ -675,7 +693,7 @@ export function hohenzollernbruecke({ seed = 801, camZ = -420 } = {}) {
     weeds.visible = k > 0.001;
   }
   overgrow(0);
-  return { group: g, slab, slabLen, BREAK, RAIL_TOP, steel, age, overgrow, rustLocks, birch };
+  return { group: g, slab, slabLen, BREAK, RAIL_TOP, steel, age, overgrow, rustLocks, dropLocks, birch };
 }
 
 /** Kleines Vorhängeschloss (für die Hand am Ende). */
@@ -686,4 +704,92 @@ export function padlock(color = "#c9a227") {
   const sh = new THREE.Mesh(new THREE.TorusGeometry(0.016, 0.004, 5, 10, Math.PI), mat("#b9b9b9", { metalness: 0.8, roughness: 0.3 }));
   sh.position.y = 0.021; g.add(sh);
   return { group: g, m };
+}
+
+// =====================================================================
+// Zusätze für die schnelle Fassung: Flugzeug, Rauchsäulen, Elefant, Prellbock
+// =====================================================================
+/** Verkehrsflugzeug, Nase zeigt nach +x. */
+export function airliner() {
+  const g = new THREE.Group();
+  const white = mat("#f2f3f5", { roughness: 0.5 }), grey = mat("#9aa3ab"), blue = mat("#1f3a6b");
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(2.0, 2.0, 38, 10), white); body.rotation.z = Math.PI / 2; g.add(body);
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(2.0, 4, 10), white); nose.rotation.z = -Math.PI / 2; nose.position.x = 21; g.add(nose);
+  const tailc = new THREE.Mesh(new THREE.ConeGeometry(2.0, 6, 10), white); tailc.rotation.z = Math.PI / 2; tailc.position.x = -22; g.add(tailc);
+  box(9, 0.5, 36, grey, 1, -0.6, 0, g);                 // Tragflächen
+  box(4, 0.4, 13, grey, -21, 0.6, 0, g);                // Höhenleitwerk
+  box(5, 7, 0.5, blue, -21, 4, 0, g);                   // Seitenleitwerk
+  for (const z of [-7, 7]) cyl(0.9, 0.9, 4, 8, grey, 3, -1.8, z, g).rotation.z = Math.PI / 2;
+  return g;
+}
+
+/** Rauchsäule: puffs steigen auf. update(t, k) – k 0..1 Stärke. glow = Feuerschein am Fuß. */
+export function smokeColumn(seed = 1, height = 220, width = 26, dark = false) {
+  const r = rng(seed);
+  const n = 46;
+  const m = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 0), new THREE.MeshStandardMaterial({ color: dark ? "#262422" : "#5a5753", roughness: 1, flatShading: true, transparent: true, opacity: 0.88, depthWrite: false, emissive: new THREE.Color("#ff6a20"), emissiveIntensity: 0 }), n);
+  m.frustumCulled = false;
+  const P = []; for (let i = 0; i < n; i++) P.push({ ph: r(), sp: r.range(0.06, 0.11), dx: r.range(-0.5, 0.5), dz: r.range(-0.5, 0.5), s: r.range(0.7, 1.3), rot: r() * 6 });
+  const fire = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 0), new THREE.MeshBasicMaterial({ color: "#ff7a2a", transparent: true, opacity: 0.9, fog: false }));
+  const g = new THREE.Group(); g.add(m, fire);
+  return {
+    group: g,
+    update(t, k, night = 0) {
+      g.visible = k > 0.002;
+      P.forEach((p, i) => {
+        const a = ((t * p.sp + p.ph) % 1 + 1) % 1;
+        const h = a * height * k;
+        const w = width * (0.35 + a * 1.4) * p.s * Math.sqrt(k);
+        o.position.set(p.dx * width + a * a * height * 0.35, h, p.dz * width);
+        o.rotation.set(p.rot, p.rot + a, 0); o.scale.setScalar(w * (a < 0.08 ? a / 0.08 : 1) * (a > 0.85 ? (1 - a) / 0.15 : 1));
+        o.updateMatrix(); m.setMatrixAt(i, o.matrix);
+      });
+      m.instanceMatrix.needsUpdate = true;
+      fire.scale.set(width * 0.7 * k, width * 0.9 * k, width * 0.7 * k); fire.position.y = width * 0.6 * k;
+      m.material.emissiveIntensity = 0.35 * night;
+      fire.material.opacity = 0.35 + 0.6 * night;
+      fire.visible = k > 0.05;
+    },
+  };
+}
+
+/** Elefant (Front nach +z). update(phase). */
+export function elephant(scale = 1) {
+  const g = new THREE.Group();
+  const skin = mat("#8c8a86"), dark = mat("#6e6c68"), tusk = mat("#efe8d8");
+  const S = scale;
+  box(1.5 * S, 1.6 * S, 2.8 * S, skin, 0, 2.3 * S, 0, g);
+  const head = new THREE.Group(); head.position.set(0, 2.6 * S, 1.6 * S); g.add(head);
+  box(1.2 * S, 1.2 * S, 1.0 * S, skin, 0, 0, 0.1 * S, head);
+  for (const sx of [-1, 1]) { const e = box(0.12 * S, 1.1 * S, 0.9 * S, dark, sx * 0.72 * S, 0, -0.1 * S, head); e.rotation.y = sx * 0.35; }
+  const trunk = new THREE.Group(); trunk.position.set(0, -0.3 * S, 0.6 * S); head.add(trunk);
+  box(0.32 * S, 1.5 * S, 0.32 * S, skin, 0, -0.75 * S, 0, trunk);
+  for (const sx of [-1, 1]) { const tk = box(0.1 * S, 0.1 * S, 0.6 * S, tusk, sx * 0.3 * S, -0.45 * S, 0.75 * S, head); tk.rotation.x = 0.5; }
+  const legs = [];
+  for (const [x, z] of [[-0.5, 0.95], [0.5, 0.95], [-0.5, -0.95], [0.5, -0.95]]) {
+    const p = new THREE.Group(); p.position.set(x * S, 1.6 * S, z * S); g.add(p);
+    box(0.45 * S, 1.6 * S, 0.45 * S, skin, 0, -0.8 * S, 0, p); legs.push(p);
+  }
+  const tail = box(0.08 * S, 0.8 * S, 0.08 * S, dark, 0, 2.2 * S, -1.45 * S, g); tail.rotation.x = 0.3;
+  g.traverse((m) => { if (m.isMesh) m.castShadow = true; });
+  return {
+    group: g,
+    update(ph) {
+      legs.forEach((l, i) => { l.rotation.x = Math.sin(ph + (i === 0 || i === 3 ? 0 : Math.PI)) * 0.28; });
+      trunk.rotation.x = 0.25 + Math.sin(ph * 0.5) * 0.25;
+      head.rotation.y = Math.sin(ph * 0.25) * 0.08;
+    },
+  };
+}
+
+/** Prellbock (rot-weiß), Front nach −z. */
+export function bufferStop() {
+  const g = new THREE.Group();
+  box(2.6, 1.3, 1.2, mat("#3a3a3c"), 0, 0.65, 0, g);
+  box(2.8, 0.5, 0.25, mat("#d8282a"), 0, 1.25, -0.7, g);
+  for (const x of [-0.75, 0.75]) cyl(0.18, 0.18, 0.6, 8, mat("#c9c9c9"), x, 1.25, -0.95, g).rotation.x = Math.PI / 2;
+  box(0.9, 0.9, 0.06, mat("#f2f2f2"), 0, 2.3, -0.6, g);
+  box(0.5, 0.5, 0.07, mat("#d8282a"), 0, 2.3, -0.62, g);
+  cyl(0.06, 0.06, 1.6, 6, mat("#555"), 0, 1.4, -0.55, g);
+  return g;
 }

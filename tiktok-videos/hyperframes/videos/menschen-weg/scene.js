@@ -1,18 +1,27 @@
-// "Was wäre, wenn alle Menschen verschwinden?" – 75 s, klassisches Format ohne Twist.
-// Zwei Orte, jeder genau einmal: Domplatte vor dem Kölner Dom (Countdown → alle weg → Stunden/Tage,
-// Licht geht aus, Tauben und Füchse) → Hohenzollernbrücke (Jahre bis Jahrhunderte: Rost, Bewuchs,
-// Wald am Ufer, der Dom wird grün, Hochwasser) → das Gehwegstück bricht ab → Rhein „HIER“.
-// Du bist der Einzige, der bleibt – deine Hände sind immer im Bild.
-import { THREE, rng, clamp, smooth, lerp, shake, createSky, crowd, car, glowTexture, streetLamp } from "./lib/lowpoly.js";
-import { hand, coffeeCup, phone, phoneScreen, mat } from "./lib/props.js";
+// "Was wäre, wenn alle Menschen verschwinden?" – 75 s, klassisches Format ohne Twist, schnelle Fassung.
+// Zwei Orte, jeder genau einmal: Domplatte vor dem Kölner Dom → Hohenzollernbrücke.
+// 0–7 s Countdown · 7 s alle weg · 7–28 s Sofortfolgen Schlag auf Schlag (Taxi, Zug, Auto im Schaufenster,
+// Flugzeug, Rauch, Alarm, Hund) · 28–44 s Zeitraffer Stunden → Wochen (Brände, Strom aus, Tiere, Gras) ·
+// 44–62 s Brücke: Jahre → Jahrhunderte (Rost, Schlösser fallen, Birken, Wald, Dom grün, Hochwasser) ·
+// 62,4 s Gehweg bricht → 65 s Rhein „HIER“. Du bist der Einzige, der bleibt – deine Hände sind immer im Bild.
+import { THREE, rng, clamp, smooth, lerp, shake, createSky, crowd, car, glowTexture, streetLamp, valueAt } from "./lib/lowpoly.js";
+import { hand, coffeeCup, phone, phoneScreen, mat, box } from "./lib/props.js";
 import { createOverlay, de, countdown, curve } from "./lib/ww-overlay.js";
 import { kolnerDom, hauptbahnhof, regioTrain, domplatte, ampel, guitar, guitarCase, quadruped, pigeonFlock,
-         rhine, riverbanks, forest, hohenzollernbruecke, padlock, HBF, WATER0, DECK_Y, RAIL_X, BANK_Z } from "./sets.js";
+         rhine, riverbanks, forest, hohenzollernbruecke, padlock, airliner, smokeColumn, elephant, bufferStop,
+         HBF, WATER0, DECK_Y, RAIL_X, BANK_Z } from "./sets.js";
 
 const DURATION = 75;
-const EVENT = 20;          // alle Menschen verschwinden
+const EVENT = 7;           // alle Menschen verschwinden
+const TAXI_HIT = 10.5;     // Taxi kracht in den Poller
+const TRAIN_HIT = 13.5;    // Zug prallt auf den Prellbock
+const SHOP_HIT = 16.8;     // Auto rollt ins Schaufenster
+const PLANE0 = 18.8, PLANE_DOWN = 22.6;   // Flugzeug kippt ab, verschwindet hinter der Stadt
+const DOG0 = 25.4;         // Hund läuft zwischen den Kleiderhaufen
+const LAPSE = 28;          // Zeitraffer beginnt
+const POWER_OFF = 33.6;    // Stromnetz fällt aus (Nacht 1)
 const CUT = 44;            // Schnitt auf die Hohenzollernbrücke
-const BREAK_T = 62.2;      // das Gehwegstück bricht ab
+const BREAK_T = 62.4;      // das Gehwegstück bricht ab
 const HIT = 65.0;          // Aufschlag im Rhein
 const BLACK = 70;
 const END = 70.5;
@@ -22,22 +31,23 @@ const SCENES = [
   { name: "Hohenzollernbrücke über den Rhein", set: "bruecke" },
 ];
 
-// Vergangene Zeit seit dem Verschwinden (Stunden), wächst immer schneller
-const HOURS = [[20, 0], [21, 0.0014], [24, 0.0167], [27, 0.25], [29, 2], [31.5, 4.8], [35.4, 11.3], [36.8, 28.8], [39, 35.3], [44, 52]];
+// Vergangene Zeit seit dem Verschwinden (Stunden): Sekunden → Minuten → Stunden → Tage → Wochen
+const HOURS = [[EVENT, 0], [8, 0.0014], [10.5, 0.0083], [13.5, 0.025], [17, 0.067], [20, 0.17], [23, 0.33], [26, 0.75], [LAPSE, 1.5],
+  [29.5, 3.5], [31, 5], [32.6, 8], [34, 10.5], [35.6, 14], [38.8, 60], [41.6, 200], [CUT, 504]];
 const H = (t) => (t < EVENT ? 0 : curve(HOURS, t));
 const hourOfDay = (t) => (17.667 + H(t)) % 24;
-// Jahre auf der Brücke (log10): 1 → 10 → 50 → 100 → 200 → 300
-const YEARS = [[44, 0], [47.8, 1], [51.4, 1.7], [54.8, 2], [58.4, 2.3], [BREAK_T, 2.477]];
+// Jahre auf der Brücke (log10): 1 → 10 → 30 → 70 → 125 → 215 → 300
+const YEARS = [[CUT, 0], [47.5, 1], [50.7, 1.48], [54, 1.85], [57.2, 2.1], [60.2, 2.33], [BREAK_T, 2.477]];
 const logY = (t) => curve(YEARS, t);
 const Y = (t) => Math.pow(10, logY(t));
-const POWER_OFF = 37.25;   // Stromnetz fällt aus (Nacht 2)
 
 function since(t) {
   const h = H(t), s = h * 3600;
   if (s < 120) return `${de(Math.floor(s))} Sekunden`;
   if (h < 2) return `${de(Math.floor(s / 60))} Minuten`;
   if (h < 36) return `${de(h, 1)} Stunden`;
-  return `${de(h / 24, 1)} Tagen`;
+  if (h < 24 * 14) return `${de(h / 24, 1)} Tagen`;
+  return `${de(h / 168, 1)} Wochen`;
 }
 const years = (t) => { const y = Y(t); return y < 1.5 ? "1 Jahr" : `${de(Math.round(y))} Jahren`; };
 
@@ -47,35 +57,35 @@ const overlay = createOverlay(document.getElementById("overlay"), {
   title: { text: "Was wäre, wenn alle Menschen verschwinden?", accent: "Menschen", accentColor: "#f2c26b", start: 0, end: 3.5 },
   hud: [
     { start: 0, end: EVENT, label: "Alle Menschen verschwinden in", value: (t) => countdown(EVENT - t),
-      sub: (t) => (t < 10 ? "Domplatte · Köln · Samstag, 17:40 Uhr" : "Menschen auf der Erde: über 8 Milliarden"), fadeIn: 0.01, fadeOut: 0.01 },
-    { start: EVENT, end: 29, label: "Ohne Menschen seit", value: since, sub: "Menschen auf der Erde: 1", fadeIn: 0.01, fadeOut: 0.01 },
-    { start: 29, end: POWER_OFF, label: "Ohne Menschen seit", value: since, sub: "Stromnetz ohne Wartung: Ausfall nach Stunden bis Tagen (Schätzung)", fadeIn: 0.01, fadeOut: 0.01 },
+      sub: (t) => (t < 3.5 ? "Domplatte · Köln · Samstag, 17:40 Uhr" : "Menschen auf der Erde: über 8 Milliarden"), fadeIn: 0.01, fadeOut: 0.01 },
+    { start: EVENT, end: LAPSE, label: "Ohne Menschen seit", value: since, sub: "Menschen auf der Erde: 1", fadeIn: 0.01, fadeOut: 0.01 },
+    { start: LAPSE, end: POWER_OFF, label: "Ohne Menschen seit", value: since, sub: "Stromnetz ohne Wartung: Ausfall nach Stunden bis Tagen (Schätzung)", fadeIn: 0.01, fadeOut: 0.01 },
     { start: POWER_OFF, end: CUT, label: "Ohne Menschen seit", value: since, sub: "Stromnetz: aus · Menschen auf der Erde: 1", fadeIn: 0.01, fadeOut: 0.01 },
-    { start: CUT, end: 51.4, label: "Ohne Menschen seit", value: years, sub: "Hohenzollernbrücke · kein Anstrich, keine Wartung", fadeIn: 0.15, fadeOut: 0.01 },
-    { start: 51.4, end: 58.4, label: "Ohne Menschen seit", value: years, sub: "Menschen auf der Erde: 1", fadeIn: 0.01, fadeOut: 0.01 },
-    { start: 58.4, end: BREAK_T, label: "Ohne Menschen seit", value: years, sub: "Schätzung: Ohne Pflege halten Stahlbrücken wenige Jahrhunderte", fadeIn: 0.01, fadeOut: 0.01 },
+    { start: CUT, end: 50.8, label: "Ohne Menschen seit", value: years, sub: "Hohenzollernbrücke · kein Anstrich, keine Wartung", fadeIn: 0.15, fadeOut: 0.01 },
+    { start: 50.8, end: 58.6, label: "Ohne Menschen seit", value: years, sub: "Menschen auf der Erde: 1", fadeIn: 0.01, fadeOut: 0.01 },
+    { start: 58.6, end: BREAK_T, label: "Ohne Menschen seit", value: years, sub: "Schätzung: Ohne Pflege halten Stahlbrücken wenige Jahrhunderte", fadeIn: 0.01, fadeOut: 0.01 },
     { start: BREAK_T, end: HIT, label: "Bis zum Rhein", value: () => `${de(fallDist, 1)} m`, sub: "Ohne Menschen seit ca. 300 Jahren", fadeIn: 0.01, fadeOut: 0.01 },
     { start: HIT, end: 67.2, label: "Bis zum Rhein", value: () => "HIER", sub: "Ohne Menschen seit ca. 300 Jahren", fadeIn: 0.01, fadeOut: 0.2 },
     { start: 67.2, end: BLACK, label: "Kölner Dom", value: () => "157 m", sub: "Steht noch. Fertig seit 1880.", fadeIn: 0.3, fadeOut: 0.4 },
   ],
   subtitles: [
-    { start: 3.7, end: 7.5, text: "Köln, Domplatte, Samstagnachmittag." },
-    { start: 7.7, end: 11.6, text: "In 12 Sekunden verschwinden alle Menschen." },
-    { start: 11.8, end: 15.6, text: "Über 8 Milliarden. Alle, außer dir." },
-    { start: 15.8, end: 19.8, text: "Der Gitarrist spielt sein letztes Lied." },
-    { start: 20.2, end: 23.6, text: "Dann sind sie weg. Nur ihre Sachen fallen." },
-    { start: 23.8, end: 26.4, text: "Ein Taxi rollt gegen einen Poller." },
-    { start: 26.6, end: 28.8, text: "Der Zug rollt ohne Fahrer aus." },
-    { start: 29.0, end: 32.2, text: "Die Ampel schaltet weiter. Für niemanden." },
-    { start: 32.4, end: 35.4, text: "Nachts leuchtet die Stadt noch. Von allein." },
-    { start: 35.6, end: 38.8, text: "Ohne Wartung geht das Licht aus." },
-    { start: 39.0, end: 43.8, text: "Tauben und Füchse übernehmen die Domplatte." },
-    { start: 44.4, end: 47.8, text: "Dann vergehen Jahre. Rost frisst die Brücke." },
-    { start: 48.0, end: 51.4, text: "Die Liebesschlösser rosten am Geländer." },
-    { start: 51.6, end: 54.8, text: "Am Ufer wächst ein Wald." },
+    { start: 3.7, end: 6.9, text: "Über 8 Milliarden. In 3 Sekunden: alle, außer dir." },
+    { start: 7.2, end: 10.0, text: "Dann sind sie weg. Nur ihre Sachen fallen." },
+    { start: 10.2, end: 13.2, text: "Ein Taxi kracht in den Poller." },
+    { start: 13.4, end: 16.5, text: "Der Zug rast ohne Fahrer in den Prellbock." },
+    { start: 16.7, end: 19.6, text: "Ein Auto rollt ins Schaufenster." },
+    { start: 19.8, end: 23.0, text: "Am Himmel kippt ein Flugzeug ab. Ohne Piloten." },
+    { start: 23.2, end: 26.4, text: "Rauch in der Ferne. Alarmanlagen heulen." },
+    { start: 29.0, end: 32.4, text: "Stunden später brennen Herde, die keiner ausmacht." },
+    { start: 32.6, end: 35.6, text: "Dann fällt der Strom aus. Der Dom wird dunkel." },
+    { start: 35.8, end: 39.8, text: "Die Tiere übernehmen. Sogar die Elefanten aus dem Zoo." },
+    { start: 40.0, end: 43.8, text: "Gras in den Fugen. Dein Akku ist leer." },
+    { start: 44.4, end: 47.4, text: "Dann vergehen Jahre. Rost frisst die Brücke." },
+    { start: 47.6, end: 50.6, text: "Die Liebesschlösser fallen ab." },
+    { start: 50.8, end: 54.8, text: "Aus den Gleisen wachsen Birken, am Ufer ein Wald." },
     { start: 55.0, end: 58.4, text: "Und der Dom wird grün." },
-    { start: 58.6, end: 62.0, text: "Jedes Hochwasser nagt an den Pfeilern." },
-    { start: 62.2, end: 64.9, text: "Bis die Brücke nachgibt." },
+    { start: 58.6, end: 62.2, text: "Jedes Hochwasser nagt an den Pfeilern." },
+    { start: 62.4, end: 64.9, text: "Bis die Brücke nachgibt." },
     { start: 66.4, end: 69.6, text: "Der Dom steht noch. Er ist Warten gewohnt." },
   ],
   black: { start: BLACK, end: END },
@@ -238,6 +248,27 @@ const manyPigeons = pigeonFlock(260, 32, [-46, 12, 150, 195]); scene.add(manyPig
 const fox = quadruped("fox"); fox.group.scale.setScalar(1.25); scene.add(fox.group);
 const fox2 = quadruped("fox"); fox2.group.scale.setScalar(1.25); scene.add(fox2.group);
 const dog = quadruped("dog"); scene.add(dog.group);
+const ele = elephant(1); scene.add(ele.group);
+const calf = elephant(0.6); scene.add(calf.group);
+
+// Gras in den Fugen (Platten 2,5 m)
+const GRASS = 900;
+const grass = new THREE.InstancedMesh(new THREE.ConeGeometry(0.06, 0.22, 4), mat("#5f8f3a"), GRASS);
+const GR = [];
+for (let i = 0; i < GRASS; i++) {
+  const alongX = R() < 0.5;
+  const lx = Math.round(R.range(-50, 10) / 2.5) * 2.5, lz = Math.round(R.range(120, 197) / 2.5) * 2.5;
+  GR.push({ x: alongX ? R.range(-50, 10) : lx + R.range(-0.04, 0.04), z: alongX ? lz + R.range(-0.04, 0.04) : R.range(120, 197), s: R.range(0.6, 1.6), at: R() });
+}
+grass.frustumCulled = false; scene.add(grass);
+function updateGrass(k) {
+  GR.forEach((g, i) => {
+    const f = smooth((k - g.at * 0.7) / 0.3);
+    o.position.set(g.x, 0.11 * g.s * f, g.z); o.rotation.set(0, i, 0); o.scale.set(g.s * f + 0.001, g.s * f + 0.001, g.s * f + 0.001); o.updateMatrix(); grass.setMatrixAt(i, o.matrix);
+  });
+  grass.instanceMatrix.needsUpdate = true;
+  grass.visible = k > 0.001;
+}
 
 // Autos auf der Trankgasse
 const taxi = car(5); taxi.children[0].material.color.set("#efe3bf");
@@ -245,12 +276,16 @@ const sign = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.18, 0.25), new THREE.Me
 sign.position.set(0, 1.78, -0.2); taxi.add(sign); scene.add(taxi);
 const car2 = car(9); scene.add(car2);
 const car3 = car(14); scene.add(car3);
+// Warnblinker (Alarmanlagen)
+const blinkMat = new THREE.MeshBasicMaterial({ color: "#ffa21a", toneMapped: false });
+for (const c of [taxi, car3]) for (const [x, z] of [[-0.8, 2.16], [0.8, 2.16], [-0.8, -2.16], [0.8, -2.16]]) { const b = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.14, 0.04), blinkMat); b.position.set(x, 0.85, z); c.add(b); }
 function taxiState(t) {
-  if (t < EVENT) return { x: -68, z: 133 - 7 * (EVENT - t), ry: 0, pitch: 0 };
-  const u = Math.min(t - EVENT, 5), du = t - EVENT;
-  const x = -68 + 6.45 * smooth(u / 5), z = 133 + 7 * u - 0.3 * u * u;
-  const vx = 6.45 * 6 * (u / 5) * (1 - u / 5) / 5, vz = 7 - 0.6 * u;
-  const bump = du > 5 ? Math.exp(-(du - 5) * 3) * Math.sin((du - 5) * 18) * 0.05 : 0;
+  const T = TAXI_HIT - EVENT, Z0 = 160 - (9 * T - 0.3 * T * T);
+  if (t < EVENT) return { x: -68, z: Z0 - 9 * (EVENT - t), ry: 0, pitch: 0 };
+  const u = Math.min(t - EVENT, T), du = t - EVENT;
+  const x = -68 + 6.45 * smooth(u / T), z = Z0 + 9 * u - 0.3 * u * u;
+  const vx = 6.45 * 6 * (u / T) * (1 - u / T) / T, vz = 9 - 0.6 * u;
+  const bump = du > T ? Math.exp(-(du - T) * 3) * Math.sin((du - T) * 18) * 0.07 : 0;
   return { x, z, ry: Math.atan2(vx, vz), pitch: bump };
 }
 function carZ(z0, v, t, dir) {   // fährt bis zum Ereignis, rollt dann in 5 s aus
@@ -258,11 +293,53 @@ function carZ(z0, v, t, dir) {   // fährt bis zum Ereignis, rollt dann in 5 s a
   const u = Math.min(t - EVENT, v / 1.6);
   return z0 + dir * (v * EVENT + v * u - 0.8 * u * u);
 }
-// Zug in der Halle: fährt ein, rollt nach dem Ereignis ohne Fahrer aus
+// Auto 3 rollt quer über den Vorplatz ins Schaufenster am Bahnhof
+const C3A = new THREE.Vector2(-74, 152), C3B = new THREE.Vector2(-104, 99.7);
+function car3State(t) {
+  const v = 5.6;
+  if (t < EVENT) return { x: C3A.x, z: C3A.y + v * (EVENT - t), ry: Math.PI };
+  const f = clamp((t - EVENT) / (SHOP_HIT - EVENT));
+  const e = smooth(clamp(f * 1.4));   // biegt ab, dann gerade
+  const x = lerp(C3A.x, C3B.x, f), z = lerp(C3A.y, C3B.y, f);
+  const ry = Math.atan2(C3B.x - C3A.x, C3B.y - C3A.y);
+  const bump = t > SHOP_HIT ? Math.exp(-(t - SHOP_HIT) * 3) * Math.sin((t - SHOP_HIT) * 16) * 0.06 : 0;
+  return { x: lerp(C3A.x, x, 1), z, ry: lerp(Math.PI, ry, e), pitch: bump };
+}
+// Schaufenster + Scherben
+const shop = box(8, 3.2, 0.12, new THREE.MeshStandardMaterial({ color: "#9ec3d6", roughness: 0.1, metalness: 0.4, transparent: true, opacity: 0.6 }), -104, 1.7, 97.9);
+scene.add(shop);
+box(8.4, 0.5, 0.3, mat("#3a3f45"), -104, 3.5, 97.9, scene);
+const shopSign = new THREE.Mesh(new THREE.PlaneGeometry(6, 0.9), new THREE.MeshBasicMaterial({ color: "#c8302a" })); shopSign.position.set(-104, 4.2, 98.1); scene.add(shopSign);
+const SH = 70;
+const shards = new THREE.InstancedMesh(new THREE.TetrahedronGeometry(0.18, 0), new THREE.MeshStandardMaterial({ color: "#cfe6f0", roughness: 0.1, metalness: 0.5 }), SH);
+const SHD = []; for (let i = 0; i < SH; i++) SHD.push({ x: R.range(-3.8, 3.8), y: R.range(0.3, 3.2), vx: R.range(-2, 2), vy: R.range(0, 3), vz: R.range(0.5, 4), r: R() * 6 });
+shards.frustumCulled = false; scene.add(shards);
+// Zug: Außengleis, rollt ohne Fahrer in den Prellbock
+const BUFFER_Z = 90;
+const buf = bufferStop(); buf.position.set(-89, 0.25, BUFFER_Z + 1.2); scene.add(buf);
 function trainZ(t) {
-  if (t < EVENT) return 112 - 8 * (EVENT - t);
-  const u = Math.min(t - EVENT, 8 / 0.9);
-  return 112 + 8 * u - 0.45 * u * u;
+  const v = 9;
+  const front = BUFFER_Z - 0.2;
+  const z = front - v * (TRAIN_HIT - t);
+  if (t < TRAIN_HIT) return z;
+  const u = t - TRAIN_HIT;
+  return front - 0.9 * Math.exp(-u * 4) * Math.sin(u * 9) * 0.5;
+}
+// Flugzeug und Rauchsäulen
+const plane = airliner(); plane.scale.setScalar(2.6); scene.add(plane);
+const SMOKE = [
+  { c: smokeColumn(11, 380, 44, true), x: 480, z: -1100, t0: PLANE_DOWN + 0.3, grow: 3 },   // Absturzstelle
+  { c: smokeColumn(12, 180, 18), x: -160, z: -620, t0: 29.0, grow: 2.5 },
+  { c: smokeColumn(13, 140, 14), x: 140, z: -480, t0: 29.6, grow: 2.5 },
+  { c: smokeColumn(14, 160, 16), x: -230, z: -380, t0: 30.4, grow: 2.5 },
+  { c: smokeColumn(15, 120, 12), x: 220, z: -260, t0: 31.0, grow: 2.5 },
+];
+for (const sm of SMOKE) { sm.c.group.position.set(sm.x, 0, sm.z); scene.add(sm.c.group); }
+function planeAt(t) {
+  const s = clamp((t - PLANE0) / (PLANE_DOWN - PLANE0));
+  const dive = smooth(clamp((t - 20.2) / (PLANE_DOWN - 20.2)));
+  const x = lerp(-420, 480, s), y = 1250 - 1250 * dive * dive;
+  return { x, y, z: -1100, pitch: -0.75 * dive, roll: 0.25 + 0.9 * dive, vis: t > PLANE0 - 0.5 && t < PLANE_DOWN + 0.2 };
 }
 
 // ============================================================ Hände (POV) ===
@@ -279,7 +356,7 @@ function drawPhone(t) {
   const day = DAYS[Math.floor(hod / 24)] || "";
   const hh = Math.floor(hod % 24), mm = Math.floor(((hod % 24) - hh) * 60);
   const clock = `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
-  const battery = Math.max(0, Math.round(64 - h * 1.45));
+  const battery = Math.max(0, Math.round(64 - h * 0.43));
   const net = t < POWER_OFF;
   const key = `${clock}|${battery}|${net}|${day}|${t < EVENT}`;
   if (key === lastPhone) return;
@@ -311,10 +388,11 @@ const gauss = (t, c, w) => Math.exp(-(((t - c) / w) ** 2));
 // Teure Updates nur, wenn sich der Wert ändert
 const memo = (fn) => { let last = NaN; return (k) => { const r = Math.round(k * 400) / 400; if (r !== last) { last = r; fn(r); } }; };
 const domGrow = memo(dom.grow), treesGrow = memo(newTrees.grow), bAge = memo(bridge.age), bOver = memo(bridge.overgrow),
-      bLocks = memo(bridge.rustLocks), birchGrow = memo(bridge.birch.grow);
+      bLocks = memo(bridge.rustLocks), birchGrow = memo(bridge.birch.grow), bDrop = memo(bridge.dropLocks);
 
 function lightPlaza(t) {
-  const hod = hourOfDay(t), d = dayF(hod);
+  const hod = hourOfDay(t), blur = smooth(clamp((t - 36.6) / 1.6));
+  const d = lerp(dayF(hod), 0.82 + 0.06 * Math.sin(t * 5), blur);   // sehr schneller Zeitraffer: Tag/Nacht verwischen
   const gold = 1 - smooth((Math.abs(hod - 19.5)) / 3.5);
   SU.top.value.copy(NIGHTSKY.top).lerp(DAYSKY.top, d);
   SU.horizon.value.copy(NIGHTSKY.hor).lerp(DAYSKY.hor.clone().lerp(new THREE.Color("#dbe7f0"), 1 - gold), d);
@@ -336,13 +414,15 @@ function lightPlaza(t) {
   return d;
 }
 
+// Blickrichtung auf der Domplatte: Dom → Bahnhof (Taxi, Zug, Schaufenster) → Himmel (Flugzeug) → Dom
+const YAWK = [[0, -0.1], [9.5, -0.1], [10.3, 0.72], [17.6, 0.72], [19.0, -0.08], [21.0, -0.16], [22.6, -0.26], [24.6, -0.1], [CUT, -0.1]];
+const PITK = [[0, 0.115], [9.5, 0.115], [10.3, 0.12], [17.6, 0.12], [19.0, 0.52], [21.4, 0.45], [23.0, 0.2], [24.4, 0.115], [CUT, 0.115]];
 function renderPlaza(t) {
-  // --- Kamera: stehen, Kopf dreht zum Bahnhof (Taxi, Zug) und zurück zum Dom
-  const pan = smooth(clamp((t - 22.6) / 1.4)) * (1 - smooth(clamp((t - 28.9) / 1.6)));
-  const yaw = lerp(-0.1 + 0.03 * Math.sin(t * 0.21), 0.66, pan);
-  const pitch = lerp(0.115 - 0.01 * Math.sin(t * 0.17), 0.125, pan);
+  const yaw = valueAt(YAWK, t) + 0.02 * Math.sin(t * 0.21);
+  const pitch = valueAt(PITK, t) - 0.008 * Math.sin(t * 0.17);
   const breath = Math.sin(t * Math.PI * 2 * 0.24) * 0.006;
-  const jolt = t >= EVENT && t < EVENT + 1.5 ? Math.exp(-(t - EVENT) * 3.5) * 0.12 : 0;
+  const jolt = (t >= EVENT && t < EVENT + 1.5 ? Math.exp(-(t - EVENT) * 3.5) * 0.12 : 0)
+    + 0.03 * Math.exp(-Math.abs(t - TAXI_HIT) * 6) * (t > TAXI_HIT ? 1 : 0) + 0.03 * Math.exp(-Math.abs(t - TRAIN_HIT) * 6) * (t > TRAIN_HIT ? 1 : 0);
   const [sx, sy] = shake(t * 1.2, 0.006 + jolt);
   camera.position.set(CAM_A.x, CAM_A.y + breath, CAM_A.z);
   eu.set(pitch + sy, yaw + sx, 0.004 * Math.sin(t * 0.5)); camera.quaternion.setFromEuler(eu);
@@ -367,31 +447,55 @@ function renderPlaza(t) {
   }
   // Tauben
   fewPigeons.update(t, () => ({ visible: true }));
-  manyPigeons.update(t, (p) => ({ visible: t > EVENT + 5 && smooth(clamp((t - 37.5) / 5.5)) > p.at }));
-  // Fuchs, zweiter Fuchs, Hund (nach Tagen)
-  const fu = t - 39.2;
+  manyPigeons.update(t, (p) => ({ visible: t > 34.5 && smooth(clamp((t - 34.5) / 4.5)) > p.at }));
+  // Hund (verwirrt zwischen den Kleiderhaufen), später Füchse und Elefanten
+  const du = t - DOG0;
+  dog.group.visible = du > 0 && t < 31;
+  const dk = clamp(du / 3.4);
+  const dx = lerp(-29, -17.5, dk), dz = 189 + Math.sin(dk * 7) * 1.6;
+  dog.group.position.set(dx, 0, dz); dog.group.rotation.y = Math.atan2(11.5 / 3.4, Math.cos(dk * 7) * 1.6 * 7 / 3.4);
+  dog.update(dk < 1 ? t * 14 : 0, dk >= 1 ? 0.6 + 0.3 * Math.sin(t * 6) : 0.2 * Math.sin(t * 5));
+  const fu = t - 35.9;
   fox.group.visible = fu > 0;
   fox.group.position.set(-31 + fu * 2.0, 0, 184 + fu * 0.5); fox.group.rotation.y = Math.atan2(2.0, 0.5); fox.update(t * 11);
-  const f2 = t - 40.6;
+  const f2 = t - 36.8;
   fox2.group.visible = f2 > 0;
   fox2.group.position.set(-9 - f2 * 1.8, 0, 181 + f2 * 0.4); fox2.group.rotation.y = Math.atan2(-1.8, 0.4); fox2.update(t * 10 + 1);
-  const du = t - 41.2;
-  dog.group.visible = du > 0;
-  const dogStop = Math.min(du, 1.6);
-  dog.group.position.set(-26 + dogStop * 2.0, 0, 190 - dogStop * 0.4); dog.group.rotation.y = Math.atan2(2.0, -0.4);
-  dog.update(du < 1.6 ? t * 9 : 0, du > 1.6 ? 0.5 + 0.3 * Math.sin(t * 6) : 0);
+  const eu2 = t - 36.2;
+  ele.group.visible = calf.group.visible = eu2 > 0;
+  ele.group.position.set(-27 + eu2 * 1.8, 0, 170 + eu2 * 0.2); ele.group.rotation.y = Math.atan2(1.8, 0.2); ele.update(t * 4.5);
+  calf.group.position.set(-31 + eu2 * 1.8, 0, 172.5 + eu2 * 0.2); calf.group.rotation.y = Math.atan2(1.8, 0.2); calf.update(t * 5.5 + 1);
+  updateGrass(clamp((t - 39.5) / 4.0));
 
-  // Autos, Zug
+  // Autos, Zug, Schaufenster
   const ts = taxiState(t);
   taxi.position.set(ts.x, 0, ts.z); taxi.rotation.set(ts.pitch, ts.ry, 0);
   sign.material.emissiveIntensity = power(t) * 0.5;
-  car2.position.set(-80, 0, carZ(330, 6.5, t, -1)); car2.rotation.y = Math.PI;
-  car3.position.set(-68, 0, carZ(-20, 6.5, t, 1) - 30);
+  car2.position.set(-80, 0, carZ(250, 6.5, t, -1)); car2.rotation.y = Math.PI;
+  const c3 = car3State(t);
+  car3.position.set(c3.x, 0, c3.z); car3.rotation.set(c3.pitch || 0, c3.ry, 0);
+  const broken = t >= SHOP_HIT;
+  shop.visible = !broken;
+  SHD.forEach((p, i) => {
+    const u = t - SHOP_HIT;
+    const vis = broken && t < LAPSE + 2;
+    const uu = Math.min(Math.max(u, 0), 1.2);
+    const y = Math.max(0.03, p.y + p.vy * uu - 4.9 * uu * uu);
+    o.position.set(-104 + p.x + p.vx * uu, y, 97.9 + p.vz * uu); o.rotation.set(p.r + uu * 4, p.r, 0); o.scale.setScalar(vis ? 1 : 0); o.updateMatrix(); shards.setMatrixAt(i, o.matrix);
+  });
+  shards.instanceMatrix.needsUpdate = true;
+  blinkMat.color.set(t > TAXI_HIT && power(t) > 0.5 && Math.sin(t * Math.PI * 2 * 1.4) > 0 ? "#ffa21a" : "#3a2a10");
   train.group.position.set(-89, 0.3, trainZ(t));
   train.win.emissiveIntensity = 0.15 + power(t) * (1 - d) * 0.6;
+  // Flugzeug
+  const pa = planeAt(t);
+  plane.visible = pa.vis;
+  plane.position.set(pa.x, pa.y, pa.z); plane.rotation.set(pa.roll, 0, pa.pitch);
+  // Rauchsäulen (nachts mit Feuerschein)
+  for (const sm of SMOKE) sm.c.update(t, smooth(clamp((t - sm.t0) / sm.grow)) * (1 - 0.5 * smooth(clamp((t - 40) / 4))), 1 - d);
 
   // Ampel: normal, im Zeitraffer blinkt sie, dann aus
-  const cyc = t < 27 ? t / 24 : 27 / 24 + (t - 27) * 1.35;
+  const cyc = t < LAPSE ? t / 24 : LAPSE / 24 + (t - LAPSE) * 1.35;
   const ph = ((cyc % 1) + 1) % 1;
   light.set(power(t) < 0.5 ? -1 : ph < 0.45 ? 0 : ph < 0.52 ? 1 : ph < 0.93 ? 2 : 1);
 
@@ -416,7 +520,12 @@ function plazaVisible(v) {
   gtr.visible = gcase.visible = v;
   fewPigeons.group.visible = manyPigeons.group.visible = v;
   taxi.visible = car2.visible = car3.visible = v;
-  if (!v) fox.group.visible = fox2.group.visible = dog.group.visible = false;
+  shards.visible = v; plane.visible = plane.visible && v;
+  if (!v) {
+    fox.group.visible = fox2.group.visible = dog.group.visible = ele.group.visible = calf.group.visible = false;
+    grass.visible = false;
+    for (const sm of SMOKE) sm.c.group.visible = false;
+  }
 }
 
 // ------------------------------------------------------------------ Brücke ---
@@ -432,9 +541,9 @@ const BUB = []; for (let i = 0; i < 80; i++) BUB.push({ x: R.range(-0.5, 0.5), z
 bubbles.frustumCulled = false; rig.add(bubbles);
 
 function waterLevel(t) {
-  const base = smooth(clamp((t - 58.3) / 1.4)) * 3.4;
-  const pulses = 1.3 * (gauss(t, 59.2, 0.4) + gauss(t, 60.5, 0.4) + gauss(t, 61.6, 0.45));
-  return WATER0 + base + pulses + (t > 61.8 ? 0.8 * smooth(clamp((t - 61.8) / 1)) : 0);
+  const base = smooth(clamp((t - 58.6) / 1.4)) * 3.4;
+  const pulses = 1.3 * (gauss(t, 59.4, 0.4) + gauss(t, 60.6, 0.4) + gauss(t, 61.7, 0.45));
+  return WATER0 + base + pulses + (t > 61.9 ? 0.8 * smooth(clamp((t - 61.9) / 1)) : 0);
 }
 const slabAngle = (t) => (t < BREAK_T ? 0 : 1.24 * Math.pow(clamp((t - BREAK_T) / (HIT - BREAK_T)), 1.6));
 
@@ -442,12 +551,13 @@ function renderBridge(t) {
   plazaVisible(false);
   const yv = Y(t), ly = Math.log10(Math.max(1, yv));
   // --- Verfall
-  bAge(clamp(ly / 2.0));
-  bOver(clamp(ly / 1.5));
-  bLocks(clamp((ly - 0.4) / 1.3));
-  birchGrow(clamp((ly - 1.0) / 1.1));
-  treesGrow(clamp((ly - 1.25) / 0.8));
-  domGrow(clamp((ly - 1.85) / 0.55));
+  bAge(clamp(ly / 1.5));
+  bOver(clamp(ly / 1.3));
+  bLocks(clamp((ly - 0.3) / 1.0));
+  bDrop(clamp((ly - 0.95) / 0.6));
+  birchGrow(clamp((ly - 1.2) / 0.55));
+  treesGrow(clamp((ly - 1.45) / 0.5));
+  domGrow(clamp((ly - 1.95) / 0.35));
   dom.light(0);
   train2.red.color.copy(train2Red).lerp(new THREE.Color("#6e3a22"), clamp(ly / 1.6));
   houseMats.forEach((m) => { m.emissiveIntensity = 0; });
@@ -462,7 +572,7 @@ function renderBridge(t) {
   bridge.slab.updateMatrixWorld();
 
   // --- Kamera
-  const look = smooth(clamp((t - 58.6) / 2.4));
+  const look = smooth(clamp((t - 59.0) / 2.4));
   let yaw = lerp(0.2 + 0.02 * Math.sin(t * 0.23), 0.52, look) + 0.03 * smooth(clamp((t - 55) / 3)) * (1 - look);
   let pitch = lerp(0.075 + 0.01 * Math.sin(t * 0.19), -0.3, look);
   const quake = t > 60.5 && t < HIT ? 0.004 + 0.02 * smooth(clamp((t - 60.5) / 1.7)) + 0.03 * gauss(t, BREAK_T, 0.25) : 0.004;
@@ -522,9 +632,9 @@ function renderBridge(t) {
   if (t < HIT) {
     lock.group.visible = false;
     const grip = 0.95 + 0.05 * smooth(clamp((t - 60.5) / 1.5));
-    // Ab 57 s gleiten die Hände vom Geländer in eine feste Pose am unteren Bildrand,
+    // Ab 57,6 s gleiten die Hände vom Geländer in eine feste Pose am unteren Bildrand,
     // sonst ragt beim Blick nach unten der Ärmel ins Bild.
-    const k = smooth(clamp((t - 57) / 1.5));
+    const k = smooth(clamp((t - 57.6) / 1.5));
     [[leftHand, HAND_L, -0.05, -1], [rightHand, HAND_R, -0.3, 1]].forEach(([hd, pL, ry, side]) => {
       tmp.copy(pL); bridge.slab.localToWorld(tmp);
       camera.worldToLocal(tmp);
@@ -556,7 +666,7 @@ function renderAt(t) {
     canvas.style.opacity = 1;
     scene.background = null; sky.visible = true;
     splash.visible = false; bubbles.visible = false;
-    domGrow(0); treesGrow(0); bAge(0); bOver(0); bLocks(0); birchGrow(0);
+    domGrow(0); treesGrow(0); bAge(0); bOver(0); bLocks(0); birchGrow(0); bDrop(0);
     bridge.slab.rotation.x = 0;
     river.update(t, WATER0);
     renderPlaza(t);
