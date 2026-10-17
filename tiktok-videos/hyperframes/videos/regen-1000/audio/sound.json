@@ -1,0 +1,393 @@
+{
+ "duration": 91,
+ "cues": [
+  {
+   "type": "ambience",
+   "preset": "street",
+   "at": 0,
+   "dur": 8.5,
+   "gain": 0.5,
+   "seed": 1,
+   "fadeIn": 0.3,
+   "fadeOut": 2.0
+  },
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 0,
+   "dur": 7.5,
+   "gain": 0.12,
+   "seed": 2,
+   "fadeIn": 0.3,
+   "fadeOut": 2.0
+  },
+  {
+   "type": "beep",
+   "at": 1.2,
+   "freq": 420,
+   "dur": 0.35,
+   "gain": 0.1,
+   "verb": 0.25,
+   "pan": -0.4
+  },
+  {
+   "type": "beep",
+   "at": 1.65,
+   "freq": 420,
+   "dur": 0.25,
+   "gain": 0.1,
+   "verb": 0.25,
+   "pan": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 3.4,
+   "freq": 380,
+   "dur": 0.5,
+   "gain": 0.1,
+   "verb": 0.25,
+   "pan": 0.1
+  },
+  {
+   "type": "beep",
+   "at": 5.1,
+   "freq": 460,
+   "dur": 0.3,
+   "gain": 0.1,
+   "verb": 0.25,
+   "pan": -0.2
+  },
+  {
+   "type": "beep",
+   "at": 5.45,
+   "freq": 460,
+   "dur": 0.3,
+   "gain": 0.1,
+   "verb": 0.25,
+   "pan": 0.5
+  },
+  {
+   "type": "beep",
+   "at": 6.6,
+   "freq": 400,
+   "dur": 0.6,
+   "gain": 0.1,
+   "verb": 0.25,
+   "pan": -0.1
+  },
+  {
+   "type": "water",
+   "at": 1.5,
+   "dur": 6.0,
+   "gain": 0.07,
+   "seed": 10,
+   "hp": 1800,
+   "fadeIn": 3,
+   "fadeOut": 0.5
+  },
+  {
+   "type": "water",
+   "at": 5,
+   "dur": 3.5,
+   "gain": 0.12,
+   "seed": 11,
+   "hp": 600,
+   "fadeIn": 1.5,
+   "fadeOut": 1.0
+  },
+  {
+   "type": "water",
+   "at": 7.5,
+   "dur": 3.0,
+   "gain": 0.22,
+   "seed": 12,
+   "hp": 600,
+   "fadeIn": 1.5,
+   "fadeOut": 1.0
+  },
+  {
+   "type": "water",
+   "at": 9.5,
+   "dur": 3.5,
+   "gain": 0.34,
+   "seed": 13,
+   "hp": 600,
+   "fadeIn": 1.5,
+   "fadeOut": 1.0
+  },
+  {
+   "type": "water",
+   "at": 12,
+   "dur": 12,
+   "gain": 0.42,
+   "seed": 20,
+   "hp": 500,
+   "fadeIn": 0.8,
+   "fadeOut": 0.5
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 12,
+   "dur": 12,
+   "gain": 0.1,
+   "seed": 30,
+   "fadeIn": 0.8,
+   "fadeOut": 0.5
+  },
+  {
+   "type": "water",
+   "at": 23.5,
+   "dur": 12.5,
+   "gain": 0.45,
+   "seed": 21,
+   "hp": 500,
+   "fadeIn": 0.5,
+   "fadeOut": 0.5
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 23.5,
+   "dur": 12.5,
+   "gain": 0.12000000000000001,
+   "seed": 31,
+   "fadeIn": 0.5,
+   "fadeOut": 0.5
+  },
+  {
+   "type": "water",
+   "at": 35.5,
+   "dur": 12.5,
+   "gain": 0.48,
+   "seed": 22,
+   "hp": 500,
+   "fadeIn": 0.5,
+   "fadeOut": 0.5
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 35.5,
+   "dur": 12.5,
+   "gain": 0.14,
+   "seed": 32,
+   "fadeIn": 0.5,
+   "fadeOut": 0.5
+  },
+  {
+   "type": "water",
+   "at": 47.5,
+   "dur": 14.899999999999999,
+   "gain": 0.52,
+   "seed": 23,
+   "hp": 500,
+   "fadeIn": 0.5,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "ambience",
+   "preset": "storm",
+   "at": 47.5,
+   "dur": 14.899999999999999,
+   "gain": 0.16,
+   "seed": 33,
+   "fadeIn": 0.5,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "water",
+   "at": 15,
+   "dur": 8,
+   "gain": 0.12,
+   "seed": 40,
+   "lp": 700,
+   "fadeIn": 1.5,
+   "fadeOut": 2
+  },
+  {
+   "type": "ambience",
+   "preset": "underwater",
+   "at": 62.4,
+   "dur": 6.4,
+   "gain": 0.55,
+   "seed": 50,
+   "fadeIn": 0.15,
+   "fadeOut": 0.3
+  },
+  {
+   "type": "sub",
+   "at": 62.4,
+   "dur": 6.4,
+   "freq": 42,
+   "gain": 0.18,
+   "seed": 51,
+   "fadeIn": 0.4,
+   "fadeOut": 0.5
+  },
+  {
+   "type": "water",
+   "at": 68.7,
+   "dur": 6.6,
+   "gain": 0.12,
+   "seed": 60,
+   "lp": 1400,
+   "fadeIn": 0.2,
+   "fadeOut": 1.5
+  },
+  {
+   "type": "drip",
+   "at": 69.0,
+   "gain": 0.069,
+   "pan": -0.42,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 69.54,
+   "gain": 0.054,
+   "pan": 0.04,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 69.96,
+   "gain": 0.053,
+   "pan": 0.01,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 70.22,
+   "gain": 0.076,
+   "pan": -0.52,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 70.52,
+   "gain": 0.075,
+   "pan": 0.39,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 70.82,
+   "gain": 0.063,
+   "pan": 0.15,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 71.5,
+   "gain": 0.085,
+   "pan": -0.12,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 72.19,
+   "gain": 0.053,
+   "pan": 0.43,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 72.57,
+   "gain": 0.059,
+   "pan": -0.46,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 72.96,
+   "gain": 0.099,
+   "pan": -0.38,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 73.47,
+   "gain": 0.088,
+   "pan": -0.15,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 73.96,
+   "gain": 0.054,
+   "pan": -0.53,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 74.31,
+   "gain": 0.091,
+   "pan": -0.09,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 74.7,
+   "gain": 0.085,
+   "pan": -0.06,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 75.08,
+   "gain": 0.098,
+   "pan": 0.24,
+   "verb": 0.35
+  },
+  {
+   "type": "drip",
+   "at": 75.44,
+   "gain": 0.084,
+   "pan": 0.03,
+   "verb": 0.35
+  },
+  {
+   "type": "ambience",
+   "preset": "backyard",
+   "at": 75,
+   "dur": 13,
+   "gain": 0.14,
+   "seed": 70,
+   "fadeIn": 1.5,
+   "fadeOut": 0.05
+  },
+  {
+   "type": "wind",
+   "at": 74.5,
+   "dur": 13.5,
+   "gain": 0.12,
+   "seed": 71
+  },
+  {
+   "type": "birds",
+   "at": 75.5,
+   "dur": 12.5,
+   "gain": 0.22,
+   "seed": 72,
+   "density": 1.6,
+   "verb": 0.3,
+   "pan": -0.3
+  },
+  {
+   "type": "birds",
+   "at": 79,
+   "dur": 9,
+   "gain": 0.18,
+   "seed": 73,
+   "density": 2.4,
+   "verb": 0.3,
+   "pan": 0.35
+  },
+  {
+   "type": "silence",
+   "at": 88,
+   "dur": 3
+  }
+ ]
+}
