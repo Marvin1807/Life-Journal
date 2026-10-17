@@ -87,24 +87,29 @@ In der Claude-Cloud vor jedem HyperFrames-Befehl:
 
 ## Zeitraster (75 s, Standard)
 
+**Nutzer-Vorgabe:** Der Anfang darf nicht lang dauern, es muss ständig etwas passieren. Das
+Ereignis kommt spätestens bei **~7 s**, danach alle 3–5 s ein neuer, sichtbarer Vorfall
+(nie mehr als ~5 s ohne neues Geschehen im Bild).
+
 | Zeit | Akt | Inhalt |
 |---|---|---|
-| 0–3,5 | Hook | Titel über friedlicher Alltagsszene; Countdown startet |
-| 3,5–20 | 1 · Ironie | Das Ereignis ist schon passiert oder steht fest, aber noch merkt es keiner. Countdown läuft weiter. 3–4 Sätze („Du merkst nichts.“ / „Es ist schon unterwegs.“) |
-| ~20 | Auslöser | Countdown erreicht 0: Toneinschnitt, Kamera ruckt, HUD wechselt auf Messgröße 1 |
-| 20–42 | 2 · Eskalation | Messgröße 1 wächst stark (×4, ×16, ×75 …). 5–6 Sätze als Kette |
-| 42–60 | 3 · Steigerung | neue Messgröße (Temperatur, Höhe, Opfer an Ort X …), der Ort verwandelt sich weiter |
-| 60–68 | Höhepunkt | eine Entfernung/Zeit läuft auf dich zu → „HIER“; ein letzter Satz („Es gibt keinen Ort zum Verstecken.“) |
+| 0–3,5 | Hook | Titel über belebter Szene; Countdown läuft schon (kurz, ~7 s) |
+| 3,5–7 | Ironie | 1–2 Sätze: Der Zuschauer weiß, was gleich passiert („In 3 Sekunden …“) |
+| ~7 | Auslöser | Countdown erreicht 0: Toneinschnitt, Kamera ruckt, HUD wechselt auf Messgröße 1 |
+| 7–25 | 1 · Sofortfolgen | Schlag auf Schlag: 4–5 sichtbare Vorfälle direkt nach dem Ereignis |
+| 25–45 | 2 · Eskalation | Messgröße 1 wächst stark (×4, ×16, ×75 …), weitere Vorfälle als Kette |
+| 45–60 | 3 · Steigerung | neue Messgröße, der Ort verwandelt sich weiter |
+| 60–68 | Höhepunkt | eine Entfernung/Zeit läuft auf dich zu → „HIER“; ein letzter Satz |
 | 68–70 | Nachklang | Bild steht/zerfällt, Ton bricht ab |
 | 70–70,5 | Schwarz | Stille |
-| 70,5–75 | Endkarte | Titel + Zeile 1 Aufklärung/Mythos („Die Sonne ist zu klein, um zu explodieren“) + Zeile 2 echter Fakt; darunter Frage an die Community |
+| 70,5–75 | Endkarte | Titel + Zeile 1 Aufklärung/Mythos + Zeile 2 echter Fakt; darunter Frage an die Community |
 
 Bei ausdrücklich gewünschten 30 s: Auslöser bei 6 s, ein Satz alle ~3 s, Höhepunkt bei 24 s, Endkarte ab 27,4 s.
 
 ## Story (Pflicht)
 
-1. **Ein Countdown oder eine zulaufende Entfernung trägt das ganze Video** bis zum Höhepunkt.
-2. **Dramatische Ironie im ersten Akt:** Der Zuschauer weiß mehr als die Menschen im Bild.
+1. **Ein kurzer Countdown (~7 s) startet das Video**, danach trägt eine zulaufende Messgröße/Entfernung bis zum Höhepunkt.
+2. **Dramatische Ironie, aber kurz:** Der Zuschauer weiß mehr als die Menschen im Bild – höchstens die ersten ~7 s.
 3. **Pro Akt eine Messgröße**, die sichtbar und stark wächst; am Ende ein Wort statt einer Zahl.
 4. **Untertitel als Kette** mit „Dann …“/„Und …“; trockene Kurzsätze als Pointen
    („Es explodiert. Natürlich.“ / „Berlin hat keine Vulkane.“).
