@@ -1,597 +1,1289 @@
 {
- "duration": 61,
+ "duration": 48,
  "cues": [
   {
-   "type": "ambience",
-   "preset": "street",
+   "type": "pad",
    "at": 0,
-   "dur": 11.95,
-   "gain": 0.2,
+   "dur": 48,
+   "freqs": [
+    130.81,
+    196.0,
+    261.63,
+    329.63,
+    392.0
+   ],
+   "gain": 0.055,
    "seed": 1,
-   "lp": 1800,
-   "fadeIn": 0.3,
-   "fadeOut": 0.8
+   "fadeIn": 0.03,
+   "fadeOut": 0.03
+  },
+  {
+   "type": "chime",
+   "at": 0.9,
+   "dur": 1.6,
+   "freq": 659.25,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 2.3,
+   "dur": 1.6,
+   "freq": 783.99,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 4.6,
+   "dur": 1.6,
+   "freq": 880.0,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 6.2,
+   "dur": 1.6,
+   "freq": 783.99,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 8.6,
+   "dur": 1.6,
+   "freq": 659.25,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 10.2,
+   "dur": 1.6,
+   "freq": 587.33,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 12.6,
+   "dur": 1.6,
+   "freq": 523.25,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 14.2,
+   "dur": 1.6,
+   "freq": 587.33,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 16.6,
+   "dur": 1.6,
+   "freq": 659.25,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 18.2,
+   "dur": 1.6,
+   "freq": 783.99,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 20.6,
+   "dur": 1.6,
+   "freq": 880.0,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 22.2,
+   "dur": 1.6,
+   "freq": 1046.5,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 24.6,
+   "dur": 1.6,
+   "freq": 783.99,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 25.8,
+   "dur": 1.6,
+   "freq": 880.0,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 27.0,
+   "dur": 1.6,
+   "freq": 1046.5,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 28.2,
+   "dur": 1.6,
+   "freq": 880.0,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 29.6,
+   "dur": 1.6,
+   "freq": 659.25,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 30.4,
+   "dur": 1.6,
+   "freq": 783.99,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 32.4,
+   "dur": 1.6,
+   "freq": 1046.5,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 33.2,
+   "dur": 1.6,
+   "freq": 880.0,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 41.0,
+   "dur": 1.6,
+   "freq": 523.25,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 43.0,
+   "dur": 1.6,
+   "freq": 493.88,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 45.4,
+   "dur": 1.6,
+   "freq": 659.25,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "chime",
+   "at": 46.6,
+   "dur": 1.6,
+   "freq": 587.33,
+   "gain": 0.04,
+   "verb": 0.45
+  },
+  {
+   "type": "bell",
+   "at": 31.55,
+   "dur": 2.4,
+   "freqs": [
+    523.25,
+    659.25,
+    783.99
+   ],
+   "gain": 0.05,
+   "verb": 0.5
+  },
+  {
+   "type": "whoosh",
+   "at": 4,
+   "dur": 0.6,
+   "gain": 0.3,
+   "seed": 104,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 8,
+   "dur": 0.6,
+   "gain": 0.3,
+   "seed": 108,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 12,
+   "dur": 0.6,
+   "gain": 0.3,
+   "seed": 112,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 16,
+   "dur": 0.6,
+   "gain": 0.3,
+   "seed": 116,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 20,
+   "dur": 0.6,
+   "gain": 0.3,
+   "seed": 120,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 24,
+   "dur": 0.6,
+   "gain": 0.3,
+   "seed": 124,
+   "verb": 0.3
+  },
+  {
+   "type": "whoosh",
+   "at": 29,
+   "dur": 0.6,
+   "gain": 0.3,
+   "seed": 129,
+   "verb": 0.3
+  },
+  {
+   "type": "ambience",
+   "preset": "subway",
+   "at": 0,
+   "dur": 4.0,
+   "gain": 0.2,
+   "seed": 2,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "static",
+   "at": 0,
+   "dur": 0.32,
+   "gain": 0.09,
+   "seed": 3,
+   "fadeIn": 0.01,
+   "fadeOut": 0.12
+  },
+  {
+   "type": "powerdown",
+   "at": 0.0,
+   "dur": 1.1,
+   "gain": 0.1,
+   "verb": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 0.05,
+   "dur": 0.16,
+   "freq": 440,
+   "gain": 0.05
+  },
+  {
+   "type": "beep",
+   "at": 0.24,
+   "dur": 0.22,
+   "freq": 330,
+   "gain": 0.05
+  },
+  {
+   "type": "whoosh",
+   "at": 2.05,
+   "dur": 0.5,
+   "gain": 0.12,
+   "seed": 7,
+   "verb": 0.2
+  },
+  {
+   "type": "ambience",
+   "preset": "supermarket",
+   "at": 4,
+   "dur": 4.0,
+   "gain": 0.17,
+   "seed": 4,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "beep",
+   "at": 4.55,
+   "dur": 0.08,
+   "freq": 2400,
+   "gain": 0.05
+  },
+  {
+   "type": "beep",
+   "at": 4.85,
+   "dur": 0.2,
+   "freq": 520,
+   "gain": 0.09
+  },
+  {
+   "type": "beep",
+   "at": 5.1,
+   "dur": 0.32,
+   "freq": 390,
+   "gain": 0.09
   },
   {
    "type": "ambience",
    "preset": "crowd",
-   "at": 0,
-   "dur": 11.95,
-   "gain": 0.12,
-   "seed": 2,
-   "lp": 1400,
-   "fadeIn": 0.3,
-   "fadeOut": 0.8
+   "at": 4,
+   "dur": 4.0,
+   "gain": 0.06,
+   "seed": 5,
+   "lp": 1600,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02
   },
   {
-   "type": "birds",
-   "at": 0,
-   "dur": 11.5,
-   "gain": 0.025,
-   "seed": 3,
-   "density": 0.7
+   "type": "ambience",
+   "preset": "night",
+   "at": 8,
+   "dur": 4.0,
+   "gain": 0.15,
+   "seed": 6,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "ambience",
+   "preset": "street",
+   "at": 8,
+   "dur": 4.0,
+   "gain": 0.08,
+   "seed": 7,
+   "lp": 1400,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "beep",
+   "at": 8.25,
+   "dur": 0.06,
+   "freq": 1450,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.45,
+   "dur": 0.06,
+   "freq": 1450,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.62,
+   "dur": 0.06,
+   "freq": 1450,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.85,
+   "dur": 0.06,
+   "freq": 1450,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 9.5,
+   "dur": 0.35,
+   "freq": 420,
+   "gain": 0.07
   },
   {
    "type": "footsteps",
    "surface": "street",
-   "at": 0,
-   "dur": 7.6,
-   "gain": 0.07,
-   "seed": 4,
+   "at": 8.0,
+   "dur": 4.0,
+   "gain": 0.04,
+   "seed": 8,
    "rate": 1.85
   },
   {
    "type": "ambience",
-   "preset": "room",
+   "preset": "crowd",
    "at": 12,
-   "dur": 10.95,
-   "gain": 0.16,
-   "seed": 5,
-   "fadeIn": 0.05,
-   "fadeOut": 0.6
+   "dur": 4.0,
+   "gain": 0.17,
+   "seed": 9,
+   "lp": 2400,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02,
+   "verb": 0.3
   },
   {
-   "type": "wind",
-   "at": 12,
-   "dur": 10.9,
-   "gain": 0.04,
-   "seed": 6
+   "type": "ding",
+   "at": 12.4,
+   "gain": 0.07,
+   "verb": 0.6
   },
   {
    "type": "footsteps",
-   "surface": "wood",
-   "at": 17.0,
-   "dur": 2.4,
-   "gain": 0.08,
-   "seed": 7,
-   "rate": 1.7
-  },
-  {
-   "type": "ambience",
-   "preset": "office",
-   "at": 23,
-   "dur": 11.9,
-   "gain": 0.13,
-   "seed": 8,
-   "fadeIn": 0.05,
-   "fadeOut": 0.7
-  },
-  {
-   "type": "ambience",
-   "preset": "crowd",
-   "at": 23,
-   "dur": 11.9,
-   "gain": 0.045,
-   "seed": 9,
-   "lp": 900,
-   "fadeIn": 0.05,
-   "fadeOut": 0.7
-  },
-  {
-   "type": "squeak",
-   "at": 23.4,
-   "dur": 0.25,
-   "gain": 0.035,
-   "seed": 234,
-   "hp": 1500
-  },
-  {
-   "type": "squeak",
-   "at": 24.1,
-   "dur": 0.25,
-   "gain": 0.035,
-   "seed": 241,
-   "hp": 1500
-  },
-  {
-   "type": "squeak",
-   "at": 24.8,
-   "dur": 0.25,
-   "gain": 0.035,
-   "seed": 248,
-   "hp": 1500
-  },
-  {
-   "type": "ambience",
-   "preset": "crowd",
-   "at": 35,
-   "dur": 18.0,
-   "gain": 0.2,
+   "surface": "tile",
+   "at": 12.0,
+   "dur": 4.0,
+   "gain": 0.05,
    "seed": 10,
-   "lp": 1000,
-   "fadeIn": 0.05,
-   "fadeOut": 1.2
+   "rate": 1.85
+  },
+  {
+   "type": "flutter",
+   "at": 13.35,
+   "dur": 0.8,
+   "gain": 0.11,
+   "seed": 11
+  },
+  {
+   "type": "ambience",
+   "preset": "street",
+   "at": 16,
+   "dur": 4.0,
+   "gain": 0.17,
+   "seed": 12,
+   "lp": 2200,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "birds",
+   "at": 16,
+   "dur": 4.0,
+   "gain": 0.03,
+   "seed": 13,
+   "density": 1.2
+  },
+  {
+   "type": "flutter",
+   "at": 16.4,
+   "dur": 0.6,
+   "gain": 0.06,
+   "seed": 14
+  },
+  {
+   "type": "beep",
+   "at": 16.9,
+   "dur": 0.05,
+   "freq": 5200,
+   "gain": 0.025
+  },
+  {
+   "type": "beep",
+   "at": 16.98,
+   "dur": 0.05,
+   "freq": 4700,
+   "gain": 0.025
+  },
+  {
+   "type": "beep",
+   "at": 18.4,
+   "dur": 0.05,
+   "freq": 5000,
+   "gain": 0.025
+  },
+  {
+   "type": "ambience",
+   "preset": "supermarket",
+   "at": 20,
+   "dur": 4.0,
+   "gain": 0.16,
+   "seed": 15,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "rattle",
+   "at": 20.0,
+   "dur": 4.0,
+   "gain": 0.035,
+   "seed": 16
+  },
+  {
+   "type": "footsteps",
+   "surface": "tile",
+   "at": 20.0,
+   "dur": 4.0,
+   "gain": 0.05,
+   "seed": 17,
+   "rate": 1.8
+  },
+  {
+   "type": "ambience",
+   "preset": "street",
+   "at": 24,
+   "dur": 5.0,
+   "gain": 0.08,
+   "seed": 18,
+   "lp": 900,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "ambience",
+   "preset": "crowd",
+   "at": 24,
+   "dur": 5.0,
+   "gain": 0.05,
+   "seed": 19,
+   "lp": 1800,
+   "fadeIn": 0.01,
+   "fadeOut": 0.02
+  },
+  {
+   "type": "birds",
+   "at": 24,
+   "dur": 5.0,
+   "gain": 0.06,
+   "seed": 20,
+   "density": 2.0
+  },
+  {
+   "type": "chord",
+   "at": 24.3,
+   "dur": 0.9,
+   "freqs": [
+    196.0,
+    246.94,
+    293.66,
+    392.0
+   ],
+   "attack": 0.01,
+   "gain": 0.045,
+   "verb": 0.3
+  },
+  {
+   "type": "chord",
+   "at": 25.0,
+   "dur": 0.9,
+   "freqs": [
+    220.0,
+    261.63,
+    329.63,
+    440.0
+   ],
+   "attack": 0.01,
+   "gain": 0.045,
+   "verb": 0.3
+  },
+  {
+   "type": "chord",
+   "at": 25.7,
+   "dur": 0.9,
+   "freqs": [
+    174.61,
+    220.0,
+    261.63,
+    349.23
+   ],
+   "attack": 0.01,
+   "gain": 0.045,
+   "verb": 0.3
+  },
+  {
+   "type": "chord",
+   "at": 26.4,
+   "dur": 0.9,
+   "freqs": [
+    196.0,
+    246.94,
+    293.66,
+    392.0
+   ],
+   "attack": 0.01,
+   "gain": 0.045,
+   "verb": 0.3
+  },
+  {
+   "type": "chord",
+   "at": 27.1,
+   "dur": 0.9,
+   "freqs": [
+    196.0,
+    246.94,
+    293.66,
+    392.0
+   ],
+   "attack": 0.01,
+   "gain": 0.045,
+   "verb": 0.3
+  },
+  {
+   "type": "chord",
+   "at": 27.8,
+   "dur": 0.9,
+   "freqs": [
+    220.0,
+    261.63,
+    329.63,
+    440.0
+   ],
+   "attack": 0.01,
+   "gain": 0.045,
+   "verb": 0.3
+  },
+  {
+   "type": "chord",
+   "at": 28.5,
+   "dur": 0.9,
+   "freqs": [
+    174.61,
+    220.0,
+    261.63,
+    349.23
+   ],
+   "attack": 0.01,
+   "gain": 0.045,
+   "verb": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 24.5,
+   "dur": 0.04,
+   "freq": 180,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 25.05,
+   "dur": 0.04,
+   "freq": 180,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 25.6,
+   "dur": 0.04,
+   "freq": 180,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 26.15,
+   "dur": 0.04,
+   "freq": 180,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 26.7,
+   "dur": 0.04,
+   "freq": 180,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 27.25,
+   "dur": 0.04,
+   "freq": 180,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 27.8,
+   "dur": 0.04,
+   "freq": 180,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 28.35,
+   "dur": 0.04,
+   "freq": 180,
+   "gain": 0.03
   },
   {
    "type": "ambience",
    "preset": "room",
-   "at": 35,
-   "dur": 24.85,
+   "at": 29,
+   "dur": 19.0,
    "gain": 0.12,
-   "seed": 11,
-   "fadeIn": 0.05,
-   "fadeOut": 0.3
-  },
-  {
-   "type": "bell",
-   "at": 43.65,
-   "dur": 0.8,
-   "freqs": [
-    2093.0,
-    2637.0
-   ],
-   "gain": 0.03,
-   "verb": 0.3
-  },
-  {
-   "type": "bell",
-   "at": 43.8,
-   "dur": 0.8,
-   "freqs": [
-    2349.0,
-    2960.0
-   ],
-   "gain": 0.022,
-   "verb": 0.3,
-   "pan": 0.3
-  },
-  {
-   "type": "pad",
-   "at": 0,
-   "dur": 12.3,
-   "freqs": [
-    110.0,
-    220.0,
-    261.6,
-    329.6
-   ],
-   "gain": 0.085,
-   "seed": 20,
-   "fadeIn": 1.2,
-   "fadeOut": 1.2,
-   "lp": 1800
-  },
-  {
-   "type": "pad",
-   "at": 11.9,
-   "dur": 11.4,
-   "freqs": [
-    87.3,
-    174.6,
-    220.0,
-    261.6
-   ],
-   "gain": 0.085,
    "seed": 21,
-   "fadeIn": 1.2,
-   "fadeOut": 1.2,
-   "lp": 1800
+   "fadeIn": 0.01,
+   "fadeOut": 0.03
   },
   {
-   "type": "pad",
-   "at": 22.9,
-   "dur": 12.4,
-   "freqs": [
-    65.4,
-    130.8,
-    196.0,
-    329.6
-   ],
-   "gain": 0.085,
+   "type": "crackle",
+   "at": 29,
+   "dur": 19.0,
+   "gain": 0.03,
    "seed": 22,
-   "fadeIn": 1.2,
-   "fadeOut": 1.2,
-   "lp": 1800
+   "density": 8
   },
   {
-   "type": "pad",
-   "at": 34.9,
-   "dur": 18.2,
-   "freqs": [
-    110.0,
-    220.0,
-    261.6,
-    329.6,
-    392.0
-   ],
-   "gain": 0.085,
-   "seed": 23,
-   "fadeIn": 1.2,
-   "fadeOut": 1.2,
-   "lp": 1800
-  },
-  {
-   "type": "bell",
-   "at": 0.4,
-   "dur": 2.4,
-   "freqs": [
-    659.3,
-    1318.6
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 2.6,
-   "dur": 2.4,
-   "freqs": [
-    523.3,
-    1046.6
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
-  },
-  {
-   "type": "bell",
-   "at": 4.9,
-   "dur": 2.4,
-   "freqs": [
-    440.0,
-    880.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 7.4,
-   "dur": 2.4,
-   "freqs": [
-    392.0,
-    784.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
-  },
-  {
-   "type": "bell",
-   "at": 9.8,
-   "dur": 2.4,
-   "freqs": [
-    440.0,
-    880.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 12.4,
-   "dur": 2.4,
-   "freqs": [
-    523.3,
-    1046.6
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
-  },
-  {
-   "type": "bell",
-   "at": 14.8,
-   "dur": 2.4,
-   "freqs": [
-    440.0,
-    880.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 17.2,
-   "dur": 2.4,
-   "freqs": [
-    349.2,
-    698.4
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
-  },
-  {
-   "type": "bell",
-   "at": 19.8,
-   "dur": 2.4,
-   "freqs": [
-    392.0,
-    784.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 21.9,
-   "dur": 2.4,
-   "freqs": [
-    440.0,
-    880.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
-  },
-  {
-   "type": "bell",
-   "at": 23.5,
-   "dur": 2.4,
-   "freqs": [
-    392.0,
-    784.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 25.9,
-   "dur": 2.4,
-   "freqs": [
-    329.6,
-    659.2
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
-  },
-  {
-   "type": "bell",
-   "at": 28.3,
-   "dur": 2.4,
-   "freqs": [
-    392.0,
-    784.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 30.9,
-   "dur": 2.4,
-   "freqs": [
-    440.0,
-    880.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
-  },
-  {
-   "type": "bell",
-   "at": 33.2,
-   "dur": 2.4,
-   "freqs": [
-    523.3,
-    1046.6
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 35.5,
-   "dur": 2.4,
-   "freqs": [
-    659.3,
-    1318.6
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
-  },
-  {
-   "type": "bell",
-   "at": 37.9,
-   "dur": 2.4,
-   "freqs": [
-    587.3,
-    1174.6
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 40.3,
-   "dur": 2.4,
-   "freqs": [
-    523.3,
-    1046.6
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
-  },
-  {
-   "type": "bell",
-   "at": 42.8,
-   "dur": 2.4,
-   "freqs": [
-    440.0,
-    880.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": 0.2
-  },
-  {
-   "type": "bell",
-   "at": 45.4,
-   "dur": 2.4,
-   "freqs": [
-    392.0,
-    784.0
-   ],
-   "gain": 0.055,
-   "lp": 2400,
-   "verb": 0.45,
-   "pan": -0.2
+   "type": "rattle",
+   "at": 29.6,
+   "dur": 1.3,
+   "gain": 0.07,
+   "seed": 23
   },
   {
    "type": "ticks",
-   "at": 45.4,
-   "dur": 7.55,
+   "at": 31.42,
+   "dur": 0.35,
    "interval": [
-    0.85,
-    0.42
+    0.07,
+    0.12
    ],
-   "gain": 0.06,
-   "seed": 40,
-   "lp": 3000
+   "gain": 0.08,
+   "seed": 24
   },
   {
-   "type": "sub",
-   "at": 45.4,
-   "dur": 7.6,
-   "freq": 46,
-   "gain": 0.045,
-   "seed": 41,
-   "fadeIn": 1.5,
-   "fadeOut": 0.05
-  },
-  {
-   "type": "silence",
-   "at": 53.0,
-   "dur": 2.0
-  },
-  {
-   "type": "creak",
-   "at": 55.35,
-   "dur": 1.3,
-   "gain": 0.09,
-   "seed": 50
-  },
-  {
-   "type": "shimmer",
-   "at": 55.3,
-   "dur": 4.5,
-   "gain": 0.12,
-   "seed": 51,
-   "density": 30,
-   "verb": 0.6
-  },
-  {
-   "type": "riser",
-   "at": 58.6,
-   "dur": 3.2,
-   "gain": 0.1,
-   "seed": 52,
-   "f0": 300,
-   "f1": 1800
-  },
-  {
-   "type": "pad",
-   "at": 55.2,
-   "dur": 4.7,
+   "type": "drone",
+   "at": 34.0,
+   "dur": 0.45,
    "freqs": [
-    220.0,
-    277.2,
-    329.6,
-    440.0
+    146,
+    149
    ],
-   "gain": 0.07,
-   "seed": 53,
-   "fadeIn": 1.5,
-   "fadeOut": 0.15,
-   "lp": 2600
+   "gain": 0.16,
+   "seed": 25
+  },
+  {
+   "type": "drone",
+   "at": 34.6,
+   "dur": 0.45,
+   "freqs": [
+    146,
+    149
+   ],
+   "gain": 0.16,
+   "seed": 26
   },
   {
    "type": "chime",
-   "at": 56.4,
-   "dur": 3.0,
-   "freq": 659.3,
+   "at": 34.35,
+   "dur": 1.2,
+   "freq": 1318.5,
    "gain": 0.05,
-   "verb": 0.6
-  },
-  {
-   "type": "whoosh",
-   "at": 8.0,
-   "dur": 0.8,
-   "gain": 0.16,
-   "seed": 8,
    "verb": 0.3
   },
   {
-   "type": "whoosh",
-   "at": 12.0,
-   "dur": 0.8,
-   "gain": 0.16,
-   "seed": 12,
-   "verb": 0.3
+   "type": "beep",
+   "at": 35.3,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.045,
+   "pan": -0.4
+  },
+  {
+   "type": "chime",
+   "at": 35.3,
+   "dur": 0.6,
+   "freq": 1318.5,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 35.56,
+   "dur": 0.07,
+   "freq": 2093,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 35.794,
+   "dur": 0.07,
+   "freq": 2637,
+   "gain": 0.045,
+   "pan": 0.0
+  },
+  {
+   "type": "beep",
+   "at": 36.005,
+   "dur": 0.07,
+   "freq": 1975.5,
+   "gain": 0.06,
+   "pan": 0.5
+  },
+  {
+   "type": "beep",
+   "at": 36.194,
+   "dur": 0.07,
+   "freq": 2349.3,
+   "gain": 0.045,
+   "pan": -0.2
+  },
+  {
+   "type": "chime",
+   "at": 36.194,
+   "dur": 0.6,
+   "freq": 880.0,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 36.365,
+   "dur": 0.07,
+   "freq": 1568,
+   "gain": 0.06,
+   "pan": -0.4
+  },
+  {
+   "type": "beep",
+   "at": 36.518,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.045,
+   "pan": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 36.656,
+   "dur": 0.07,
+   "freq": 2093,
+   "gain": 0.06,
+   "pan": 0.0
+  },
+  {
+   "type": "beep",
+   "at": 36.781,
+   "dur": 0.07,
+   "freq": 2637,
+   "gain": 0.045,
+   "pan": 0.5
+  },
+  {
+   "type": "chime",
+   "at": 36.781,
+   "dur": 0.6,
+   "freq": 1174.65,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 36.893,
+   "dur": 0.07,
+   "freq": 1975.5,
+   "gain": 0.06,
+   "pan": -0.2
+  },
+  {
+   "type": "beep",
+   "at": 36.993,
+   "dur": 0.07,
+   "freq": 2349.3,
+   "gain": 0.045,
+   "pan": -0.4
+  },
+  {
+   "type": "beep",
+   "at": 37.084,
+   "dur": 0.07,
+   "freq": 1568,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 37.166,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.045,
+   "pan": 0.0
+  },
+  {
+   "type": "chime",
+   "at": 37.166,
+   "dur": 0.6,
+   "freq": 1318.5,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 37.239,
+   "dur": 0.07,
+   "freq": 2093,
+   "gain": 0.06,
+   "pan": 0.5
+  },
+  {
+   "type": "beep",
+   "at": 37.305,
+   "dur": 0.07,
+   "freq": 2637,
+   "gain": 0.045,
+   "pan": -0.2
+  },
+  {
+   "type": "beep",
+   "at": 37.365,
+   "dur": 0.07,
+   "freq": 1975.5,
+   "gain": 0.06,
+   "pan": -0.4
+  },
+  {
+   "type": "beep",
+   "at": 37.418,
+   "dur": 0.07,
+   "freq": 2349.3,
+   "gain": 0.045,
+   "pan": 0.3
+  },
+  {
+   "type": "chime",
+   "at": 37.418,
+   "dur": 0.6,
+   "freq": 880.0,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 37.466,
+   "dur": 0.07,
+   "freq": 1568,
+   "gain": 0.06,
+   "pan": 0.0
+  },
+  {
+   "type": "beep",
+   "at": 37.511,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.045,
+   "pan": 0.5
+  },
+  {
+   "type": "beep",
+   "at": 37.556,
+   "dur": 0.07,
+   "freq": 2093,
+   "gain": 0.06,
+   "pan": -0.2
+  },
+  {
+   "type": "beep",
+   "at": 37.601,
+   "dur": 0.07,
+   "freq": 2637,
+   "gain": 0.045,
+   "pan": -0.4
+  },
+  {
+   "type": "chime",
+   "at": 37.601,
+   "dur": 0.6,
+   "freq": 1174.65,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 37.646,
+   "dur": 0.07,
+   "freq": 1975.5,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 37.691,
+   "dur": 0.07,
+   "freq": 2349.3,
+   "gain": 0.045,
+   "pan": 0.0
+  },
+  {
+   "type": "beep",
+   "at": 37.736,
+   "dur": 0.07,
+   "freq": 1568,
+   "gain": 0.06,
+   "pan": 0.5
+  },
+  {
+   "type": "beep",
+   "at": 37.781,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.045,
+   "pan": -0.2
+  },
+  {
+   "type": "chime",
+   "at": 37.781,
+   "dur": 0.6,
+   "freq": 1318.5,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 37.826,
+   "dur": 0.07,
+   "freq": 2093,
+   "gain": 0.06,
+   "pan": -0.4
+  },
+  {
+   "type": "beep",
+   "at": 37.871,
+   "dur": 0.07,
+   "freq": 2637,
+   "gain": 0.045,
+   "pan": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 37.916,
+   "dur": 0.07,
+   "freq": 1975.5,
+   "gain": 0.06,
+   "pan": 0.0
+  },
+  {
+   "type": "beep",
+   "at": 37.961,
+   "dur": 0.07,
+   "freq": 2349.3,
+   "gain": 0.045,
+   "pan": 0.5
+  },
+  {
+   "type": "chime",
+   "at": 37.961,
+   "dur": 0.6,
+   "freq": 880.0,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 38.006,
+   "dur": 0.07,
+   "freq": 1568,
+   "gain": 0.06,
+   "pan": -0.2
+  },
+  {
+   "type": "beep",
+   "at": 38.051,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.045,
+   "pan": -0.4
+  },
+  {
+   "type": "beep",
+   "at": 38.096,
+   "dur": 0.07,
+   "freq": 2093,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 38.141,
+   "dur": 0.07,
+   "freq": 2637,
+   "gain": 0.045,
+   "pan": 0.0
+  },
+  {
+   "type": "chime",
+   "at": 38.141,
+   "dur": 0.6,
+   "freq": 1174.65,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 38.186,
+   "dur": 0.07,
+   "freq": 1975.5,
+   "gain": 0.06,
+   "pan": 0.5
+  },
+  {
+   "type": "beep",
+   "at": 38.231,
+   "dur": 0.07,
+   "freq": 2349.3,
+   "gain": 0.045,
+   "pan": -0.2
+  },
+  {
+   "type": "beep",
+   "at": 38.276,
+   "dur": 0.07,
+   "freq": 1568,
+   "gain": 0.06,
+   "pan": -0.4
+  },
+  {
+   "type": "beep",
+   "at": 38.321,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.045,
+   "pan": 0.3
+  },
+  {
+   "type": "chime",
+   "at": 38.321,
+   "dur": 0.6,
+   "freq": 1318.5,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 38.366,
+   "dur": 0.07,
+   "freq": 2093,
+   "gain": 0.06,
+   "pan": 0.0
+  },
+  {
+   "type": "beep",
+   "at": 38.411,
+   "dur": 0.07,
+   "freq": 2637,
+   "gain": 0.045,
+   "pan": 0.5
+  },
+  {
+   "type": "beep",
+   "at": 38.456,
+   "dur": 0.07,
+   "freq": 1975.5,
+   "gain": 0.06,
+   "pan": -0.2
+  },
+  {
+   "type": "beep",
+   "at": 38.501,
+   "dur": 0.07,
+   "freq": 2349.3,
+   "gain": 0.045,
+   "pan": -0.4
+  },
+  {
+   "type": "chime",
+   "at": 38.501,
+   "dur": 0.6,
+   "freq": 880.0,
+   "gain": 0.03
+  },
+  {
+   "type": "beep",
+   "at": 38.546,
+   "dur": 0.07,
+   "freq": 1568,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "beep",
+   "at": 38.591,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.045,
+   "pan": 0.0
+  },
+  {
+   "type": "beep",
+   "at": 40.2,
+   "dur": 0.07,
+   "freq": 2093,
+   "gain": 0.035
+  },
+  {
+   "type": "beep",
+   "at": 40.5,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.035
+  },
+  {
+   "type": "beep",
+   "at": 40.75,
+   "dur": 0.07,
+   "freq": 2637,
+   "gain": 0.035
+  },
+  {
+   "type": "beep",
+   "at": 41.3,
+   "dur": 0.07,
+   "freq": 1975.5,
+   "gain": 0.035
+  },
+  {
+   "type": "beep",
+   "at": 42.1,
+   "dur": 0.07,
+   "freq": 2349.3,
+   "gain": 0.035
+  },
+  {
+   "type": "beep",
+   "at": 43.4,
+   "dur": 0.07,
+   "freq": 1760,
+   "gain": 0.035
+  },
+  {
+   "type": "drop",
+   "at": 40.0,
+   "dur": 1.6,
+   "f0": 700,
+   "f1": 160,
+   "gain": 0.04,
+   "verb": 0.4
   },
   {
    "type": "whoosh",
-   "at": 23.0,
-   "dur": 0.8,
-   "gain": 0.16,
-   "seed": 23,
-   "verb": 0.3
+   "at": 45.0,
+   "dur": 0.4,
+   "gain": 0.1,
+   "seed": 27,
+   "verb": 0.2
   },
   {
-   "type": "whoosh",
-   "at": 35.0,
-   "dur": 0.8,
-   "gain": 0.16,
-   "seed": 35,
-   "verb": 0.3
+   "type": "static",
+   "at": 47.35,
+   "dur": 0.65,
+   "gain": 0.07,
+   "seed": 28,
+   "fadeIn": 0.3,
+   "fadeOut": 0.01
   },
   {
-   "type": "silence",
-   "at": 59.9,
-   "dur": 1.1
+   "type": "reverse",
+   "at": 48.0,
+   "dur": 0.65,
+   "gain": 0.06,
+   "seed": 29
   }
  ]
 }
