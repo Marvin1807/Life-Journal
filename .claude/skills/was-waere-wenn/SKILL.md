@@ -85,6 +85,24 @@ Claude-Code-Mods (`tiktok-videos/claude-mods/`, im Projekt aktiviert):
 In der Claude-Cloud vor jedem HyperFrames-Befehl:
 `export HYPERFRAMES_BROWSER_PATH=$(find /opt/pw-browsers -name chrome-headless-shell -type f | head -1)`
 
+## Was die Kanal-Daten zeigen (Stand 21.10.2026, @anderewelt7)
+
+| Video | Länge | Ø geschaut | bis zum Ende |
+|---|---|---|---|
+| Sauerstoff | 75 s | 17,7 s | 4,0 % |
+| Wal | 75 s (20 s ruhiger Anfang) | 10,7 s | 1,8 % |
+| Nur noch 100 | 61 s (persönlich, offene Frage) | 16,4 s | **16,3 %** |
+| Regen | 91 s | 18,2 s | 4,7 % |
+| Roadster | 96 s | 16,1 s | 1,8 % |
+
+Folgerungen (haben Vorrang vor dem Zeitraster unten):
+- **Länge 35–45 s.** Zuschauer bleiben im Schnitt nur 16–18 s, egal wie lang das Video ist.
+- **Bis 2 s etwas Überraschendes, bis 15 s die stärksten Bilder.** Kein ruhiger Einstieg.
+- **Persönlicher Bezug + offene Frage bis zum Schluss** („du“, „deine Mama“, „Wer ist Nummer 101?“) –
+  das einzige Video mit >15 % Komplett-Ansichten hatte genau das.
+- **Loop-Ende** statt langer Endkarte, damit Wiederholungen zählen.
+- Das Zeitraster unten bei 40 s Länge sinngemäß stauchen (Ereignis ~1–2 s, Höhepunkt ~30 s).
+
 ## Zeitraster (75 s, Standard)
 
 **Nutzer-Vorgabe:** Der Anfang darf nicht lang dauern, es muss ständig etwas passieren. Das
