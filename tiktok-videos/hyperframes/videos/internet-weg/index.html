@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Was wäre, wenn nur noch 100 Menschen übrig wären?</title>
+    <link rel="stylesheet" href="lib/ww.css" />
+    <style>
+      @font-face { font-family: "WW Serif"; font-style: normal; font-weight: 400; src: url("lib/fonts/eb-garamond-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "WW Serif"; font-style: italic; font-weight: 400; src: url("lib/fonts/eb-garamond-latin-400-italic.woff2") format("woff2"); }
+      @font-face { font-family: "WW Sans"; font-style: normal; font-weight: 500; src: url("lib/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "WW Sans"; font-style: normal; font-weight: 600; src: url("lib/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "WW Mono"; font-style: normal; font-weight: 400; src: url("lib/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
+      /* Schluss wie in der Referenz: groß und kursiv „Teil 2?“ auf Schwarz, kein Titel */
+      .ww-end-title { display: none; }
+      .ww-end-lines { top: 860px; }
+      .ww-end-lines div:first-child { font-family: "WW Serif"; font-style: italic; font-size: 104px; letter-spacing: 0; text-transform: none; color: #f2f2f2; margin-bottom: 44px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="internet-weg" data-start="0" data-duration="61" data-width="1080" data-height="1920">
+      <canvas id="scene" class="clip" data-start="0" data-duration="61" data-track-index="0"></canvas>
+      <div id="overlay" class="clip" data-start="0" data-duration="61" data-track-index="1" style="position:absolute;inset:0"></div>
+      <audio id="sound" src="audio/sound.wav" data-start="0" data-duration="61" data-track-index="2" data-volume="1"></audio>
+    </div>
+
+    <script src="lib/gsap.min.js"></script>
+    <script>
+      // Leere Root-Timeline: gibt HyperFrames die Länge vor; die Szene selbst hört auf hf-seek.
+      window.__timelines = window.__timelines || {};
+      window.__timelines["internet-weg"] = gsap.timeline({ paused: true }).set({}, {}, 61);
+    </script>
+    <script type="importmap">
+      { "imports": { "three": "./lib/three.module.min.js" } }
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import "./scene.js"; // Szene, Overlay und Kamera
+    </script>
+  </body>
+</html>
