@@ -1,32 +1,34 @@
-// "Was wäre, wenn das Internet eine Woche lang ausfällt?" – 48 s, Tage-Format wie nur-100, LOOP.
-// Acht Orte, jeder genau einmal, alle 3–5 s ein Zeitsprung: U-Bahn (Minute 1) → Supermarktkasse (Stunde 2) →
-// Geldautomat (Stunde 3) → Bahnhofshalle (Stunde 9) → Späti (Tag 2) → Supermarktgang (Tag 3) → Hinterhof (Tag 5) →
+// "Was wäre, wenn das Internet eine Woche lang ausfällt?" – 40 s, Tage-Format wie nur-100, LOOP.
+// Sieben Orte, jeder genau einmal, alle ~3,2 s ein Zeitsprung: U-Bahn (Minute 1) → Supermarktkasse (Stunde 2) →
+// Bahnhofshalle (Stunde 9) → Späti (Tag 2) → Supermarktgang (Tag 3) → Hinterhof (Tag 5) →
 // Wohnzimmer bei Kerzenlicht (Tag 7): Spieleabend, das Netz kommt zurück, alle schauen wieder aufs Handy.
 // Ende = Anfang: Die Kamera fährt auf dein Handy, der Feed zeigt dieses Video, dann „Keine Verbindung“ – exakt das
 // erste Bild. Durchgehend POV mit sichtbaren Händen und deinem Handy.
 import { THREE, rng, clamp, smooth, lerp, shake, createSky, valueAt } from "./lib/lowpoly.js";
 import { hand, coffeeCup, shoppingCart, supermarketAisle, mat, box, cyl } from "./lib/props.js";
 import { createOverlay, de } from "./lib/ww-overlay.js";
-import { folk, heldPhones, bigPhone, subwayCar, checkout, atmStreet, stationHall, paperMap, spaeti, courtyard,
+import { folk, heldPhones, bigPhone, subwayCar, checkout, stationHall, paperMap, spaeti, courtyard,
          livingRoom, dice, drawPanel, handFont, TABLE_Y } from "./sets.js";
 
-const DURATION = 48;
-const CUT = [0, 4, 8, 12, 16, 20, 24, 29];   // Szenenstarts
-const LOOKUP = 2.0;        // alle Fahrgäste schauen hoch
-const TAP = 4.55;          // Karte ans Terminal
-const MAP_UP = 13.4;       // Stadtplan kommt ins Bild
-const ROLL = 30.9, LAND = 31.5;   // Würfeln
-const BUZZ = 34.0;         // dein Handy vibriert
-const FLOOD0 = 35.3, FLOOD1 = 38.6;   // Benachrichtigungs-Zähler
-const PHONES_UP = 40.0;    // alle nehmen ihr Handy
-const GRAB = 44.4;         // du greifst nach deinem Handy
-const FEED = 45.0;         // Feed mit diesem Video
-const OFFLINE = 47.35;     // Display springt auf „Keine Verbindung“ (= erstes Bild)
+const DURATION = 40;
+// Szenenstarts (je ~3,2 s): U-Bahn 0 · Kasse · Bahnhof · Späti · Regalgang · Hinterhof · Wohnzimmer
+const CUT_B = 3.2, CUT_D = 6.4, CUT_E = 9.6, CUT_F = 12.8, CUT_G = 16.0, CUT_H = 19.5;
+const LOOKUP = 1.3;        // alle Fahrgäste schauen hoch
+const TAP = 3.65;          // Karte ans Terminal
+const MAP_UP = 7.7;        // Stadtplan kommt ins Bild
+const ROLL = 21.2, LAND = 21.8;   // Würfeln
+const BUZZ = 24.0;         // dein Handy vibriert
+const FLOOD0 = 25.0, FLOOD1 = 28.0;   // Benachrichtigungs-Zähler
+const PHONES_UP = 29.0;    // alle nehmen ihr Handy
+const GRAB = 33.3;         // du greifst nach deinem Handy
+const FEED = 34.0;         // Feed mit diesem Video
+const OFFLINE = 39.35;     // Display springt auf „Keine Verbindung“ (= erstes Bild)
+// Blinken des „Keine Verbindung“-Symbols, durchgehend über die Loop-Naht (Ende → Anfang)
+const blink = (t) => { const u = t > 30 ? t - DURATION : t; return u > -0.7 && u < 0.75 ? Math.floor((u + 10) * 5) % 2 : 0; };
 
 const SCENES = [
   { name: "U-Bahn-Wagen der U2", set: "ubahn" },
   { name: "Supermarktkasse mit Kartenterminal", set: "kasse" },
-  { name: "Geldautomat in der Nacht", set: "geldautomat" },
   { name: "Bahnhofshalle mit Anzeigetafel", set: "bahnhof" },
   { name: "Späti mit leerem Zeitungsständer", set: "spaeti" },
   { name: "Supermarktgang, Regale leeren sich", set: "regalgang" },
@@ -39,33 +41,31 @@ const notifCount = (t) => Math.round(3482 * Math.pow(smooth(clamp((t - FLOOD0) /
 const overlay = createOverlay(document.getElementById("overlay"), {
   title: { text: "Was wäre, wenn das Internet eine Woche lang ausfällt?", accent: "Internet", accentColor: "#7fc4ff", start: 0, end: 2.8 },
   hud: [
-    { start: 0.9, end: 3.95, label: "Ohne Internet", value: () => "Minute 1", sub: "Montag · 21:16 Uhr · U2 Richtung Pankow", fadeIn: 0.3, fadeOut: 0.12 },
-    { start: 4.08, end: 7.95, label: "Ohne Internet", value: () => "Stunde 2", sub: "19. Juli 2024: Ein fehlerhaftes Update legte weltweit ca. 8,5 Mio. Windows-PCs lahm", fadeIn: 0.12, fadeOut: 0.12 },
-    { start: 8.08, end: 11.95, label: "Ohne Internet", value: () => "Stunde 3", sub: "00:16 Uhr · Kein Bargeld", fadeIn: 0.12, fadeOut: 0.12 },
-    { start: 12.08, end: 15.95, label: "Ohne Internet", value: () => "Stunde 9", sub: "06:16 Uhr · Kein Navi, kein Fahrplan", fadeIn: 0.12, fadeOut: 0.12 },
-    { start: 16.08, end: 19.95, label: "Ohne Internet", value: () => "Tag 2", sub: "Dienstag · Keine Nachrichten-Apps", fadeIn: 0.12, fadeOut: 0.12 },
-    { start: 20.08, end: 23.95, label: "Ohne Internet", value: () => "Tag 3", sub: "Mittwoch · Lieferungen bleiben aus", fadeIn: 0.12, fadeOut: 0.12 },
-    { start: 24.08, end: 28.95, label: "Ohne Internet", value: () => "Tag 5", sub: "Freitag · Bildschirmzeit: 0 Minuten", fadeIn: 0.12, fadeOut: 0.12 },
-    { start: 29.08, end: BUZZ, label: "Ohne Internet", value: () => "Tag 7", sub: "Sonntag · Spieleabend", fadeIn: 0.12, fadeOut: 0.02 },
-    { start: BUZZ, end: 44.8, label: "Wieder online", value: () => "Tag 7",
-      sub: (t) => t < 37 ? "21:14 Uhr · Verbindung wiederhergestellt" : t < PHONES_UP ? `21:15 Uhr · ${de(notifCount(t))} Benachrichtigungen` : "21:15 Uhr · Bildschirmzeit läuft wieder", fadeIn: 0.02, fadeOut: 0.4 },
+    { start: 0.7, end: 3.15, label: "Ohne Internet", value: () => "Minute 1", sub: "Montag · 21:16 Uhr · U2 Richtung Pankow", fadeIn: 0.3, fadeOut: 0.12 },
+    { start: 3.28, end: 6.35, label: "Ohne Internet", value: () => "Stunde 2", sub: "23:16 Uhr · Auch die Geldautomaten: außer Betrieb", fadeIn: 0.12, fadeOut: 0.12 },
+    { start: 6.48, end: 9.55, label: "Ohne Internet", value: () => "Stunde 9", sub: "19. Juli 2024: Ein fehlerhaftes Update legte weltweit ca. 8,5 Mio. Windows-PCs lahm", fadeIn: 0.12, fadeOut: 0.12 },
+    { start: 9.68, end: 12.75, label: "Ohne Internet", value: () => "Tag 2", sub: "Dienstag · Keine Nachrichten-Apps", fadeIn: 0.12, fadeOut: 0.12 },
+    { start: 12.88, end: 15.95, label: "Ohne Internet", value: () => "Tag 3", sub: "Mittwoch · Lieferungen bleiben aus", fadeIn: 0.12, fadeOut: 0.12 },
+    { start: 16.08, end: 19.45, label: "Ohne Internet", value: () => "Tag 5", sub: "Freitag · Bildschirmzeit: 0 Minuten", fadeIn: 0.12, fadeOut: 0.12 },
+    { start: 19.58, end: BUZZ, label: "Ohne Internet", value: () => "Tag 7", sub: "Sonntag · Spieleabend", fadeIn: 0.12, fadeOut: 0.02 },
+    { start: BUZZ, end: 33.8, label: "Wieder online", value: () => "Tag 7",
+      sub: (t) => t < FLOOD0 + 0.6 ? "21:14 Uhr · Verbindung wiederhergestellt" : t < PHONES_UP ? `21:15 Uhr · ${de(notifCount(t))} Benachrichtigungen` : "21:15 Uhr · Bildschirmzeit läuft wieder", fadeIn: 0.02, fadeOut: 0.4 },
   ],
   subtitles: [
-    { start: 1.0, end: 3.9, text: "Minute 1: Alle schauen gleichzeitig hoch." },
-    { start: 4.25, end: 7.85, text: "Karte geht nicht. Nur noch Bargeld." },
-    { start: 8.25, end: 11.85, text: "Und der Geldautomat auch nicht." },
-    { start: 12.25, end: 15.85, text: "Navi weg. Zum ersten Mal: ein Stadtplan aus Papier." },
-    { start: 16.25, end: 19.85, text: "Tag 2: Die Zeitung ist ausverkauft." },
-    { start: 20.25, end: 23.85, text: "Bestellungen kommen nicht mehr an. Die Regale werden leer." },
-    { start: 24.25, end: 28.85, text: "Tag 5: Die Nachbarn reden miteinander." },
-    { start: 29.3, end: 33.85, text: "Tag 7: Und irgendwie … ist es schön." },
-    { start: 34.5, end: 39.85, text: "Dann ist es wieder da." },
-    { start: 40.1, end: 44.85, text: "Und alle schauen wieder runter." },
-    { start: 45.0, end: 47.8, text: "Würdest du es überhaupt eine Woche schaffen?" },
+    { start: 0.6, end: 3.1, text: "Minute 1: Alle schauen gleichzeitig hoch." },
+    { start: 3.4, end: 6.3, text: "Karte geht nicht. Nur noch Bargeld." },
+    { start: 6.6, end: 9.5, text: "Navi weg. Zum ersten Mal: ein Stadtplan aus Papier." },
+    { start: 9.8, end: 12.7, text: "Tag 2: Die Zeitung ist ausverkauft." },
+    { start: 13.0, end: 15.9, text: "Bestellungen kommen nicht mehr an. Die Regale werden leer." },
+    { start: 16.2, end: 19.4, text: "Tag 5: Die Nachbarn reden miteinander." },
+    { start: 19.7, end: 23.85, text: "Tag 7: Und irgendwie … ist es schön." },
+    { start: 24.4, end: 28.85, text: "Dann ist es wieder da." },
+    { start: 29.1, end: 33.85, text: "Und alle schauen wieder runter." },
+    { start: 35.0, end: 39.8, text: "Würdest du es überhaupt eine Woche schaffen?" },
   ],
   // Kein Schwarzbild, keine Endkarte: das Video endet im Loop-Bild (Start nach dem Videoende = unsichtbar).
-  black: { start: 48.5, end: 48.5 },
-  endcard: { start: 48.5, end: 48.5, lines: [
+  black: { start: 40.5, end: 40.5 },
+  endcard: { start: 40.5, end: 40.5, lines: [
     "19. Juli 2024: ca. 8,5 Mio. Windows-PCs fielen nach einem fehlerhaften Update aus",
     "Würdest du es eine Woche ohne Internet schaffen?",
   ] },
@@ -133,19 +133,19 @@ let currentT = 0;
 // ================================================================= Sets ===
 const A = subwayCar(); scene.add(A.group);
 const B = checkout(); scene.add(B.group);
-const C = atmStreet(); scene.add(C.group);
 const D = stationHall(); scene.add(D.group);
 const E = spaeti(); scene.add(E.group);
-const F = { group: new THREE.Group(), aisle: supermarketAisle({ length: 18, emptyFrom: 20.4, emptyTo: 23.4, seed: 77 }) };
+const F = { group: new THREE.Group(), aisle: supermarketAisle({ length: 18, emptyFrom: 13.0, emptyTo: 15.6, seed: 77 }) };
 F.group.add(F.aisle.group); scene.add(F.group);
 const G = courtyard(); scene.add(G.group);
 const H = livingRoom(); scene.add(H.group);
-const SETS = { A: A.group, B: B.group, C: C.group, D: D.group, E: E.group, F: F.group, G: G.group, H: H.group };
+const SETS = { A: A.group, B: B.group, D: D.group, E: E.group, F: F.group, G: G.group, H: H.group };
 function only(k) { for (const [n, g] of Object.entries(SETS)) g.visible = n === k; }
 
 // ============================================================ Hände (POV) ===
 const SLEEVE = "#3d5a73";
 const rig = new THREE.Group(); camera.add(rig);
+const rigLight = new THREE.PointLight("#fff0dc", 0.5, 1.4, 1.2); rigLight.position.set(0.05, 0.12, 0.05); rig.add(rigLight);   // Fülllicht für Hände/Handy
 const leftHand = hand(-1, SLEEVE); rig.add(leftHand);
 const rightHand = hand(1, SLEEVE); rig.add(rightHand);
 const handy = bigPhone(); rig.add(handy);
@@ -178,16 +178,20 @@ const HAND_REL = (() => {
   const pm = new THREE.Matrix4().compose(new THREE.Vector3(-0.103, -0.222, -0.495), new THREE.Quaternion().setFromEuler(new THREE.Euler(-0.55, 0.14, 0.05)), new THREE.Vector3(1, 1, 1));
   return pm.invert().multiply(hm);
 })();
-const CLOSE = { pos: new THREE.Vector3(0, -0.006, -0.205), quat: new THREE.Quaternion() };   // Loop-Bild
+const CLOSE = { pos: new THREE.Vector3(0, -0.004, -0.168), quat: new THREE.Quaternion() };   // Loop-Bild
+// Hand in der Nahaufnahme: hält das Handy von unten, Ärmel verschwindet nach unten aus dem Bild
+const CLOSE_HAND = { pos: new THREE.Vector3(-0.012, -0.175, -0.29), quat: new THREE.Quaternion().setFromEuler(new THREE.Euler(1.2, 0, -0.18)) };
 const pose = (x, y, z, rx, ry, rz) => ({ pos: new THREE.Vector3(x, y, z), quat: new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, rz)) });
 const HOLD = pose(-0.105, -0.2, -0.43, -0.42, 0.16, 0.05);
-const HOLD_LOW = pose(-0.15, -0.27, -0.45, -0.62, 0.22, 0.08);
+const HOLD_LOW = pose(-0.14, -0.235, -0.45, -0.55, 0.2, 0.08);
 const _p = new THREE.Vector3(), _q = new THREE.Quaternion(), _m = new THREE.Matrix4(), _one = new THREE.Vector3(1, 1, 1);
 function placePhone(a, b, k, grip = 1) {
   _p.copy(a.pos).lerp(b.pos, k); _q.copy(a.quat).slerp(b.quat, k);
   handy.position.copy(_p); handy.quaternion.copy(_q);
   _m.compose(_p, _q, _one).multiply(HAND_REL);
   _m.decompose(leftHand.position, leftHand.quaternion, tmp);
+  const ck = b === CLOSE ? k : a === CLOSE ? 1 - k : 0;   // Nähe zur Loop-Nahaufnahme
+  if (ck > 0) { const w = smooth(ck); leftHand.position.lerp(CLOSE_HAND.pos, w); leftHand.quaternion.slerp(CLOSE_HAND.quat, w); }
   leftHand.position.y -= (1 - grip) * 0.35;
   leftHand.userData.curl(0.45);
 }
@@ -222,11 +226,12 @@ function card2(c, x, y, w, h, title, text, col = "rgba(255,255,255,0.86)") {
   c.font = "500 27px Arial"; c.fillStyle = "#3a3f4a"; c.fillText(text, x + 28, y + h * 0.7);
 }
 const SCREENS = {
-  offline(c, w, h) {   // = erstes und letztes Bild
+  offline(c, w, h, s) {   // = erstes und letztes Bild (s.b = Blinkphase)
     const gr = c.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, "#151b28"); gr.addColorStop(1, "#0a0d14");
     c.fillStyle = gr; c.fillRect(0, 0, w, h);
     statusBar(c, w, "21:16", 64, false);
-    wifiOff(c, w / 2, h * 0.5, 190);
+    if (s.b) { c.fillStyle = "rgba(255,91,74,0.16)"; c.beginPath(); c.arc(w / 2, h * 0.5, 200, 0, 6.3); c.fill(); }
+    c.globalAlpha = s.b ? 1 : 0.55; wifiOff(c, w / 2, h * 0.5, 190); c.globalAlpha = 1;
     c.fillStyle = "#ffffff"; c.textAlign = "center"; c.textBaseline = "middle";
     c.font = "800 62px Arial"; c.fillText("Keine", w / 2, h * 0.655); c.fillText("Verbindung", w / 2, h * 0.71);
     c.fillStyle = "#9aa3b5"; c.font = "500 30px Arial"; c.fillText("Überprüfe deine", w / 2, h * 0.775); c.fillText("Internetverbindung.", w / 2, h * 0.805);
@@ -352,13 +357,13 @@ function renderSubway(t) {
   const yaw = 0.0 + 0.02 * Math.sin(t * 0.6), pitch = lerp(-0.2, -0.13, smooth((t - LOOKUP) / 0.8));
   setCam([CAM_A.x + sway, CAM_A.y, CAM_A.z], yaw, pitch, 62, 0.004, sway * 2);
   // Licht: Wagenbeleuchtung, im ersten Moment noch gedimmt (Blick aufs Display)
-  const wake = 0.55 + 0.45 * smooth(t / 0.9);
+  const wake = 0.45 + 0.55 * smooth((t - 0.15) / 0.8);
   look({ hemiSky: "#fff6e6", hemiGround: "#6a6258", hemiI: 1.25 * wake, bg: "#05070b", exposure: 1.15 * (0.75 + 0.25 * wake), fog: [30, 60], fogColor: "#0a0c10" });
   A.lights.forEach((l) => { l.intensity = 4 * wake; });
   A.update(t);
   aPeople.forEach((p, i) => {
     const up = smooth((t - LOOKUP - p.d) / 0.35);
-    const shrug = p.shrug ? smooth((t - 2.6 - p.d) / 0.4) * (1 - smooth((t - 3.5) / 0.4)) : 0;
+    const shrug = p.shrug ? smooth((t - LOOKUP - 0.6 - p.d) / 0.35) * (1 - smooth((t - 2.75) / 0.35)) : 0;
     const toCam = towardCam(CAM_A.x, CAM_A.z, p.x, p.z, p.rotY);
     const yawLook = p.lookCam ? toCam * 0.85 : 0.6 * Math.sin(p.ph + t * 0.8);
     aFolk.set(i, { x: p.x, z: p.z, rotY: p.rotY, sit: p.sit,
@@ -370,8 +375,8 @@ function renderSubway(t) {
   aFolk.commit(); aPh.commit();
   // Dein Handy: erstes Bild ganz nah (= letztes Bild), dann runter in die normale Haltung
   hands({ left: "phone" });
-  placePhone(HOLD, CLOSE, 1 - smooth(t / 1.25));
-  screen("offline");
+  placePhone(HOLD, CLOSE, 1 - smooth((t - 0.15) / 1.0));
+  screen("offline", { b: blink(t) });
   rig.position.set(0, 0, 0);
   canvas.style.filter = "saturate(1.05) contrast(1.03)";
   return 1;
@@ -407,15 +412,15 @@ function drawTerminal(state) {
 let termState = "";
 function renderCheckout(t) {
   only("B");
-  const lt = t - CUT[1];
-  const yaw = lerp(-0.28, -0.36, smooth(lt / 3.5)), pitch = lerp(-0.42, -0.36, smooth(lt / 3.5));
-  setCam([CAM_B.x, CAM_B.y, CAM_B.z], yaw, pitch, lerp(62, 54, smooth((lt - 0.8) / 2.5)), 0.003);
+  const lt = t - CUT_B;
+  const yaw = lerp(-0.13, -0.18, smooth(lt / 2.8)), pitch = lerp(-0.4, -0.34, smooth(lt / 2.8));
+  setCam([CAM_B.x, CAM_B.y, CAM_B.z], yaw, pitch, lerp(62, 54, smooth((lt - 0.5) / 2.2)), 0.003);
   look({ hemiSky: "#fffaf0", hemiGround: "#9a8f80", hemiI: 1.6, sunColor: "#fff4e0", sunI: 0.9, sunDir: new THREE.Vector3(-0.3, 1, 0.4).normalize(), shadowAt: [0, 0, -2], shadowSize: 6, bg: "#efe9df", exposure: 1.08, fog: [12, 30], fogColor: "#efe9df" });
   const st = t < TAP + 0.25 ? "wait" : "fail";
   if (st !== termState) { drawTerminal(st); termState = st; }
   bPeople.forEach((p, i) => {
     if (p.cashier) {
-      const shrug = smooth((t - TAP - 0.5) / 0.4) * (1 - smooth((t - 6.6) / 0.5));
+      const shrug = smooth((t - TAP - 0.5) / 0.4) * (1 - smooth((t - (TAP + 2.0)) / 0.4));
       bFolk.set(i, { x: p.x, z: p.z, rotY: p.rotY, sit: true, headYaw: lerp(0.0, -0.35, smooth((t - TAP) / 0.5)), headPitch: 0.05, headTilt: 0.12 * shrug,
         armL: 0.9 + 0.35 * shrug, armR: 0.9 + 0.35 * shrug, spreadL: 0.5 * shrug, spreadR: 0.5 * shrug, visible: true });
       return;
@@ -434,44 +439,6 @@ function renderCheckout(t) {
   placePhone(HOLD_LOW, HOLD_LOW, 0);
   screen("lock", { a: "#3a2b5a", b: "#b0566a", battery: 61, date: "Montag, 9. März", time: "23:16", cards: [["Kein Netz", "Mobiles Bezahlen nicht verfügbar"]] });
   canvas.style.filter = "saturate(1.04) contrast(1.03)";
-  return smooth(lt / 0.14);
-}
-
-// ===================================================== C: Geldautomat ===
-const CAM_C = new THREE.Vector3(0.72, 1.62, 2.75);
-const NC = 8;
-const cFolk = folk(NC, 233); C.group.add(cFolk.group);
-const cPeople = [[-0.28, -2.3], [-0.5, -1.5], [-0.6, -0.7], [-0.55, 0.1], [-0.35, 0.9], [-0.05, 1.7], [-2.2, 4.4], [2.8, -1.6]].map(([x, z], i) => ({ x, z, rotY: i < 6 ? Math.PI + 0.1 * Math.sin(i) : i === 6 ? 0.4 : -2.2, ph: R() * 6.28 }));
-function renderAtm(t) {
-  only("C");
-  const lt = t - CUT[2];
-  const lean = smooth((lt - 1.2) / 1.2);
-  const atmP = new THREE.Vector3(0, 1.45, -2.84);
-  const pos = [CAM_C.x + 0.18 * lean, CAM_C.y, CAM_C.z];
-  setCam(pos, yawTo({ x: pos[0], z: pos[2] }, atmP.x, atmP.z) + lerp(-0.05, 0, lean), Math.atan2(atmP.y - pos[1], Math.hypot(atmP.x - pos[0], atmP.z - pos[2])) - 0.02, lerp(62, 34, smooth((lt - 1.4) / 2.0)), 0.004);
-  const MOON = new THREE.Vector3(0.5, 0.8, 0.45).normalize();
-  look({ hemiSky: "#8aa0d8", hemiGround: "#3a3a4a", hemiI: 0.75, sunColor: "#a8bce8", sunI: 0.7, sunDir: MOON, shadowAt: [0, 0, 0], shadowSize: 8, skyCols: ["#0a1430", "#2a3a62", "#141824", 0.2], exposure: 1.25, fog: [25, 80], fogColor: "#1a2238" });
-  C.facades.forEach((m) => { m.emissiveIntensity = 0.85; });
-  cPeople.forEach((p, i) => {
-    let s = { x: p.x, z: p.z, rotY: p.rotY, headYaw: 0.15 * Math.sin(t * 0.6 + p.ph), headPitch: 0.04, armL: 0.12, armR: 0.12, visible: true };
-    if (i === 0) {   // tippt am Automaten, zuckt dann mit den Schultern
-      const press = smooth((lt - 0.2) / 0.3) * (1 - smooth((lt - 1.6) / 0.3));
-      const shrug = smooth((lt - 1.8) / 0.4);
-      s = { ...s, armR: 0.12 + 1.15 * press + 0.4 * shrug, spreadR: 0.45 * shrug, armL: 0.12 + 0.4 * shrug, spreadL: 0.45 * shrug, twist: -0.5 * shrug, headYaw: -0.9 * shrug, headTilt: 0.1 * shrug };
-    } else if (i === 2 || i === 4) {   // drehen sich zu dir um
-      const turn = smooth((lt - 1.9 - i * 0.12) / 0.6);
-      const tw = towardCam(pos[0], pos[2], p.x, p.z, p.rotY);
-      s = { ...s, twist: tw * 0.5 * turn, headYaw: tw * 0.55 * turn, armL: 0.12 + 0.35 * turn, armR: 0.12 + 0.35 * turn, spreadL: 0.4 * turn, spreadR: 0.4 * turn, headTilt: 0.1 * turn };
-    } else if (i === 6) {   // läuft auf der anderen Straßenseite weg (nicht durchs Bild)
-      s = { ...s, x: p.x - 0.9 * lt, swing: Math.sin(lt * 5) * 0.45, rotY: -Math.PI / 2 };
-    }
-    cFolk.set(i, s);
-  });
-  cFolk.commit();
-  hands({ left: "phone" });
-  placePhone(HOLD_LOW, HOLD_LOW, 0);
-  screen("lock", { a: "#16213a", b: "#3a2a4a", battery: 52, date: "Dienstag, 10. März", time: "00:16", cards: [["Kein Netz", "Keine Verbindung seit 3 Std."]] });
-  canvas.style.filter = "saturate(1.08) contrast(1.04)";
   return smooth(lt / 0.14);
 }
 
@@ -494,8 +461,8 @@ dMaps.forEach((m) => D.group.add(m));
 const _mm = new THREE.Matrix4(), _ml = new THREE.Matrix4();
 function renderStation(t) {
   only("D");
-  const lt = t - CUT[3];
-  setCam([CAM_D.x - 0.1 * lt, CAM_D.y, CAM_D.z - 0.15 * lt], lerp(0.08, 0.02, smooth(lt / 4)), lerp(0.1, -0.02, smooth((lt - 1.2) / 1.6)), 62, 0.004);
+  const lt = t - CUT_D;
+  setCam([CAM_D.x - 0.12 * lt, CAM_D.y, CAM_D.z - 0.18 * lt], lerp(0.08, 0.02, smooth(lt / 3.2)), lerp(0.1, -0.02, smooth((lt - 0.9) / 1.3)), 62, 0.004);
   const SUN = new THREE.Vector3(-0.45, 0.85, 0.3).normalize();
   look({ hemiSky: "#fff4e6", hemiGround: "#9a8c78", hemiI: 1.35, sunColor: "#ffe2b8", sunI: 1.8, sunDir: SUN, shadowAt: [0, 0, -6], shadowSize: 16, bg: "#dfe8ef", exposure: 1.05, fog: [30, 90], fogColor: "#e6e0d6" });
   let mi = 0;
@@ -537,8 +504,8 @@ const ePeople = [
 const lastPaper = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.02, 0.22), mat("#ecebe4")); E.group.add(lastPaper);
 function renderSpaeti(t) {
   only("E");
-  const lt = t - CUT[4];
-  const tgt = new THREE.Vector3(lerp(-0.6, 0.6, smooth((lt - 0.4) / 2.2)), 1.35, -2.2);
+  const lt = t - CUT_E;
+  const tgt = new THREE.Vector3(lerp(-0.7, 0.95, smooth((lt - 0.3) / 2.0)), 1.35, -2.2);
   const pos = [CAM_E.x, CAM_E.y, CAM_E.z - 0.1 * lt];
   setCam(pos, yawTo({ x: pos[0], z: pos[2] }, tgt.x, tgt.z), Math.atan2(tgt.y - pos[1], Math.hypot(tgt.x - pos[0], tgt.z - pos[2])), 62, 0.004);
   const SUN = new THREE.Vector3(0.6, 0.55, 0.55).normalize();
@@ -546,10 +513,10 @@ function renderSpaeti(t) {
   ePeople.forEach((p, i) => {
     let s = { x: p.x, z: p.z, rotY: p.rotY, headYaw: 0.25 * Math.sin(t * 0.5 + p.ph), headPitch: 0.04, armL: 0.1, armR: 0.1, visible: true };
     if (p.seller) {   // zeigt bedauernd auf den leeren Ständer
-      const gest = smooth((lt - 1.0) / 0.5) * (1 - smooth((lt - 3.2) / 0.4));
+      const gest = smooth((lt - 0.6) / 0.5) * (1 - smooth((lt - 2.6) / 0.4));
       s = { ...s, y: 0, armL: 0.9, armR: 0.9 + 0.5 * gest, spreadR: -0.6 * gest, headYaw: -0.4 * gest, headTilt: 0.1 * gest };
     }
-    if (i === 1) s = { ...s, headYaw: -0.5 * smooth((lt - 1.3) / 0.5), headPitch: 0.1 };
+    if (i === 1) s = { ...s, headYaw: -0.5 * smooth((lt - 0.9) / 0.5), headPitch: 0.1 };
     if (p.paper) {   // hat die letzte Zeitung ergattert und liest im Gehen
       const x = p.x + 0.55 * lt, z = p.z + 0.05 * lt;
       s = { ...s, x, z, rotY: Math.PI / 2 + 0.4, swing: Math.sin(lt * 4.6) * 0.3, armL: 1.0, armR: 1.0, spreadL: -0.15, spreadR: -0.15, headPitch: 0.4 };
@@ -584,7 +551,7 @@ const delivery = drawPanel(0.5, 0.32, 900, (c, w, h) => {
 delivery.mesh.position.set(1.22, 1.55, -3.6); delivery.mesh.rotation.y = -Math.PI / 2 + 0.25; F.group.add(delivery.mesh);
 function renderAisle(t) {
   only("F");
-  const lt = t - CUT[5];
+  const lt = t - CUT_F;
   const z = 1.2 - 0.55 * lt;
   const bob = Math.sin(lt * Math.PI * 2 * 0.9) * 0.012;
   setCam([0.05, 1.62 + bob, z], 0.04 * Math.sin(lt * 0.7) - 0.06, -0.2, 62, 0.003);
@@ -593,7 +560,7 @@ function renderAisle(t) {
   fPeople.forEach((p, i) => {
     let s = { x: p.x, z: p.z, rotY: p.rotY, headYaw: 0.3 * Math.sin(t * 0.7 + p.ph), headPitch: 0.05, armL: 0.1, armR: 0.1, visible: true };
     if (i === 0) { const reach = Math.max(0, Math.sin(lt * 1.6)); s = { ...s, armR: 0.3 + 1.1 * reach, headPitch: -0.1, headYaw: 0.25 * Math.sin(lt) }; }
-    if (i === 1) { const shrug = smooth((lt - 1.5) / 0.5); s = { ...s, twist: -0.4 * shrug, headYaw: -0.7 * shrug, armL: 0.12 + 0.4 * shrug, armR: 0.12 + 0.4 * shrug, spreadL: 0.45 * shrug, spreadR: 0.45 * shrug }; }
+    if (i === 1) { const shrug = smooth((lt - 1.0) / 0.5); s = { ...s, twist: -0.4 * shrug, headYaw: -0.7 * shrug, armL: 0.12 + 0.4 * shrug, armR: 0.12 + 0.4 * shrug, spreadL: 0.45 * shrug, spreadR: 0.45 * shrug }; }
     if (i === 2) s = { ...s, z: p.z - 0.6 * lt, swing: Math.sin(lt * 4.8) * 0.4 };
     fFolk.set(i, s);
   });
@@ -617,12 +584,12 @@ gFolk.look(0, { shirt: "#e74c3c", hair: "#c9a16a", long: 0.9 }); gFolk.look(1, {
 gFolk.look(6, { shirt: "#5d6b3a", hair: "#4a3222", beard: 1, long: 0 });   // Gitarrist
 function renderCourtyard(t) {
   only("G");
-  const lt = t - CUT[6];
-  setCam([CAM_G.x - 0.12 * lt, CAM_G.y, CAM_G.z - 0.1 * lt], lerp(0.32, -0.3, smooth(lt / 5)), lerp(-0.1, -0.13, smooth(lt / 5)), 62, 0.004);
+  const lt = t - CUT_G;
+  setCam([CAM_G.x - 0.12 * lt, CAM_G.y, CAM_G.z - 0.1 * lt], lerp(0.3, -0.3, smooth(lt / 3.5)), lerp(-0.1, -0.13, smooth(lt / 3.5)), 62, 0.004);
   const SUN = new THREE.Vector3(-0.5, 0.75, 0.45).normalize();
   look({ hemiSky: "#fff1dc", hemiGround: "#7a7060", hemiI: 1.15, sunColor: "#ffe2b0", sunI: 2.6, sunDir: SUN, shadowAt: [0, 0, -4], shadowSize: 11, skyCols: ["#6f9cd4", "#f2e0c0", "#8a8070", 0.6], exposure: 1.06, fog: [50, 200], fogColor: "#eadcc4" });
   // Kinder rennen dem Ball hinterher
-  const bc = { x: 0.6, z: -4.6 };
+  const bc = { x: 1.1, z: -4.4 };
   const ba = lt * 1.5;
   const ballX = bc.x + Math.cos(ba) * 1.5, ballZ = bc.z + Math.sin(ba) * 0.9;
   G.ball.position.set(ballX, 0.13 + Math.abs(Math.sin(lt * 5.5)) * 0.45, ballZ);
@@ -633,10 +600,10 @@ function renderCourtyard(t) {
     gFolk.set(k, { x, y: Math.abs(Math.sin(lt * 7 + j)) * 0.08, z, rotY: dir, scale: [0.6, 0.66, 0.55][j], headScale: 1.15, swing: Math.sin(lt * 9 + j) * 0.7, armL: j === 0 ? 0.3 : 0, armR: j === 2 ? 1.6 + 0.3 * Math.sin(lt * 6) : 0, visible: true });
   });
   // Nachbarn im Gespräch
-  const grp = [[-2.6, -3.5, 2.4], [-1.85, -4.15, -0.9], [-3.3, -4.25, 0.95]];
+  const grp = [[-1.5, -3.6, 2.4], [-0.75, -4.25, -0.9], [-2.2, -4.35, 0.95]];
   grp.forEach(([x, z, ry], j) => {
     const talk = Math.max(0, Math.sin(lt * 1.3 + j * 2.1));
-    const laugh = smooth((lt - 2.2 - j * 0.15) / 0.3) * (1 - smooth((lt - 3.4) / 0.4));
+    const laugh = smooth((lt - 1.4 - j * 0.15) / 0.3) * (1 - smooth((lt - 2.6) / 0.4));
     gFolk.set(3 + j, { x, z, rotY: ry, headYaw: 0.25 * Math.sin(lt * 0.9 + j), headPitch: -0.06 - 0.12 * laugh, headTilt: 0.12 * laugh, armR: 0.2 + 0.7 * talk * (j === 0 ? 1 : 0.6), spreadR: -0.2 * talk, armL: 0.15 + 0.3 * laugh, visible: true });
   });
   // Gitarrist auf der Bank
@@ -660,10 +627,10 @@ const TZ = H.tz;
 const CAM_H = new THREE.Vector3(0, 1.2, 0.18);
 const hFolk = folk(3, 288); H.group.add(hFolk.group);
 hFolk.look(0, { shirt: "#7a2e3e", hair: "#a8552e", long: 1.1 });
-hFolk.look(1, { shirt: "#d9c7a5", hair: "#2a1e17", long: 0, beard: 1 });
+hFolk.look(1, { shirt: "#5d6b3a", hair: "#2a1e17", long: 0, beard: 1 });
 hFolk.look(2, { shirt: "#3f6a8a", hair: "#c9a16a", long: 0.8 });
 const hPh = heldPhones(3); H.group.add(hPh.group);
-const FRIENDS = H.chairs.map(([x, z, ry], i) => ({ x: x * 0.97, z: i === 1 ? z + 0.05 : z, rotY: ry, ph: i * 2.1 }));
+const FRIENDS = H.chairs.map(([x, z, ry], i) => ({ x: i === 2 ? x * 0.97 : x, z: i < 2 ? z + 0.05 : z, rotY: ry, ph: i * 2.1 }));
 const phoneLights = FRIENDS.map(() => { const l = new THREE.PointLight("#9ec4ff", 0, 1.6, 1.5); H.group.add(l); return l; });
 const myPhoneLight = new THREE.PointLight("#9ec4ff", 0, 1.2, 1.5); H.group.add(myPhoneLight);
 const tablePhone = handy.clone(); H.group.add(tablePhone);
@@ -672,14 +639,14 @@ const die = dice(); H.group.add(die);
 const DIE_END = new THREE.Vector3(0.06, TABLE_Y + 0.014, TZ + 0.06);
 const _hw = new THREE.Vector3();
 const HK = {
-  yaw: [[29, 0.04], [30.5, 0.02], [31.6, 0.0], [33.6, 0.06], [BUZZ + 0.15, 0.06], [BUZZ + 0.9, 0.5], [39.5, 0.5], [40.4, 0.02], [GRAB - 0.1, 0.0], [GRAB + 0.5, 0.25], [FEED + 0.3, 0.12], [DURATION, 0.05]],
-  pitch: [[29, -0.36], [30.5, -0.42], [31.6, -0.46], [33.6, -0.34], [BUZZ + 0.15, -0.34], [BUZZ + 0.9, -0.92], [39.5, -0.92], [40.4, -0.24], [GRAB - 0.1, -0.26], [GRAB + 0.5, -0.55], [FEED + 0.3, -0.22], [DURATION, -0.14]],
-  fwd: [[29, 0], [BUZZ + 0.15, 0], [BUZZ + 0.9, 0.3], [39.5, 0.3], [40.4, 0], [DURATION, 0]],
-  fov: [[29, 62], [BUZZ + 0.15, 62], [BUZZ + 0.9, 46], [39.5, 46], [40.4, 62], [DURATION, 62]],
+  yaw: [[CUT_H, 0.04], [ROLL - 0.4, 0.02], [LAND + 0.1, 0.0], [BUZZ - 0.4, 0.06], [BUZZ + 0.15, 0.06], [BUZZ + 0.9, 0.55], [PHONES_UP - 0.5, 0.55], [PHONES_UP + 0.4, 0.02], [GRAB - 0.1, 0.0], [GRAB + 0.5, 0.25], [FEED + 0.3, 0.12], [DURATION, 0.05]],
+  pitch: [[CUT_H, -0.2], [ROLL - 0.4, -0.25], [LAND + 0.1, -0.27], [BUZZ - 0.4, -0.2], [BUZZ + 0.15, -0.2], [BUZZ + 0.9, -0.68], [PHONES_UP - 0.5, -0.68], [PHONES_UP + 0.4, -0.2], [GRAB - 0.1, -0.22], [GRAB + 0.5, -0.55], [FEED + 0.3, -0.2], [DURATION, -0.12]],
+  fwd: [[CUT_H, 0], [BUZZ + 0.15, 0], [BUZZ + 0.9, 0.35], [PHONES_UP - 0.5, 0.35], [PHONES_UP + 0.4, 0], [DURATION, 0]],
+  fov: [[CUT_H, 62], [BUZZ + 0.15, 62], [BUZZ + 0.9, 34], [PHONES_UP - 0.5, 34], [PHONES_UP + 0.4, 62], [DURATION, 62]],
 };
 function renderLiving(t) {
   only("H");
-  const lt = t - CUT[7];
+  const lt = t - CUT_H;
   const fwd = valueAt(HK.fwd, t);
   const breath = Math.sin(t * Math.PI * 2 * 0.24) * 0.004;
   setCam([CAM_H.x - 0.12 * fwd, CAM_H.y + 0.12 * fwd + breath, CAM_H.z - 0.45 * fwd], valueAt(HK.yaw, t), valueAt(HK.pitch, t), valueAt(HK.fov, t), 0.003);
@@ -693,14 +660,14 @@ function renderLiving(t) {
   const online = smooth((t - (BUZZ + 0.3)) / 0.2);
   FRIENDS.forEach((f, i) => {
     const pick = smooth((t - PHONES_UP - i * 0.25) / 0.7);
-    const cheer = i === 1 ? smooth((t - LAND - 0.1) / 0.3) * (1 - smooth((t - 32.7) / 0.5)) : 0;
-    const laugh = smooth((t - LAND) / 0.3) * (1 - smooth((t - 33.2) / 0.5));
+    const cheer = i === 0 ? smooth((t - LAND - 0.1) / 0.3) * (1 - smooth((t - (LAND + 1.1)) / 0.4)) : 0;
+    const laugh = smooth((t - LAND) / 0.3) * (1 - smooth((t - (LAND + 1.5)) / 0.4));
     const glance = smooth((t - BUZZ - 0.4 - i * 0.1) / 0.4) * (1 - pick);
     const toCam = towardCam(CAM_H.x, CAM_H.z, f.x, f.z, f.rotY);
     let headYaw = lerp(0.3 * Math.sin(t * 0.6 + f.ph) + toCam * 0.4 * Math.max(0, Math.sin(t * 0.45 + f.ph)), 0, glance);
     let headPitch = lerp(0.3 - 0.15 * laugh, 0.55, Math.max(glance, pick));
     hFolk.set(i, { x: f.x, z: f.z, rotY: f.rotY, sit: true, headYaw: lerp(headYaw, 0, pick), headPitch, headTilt: 0.12 * laugh * Math.sin(f.ph + 1),
-      armL: lerp(0.95, 1.0, pick) + 1.6 * cheer, armR: lerp(0.95, 1.0, pick) + 1.6 * cheer, spreadL: lerp(0.05, -0.2, pick) + 0.3 * cheer, spreadR: lerp(0.05, -0.2, pick) + 0.3 * cheer, visible: true });
+      armL: lerp(0.95, 1.35, pick) + 1.6 * cheer, armR: lerp(0.95, 1.35, pick) + 1.6 * cheer, spreadL: lerp(0.05, -0.2, pick) + 0.3 * cheer, spreadR: lerp(0.05, -0.2, pick) + 0.3 * cheer, visible: true });
     hPh.set(i, { x: f.x, z: f.z, rotY: f.rotY, sit: true, rest: "table", lift: pick, visible: true, on: online > 0.5 });
     _mm.compose(tmp.set(f.x, -0.43, f.z), _q.setFromEuler(new THREE.Euler(0, f.rotY, 0)), _one);
     phoneLights[i].position.set(0, 1.35, 0.35).applyMatrix4(_mm);
@@ -711,7 +678,7 @@ function renderLiving(t) {
   const throwK = smooth((t - (ROLL - 0.15)) / 0.3);
   const handOn = t < GRAB - 0.1;
   hands({ right: handOn ? "dice" : null, left: t >= GRAB ? "phone" : null });
-  const shakeY = t < ROLL ? 0.012 * Math.sin(t * 34) * smooth((t - 29.6) / 0.3) : 0;
+  const shakeY = t < ROLL ? 0.012 * Math.sin(t * 34) * smooth((t - (CUT_H + 0.3)) / 0.3) : 0;
   const rest = smooth((t - (ROLL + 0.5)) / 0.6);
   rightHand.position.set(lerp(0.13, 0.15, throwK), lerp(-0.34, -0.39, throwK) + shakeY - 0.05 * rest, lerp(-0.44, -0.6, throwK) + 0.06 * rest);
   rightHand.rotation.set(0.5 + 0.3 * throwK, 0.2, 1.2 - 0.9 * throwK); rightHand.userData.curl(lerp(0.85, 0.25, throwK));
@@ -735,10 +702,10 @@ function renderLiving(t) {
   myPhoneLight.position.set(TP.x, TABLE_Y + 0.25, TP.z); myPhoneLight.intensity = 0.35 * online;
   if (t < BUZZ) screen("dark");
   else if (t < FEED) {
-    const tm = t < 37 ? "21:14" : t < GRAB ? "21:15" : "21:16";
+    const tm = t < FLOOD0 + 0.6 ? "21:14" : t < GRAB ? "21:15" : "21:16";
     screen("restored", { time: tm, n: t < FLOOD0 ? 0 : notifCount(t) });
   } else if (t < OFFLINE) screen("feed", { p: Math.round(clamp((t - FEED) / 4) * 40) / 40 });
-  else screen("offline");
+  else screen("offline", { b: blink(t) });
   if (t < GRAB) {
     tablePhone.visible = true; handy.visible = false;
   } else {
@@ -750,7 +717,7 @@ function renderLiving(t) {
     _m.decompose(TABLE_POSE.pos, TABLE_POSE.quat, tmp);
     const reach = smooth((t - GRAB) / 0.45);
     const lift = smooth((t - (GRAB + 0.45)) / 0.6);
-    const close = smooth((t - (FEED + 0.5)) / (DURATION - FEED - 0.5));
+    const close = smooth((t - (FEED + 0.5)) / (DURATION - 0.3 - FEED - 0.5));
     if (lift <= 0) {
       placePhone(TABLE_POSE, TABLE_POSE, 0, reach);
     } else if (close <= 0) {
@@ -769,13 +736,12 @@ function renderAt(t) {
   overlay.update(t);
   titleEl.style.opacity = titleOpacity(t);
   let k;
-  if (t < CUT[1]) k = renderSubway(t);
-  else if (t < CUT[2]) k = renderCheckout(t);
-  else if (t < CUT[3]) k = renderAtm(t);
-  else if (t < CUT[4]) k = renderStation(t);
-  else if (t < CUT[5]) k = renderSpaeti(t);
-  else if (t < CUT[6]) k = renderAisle(t);
-  else if (t < CUT[7]) k = renderCourtyard(t);
+  if (t < CUT_B) k = renderSubway(t);
+  else if (t < CUT_D) k = renderCheckout(t);
+  else if (t < CUT_E) k = renderStation(t);
+  else if (t < CUT_F) k = renderSpaeti(t);
+  else if (t < CUT_G) k = renderAisle(t);
+  else if (t < CUT_H) k = renderCourtyard(t);
   else k = renderLiving(t);
   canvas.style.opacity = clamp(k);
   renderer.render(scene, camera);

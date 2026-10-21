@@ -211,12 +211,12 @@ export function heldPhones(n) {
   for (let i = 0; i < n; i++) scr.setColorAt(i, c.set("#bcd6ff"));
   const mR = new THREE.Matrix4(), mL = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), v = new THREE.Vector3(), s = new THREE.Vector3();
   const zero = new THREE.Matrix4().makeScale(0, 0, 0);
-  const POSE = { up: [0, 1.17, 0.47, 0.9], lap: [0, 0.94, 0.26, 1.42], table: [0, 1.215, 0.42, Math.PI / 2] };
+  const POSE = { up: [0, 1.17, 0.47, 0.9], upTable: [0, 1.33, 0.5, 0.8], lap: [0, 0.94, 0.26, 1.42], table: [0, 1.215, 0.42, Math.PI / 2] };
   function set(i, o) {
     if (!o.visible) { body.setMatrixAt(i, zero); scr.setMatrixAt(i, zero); return; }
     const S = o.scale ?? 1;
     mR.compose(v.set(o.x, o.y ?? (o.sit ? -0.43 * S : 0), o.z), q.setFromEuler(e.set(0, o.rotY ?? 0, 0)), s.setScalar(S));
-    const a = POSE[o.rest || "lap"], b = POSE.up, k = o.lift ?? 1;
+    const a = POSE[o.rest || "lap"], b = o.rest === "table" ? POSE.upTable : POSE.up, k = o.lift ?? 1;
     mL.compose(v.set(lerp(a[0], b[0], k), lerp(a[1], b[1], k), lerp(a[2], b[2], k)), q.setFromEuler(e.set(lerp(a[3], b[3], k), 0, 0)), s.setScalar(1));
     mR.multiply(mL);
     body.setMatrixAt(i, mR); scr.setMatrixAt(i, mR);
@@ -378,23 +378,23 @@ export function checkout({ seed = 401 } = {}) {
     }
   }
   // Kartenterminal (dein Ende der Kasse), Bildschirm zeigt zu dir
-  const term = new THREE.Group(); term.position.set(0.3, 0.98, -0.12); term.rotation.set(-0.95, 0.35, 0, "YXZ"); g.add(term);
+  const term = new THREE.Group(); term.position.set(0.26, 1.0, -0.14); term.rotation.set(-0.8, -0.42, 0, "YXZ"); g.add(term);
   box(0.12, 0.21, 0.035, mat("#26282d", { roughness: 0.4 }), 0, 0, 0, term);
   const tdisp = drawPanel(0.1, 0.08, 3000, () => {});
   tdisp.mesh.position.set(0, 0.048, 0.0185); term.add(tdisp.mesh);
   for (let k = 0; k < 12; k++) box(0.022, 0.012, 0.006, mat(k === 9 ? "#c0392b" : k === 11 ? "#27ae60" : "#d9d9d9"), -0.03 + (k % 3) * 0.03, -0.012 - Math.floor(k / 3) * 0.02, 0.019, term);
-  cyl(0.03, 0.04, 0.12, 8, mat("#3a3c42"), 0.3, 0.9, -0.18, g);
+  cyl(0.03, 0.04, 0.12, 8, mat("#3a3c42"), 0.26, 0.92, -0.2, g);
   // Schild „Nur Barzahlung“ (Pappe auf einem Ständer)
   const sign = drawPanel(0.62, 0.42, 900, (c, w, h) => {
     c.fillStyle = "#f4efe2"; c.fillRect(0, 0, w, h);
     c.strokeStyle = "#c0392b"; c.lineWidth = 14; c.strokeRect(18, 18, w - 36, h - 36);
     c.fillStyle = "#c0392b"; c.textAlign = "center"; c.textBaseline = "middle";
-    c.font = handFont(96); c.fillText("Nur", w / 2, h * 0.3);
-    c.font = handFont(104); c.fillText("Barzahlung!", w / 2, h * 0.58);
-    c.fillStyle = "#333"; c.font = handFont(44); c.fillText("Kartenzahlung gestört", w / 2, h * 0.83);
+    c.font = handFont(88); c.fillText("Nur", w / 2, h * 0.3);
+    c.font = handFont(80); c.fillText("Barzahlung!", w / 2, h * 0.58);
+    c.fillStyle = "#333"; c.font = handFont(36); c.fillText("Kartenzahlung gestört", w / 2, h * 0.83);
   }, { basicMat: false });
-  sign.mesh.position.set(0.42, 1.48, -1.25); sign.mesh.rotation.y = -0.25; g.add(sign.mesh);
-  cyl(0.012, 0.012, 0.55, 6, mat("#7a7f86"), 0.42, 1.0, -1.27, g);
+  sign.mesh.position.set(0.3, 1.5, -1.95); sign.mesh.rotation.y = -0.1; g.add(sign.mesh);
+  cyl(0.012, 0.012, 0.55, 6, mat("#7a7f86"), 0.3, 1.02, -1.97, g);
   return { group: g, term: tdisp, lanes };
 }
 
@@ -595,7 +595,7 @@ export function spaeti({ seed = 701 } = {}) {
   box(1.6, 0.06, 0.4, mat("#7a5232"), -3.4, 0.46, -2.5, g);
   for (const x of [-4.1, -2.7]) box(0.06, 0.45, 0.35, mat("#3a3a3a"), x, 0.23, -2.5, g);
   // Zeitungsständer (leer) + Pappschild
-  const rack = new THREE.Group(); rack.position.set(1.15, 0, -1.9); rack.rotation.y = -0.35; g.add(rack);
+  const rack = new THREE.Group(); rack.position.set(1.15, 0, -1.9); rack.rotation.y = -0.08; g.add(rack);
   const wire = mat("#9aa0a8", { metalness: 0.6, roughness: 0.4 });
   for (const x of [-0.4, 0.4]) box(0.03, 1.3, 0.03, wire, x, 0.65, 0, rack);
   for (let k = 0; k < 3; k++) { const sh = box(0.85, 0.02, 0.28, wire, 0, 0.45 + k * 0.33, 0.06, rack); sh.rotation.x = -0.45; box(0.85, 0.06, 0.015, wire, 0, 0.47 + k * 0.33, 0.19, rack); }
@@ -604,10 +604,10 @@ export function spaeti({ seed = 701 } = {}) {
     c.fillStyle = "#c9a26a"; c.fillRect(0, 0, w, h);
     c.fillStyle = "rgba(0,0,0,0.08)"; for (let i = 0; i < 40; i++) c.fillRect(0, i * 10, w, 2);
     c.fillStyle = "#1d1d1d"; c.textAlign = "center"; c.textBaseline = "middle";
-    c.font = handFont(92); c.fillText("Zeitungen", w / 2, h * 0.32);
-    c.fillStyle = "#b02a20"; c.font = handFont(104); c.fillText("ausverkauft!", w / 2, h * 0.64);
+    c.font = handFont(84); c.fillText("Zeitungen", w / 2, h * 0.32);
+    c.fillStyle = "#b02a20"; c.font = handFont(80); c.fillText("ausverkauft!", w / 2, h * 0.64);
   }, { basicMat: false });
-  card.mesh.position.set(0, 1.42, 0.03); card.mesh.rotation.x = -0.05; rack.add(card.mesh);
+  card.mesh.position.set(0, 1.5, 0.2); card.mesh.rotation.x = -0.05; rack.add(card.mesh);
   return { group: g };
 }
 
@@ -760,7 +760,7 @@ export function livingRoom({ seed = 901 } = {}) {
   box(1.5, 0.05, 1.05, mat("#8a5a32", { roughness: 0.6 }), 0, TABLE_Y - 0.025, tz, g);
   for (const [x, z] of [[-0.68, -0.45], [0.68, -0.45], [-0.68, 0.45], [0.68, 0.45]]) box(0.06, TABLE_Y - 0.05, 0.06, mat("#6a4224"), x, (TABLE_Y - 0.05) / 2, tz + z, g);
   // Stühle der Freunde
-  const chairs = [[-1.05, tz, Math.PI / 2], [0, tz - 0.85, 0], [1.05, tz, -Math.PI / 2]];
+  const chairs = [[-0.4, tz - 0.85, 0], [0.4, tz - 0.85, 0], [1.05, tz - 0.2, -Math.PI / 2]];
   for (const [x, z, ry] of chairs) {
     const ch = new THREE.Group(); ch.position.set(x, 0, z); ch.rotation.y = ry; g.add(ch);
     box(0.45, 0.05, 0.45, mat("#6a4224"), 0, 0.45, 0, ch); box(0.45, 0.5, 0.05, mat("#6a4224"), 0, 0.72, -0.22, ch);

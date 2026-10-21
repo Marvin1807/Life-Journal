@@ -16,17 +16,17 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="internet-weg" data-start="0" data-duration="48" data-width="1080" data-height="1920">
-      <canvas id="scene" class="clip" data-start="0" data-duration="48" data-track-index="0"></canvas>
-      <div id="overlay" class="clip" data-start="0" data-duration="48" data-track-index="1" style="position:absolute;inset:0"></div>
-      <audio id="sound" src="audio/sound.wav" data-start="0" data-duration="48" data-track-index="2" data-volume="1"></audio>
+    <div id="root" data-composition-id="internet-weg" data-start="0" data-duration="40" data-width="1080" data-height="1920">
+      <canvas id="scene" class="clip" data-start="0" data-duration="40" data-track-index="0"></canvas>
+      <div id="overlay" class="clip" data-start="0" data-duration="40" data-track-index="1" style="position:absolute;inset:0"></div>
+      <audio id="sound" src="audio/sound.wav" data-start="0" data-duration="40" data-track-index="2" data-volume="1"></audio>
     </div>
 
     <script src="lib/gsap.min.js"></script>
     <script>
       // Leere Root-Timeline: gibt HyperFrames die Länge vor; die Szene selbst hört auf hf-seek.
       window.__timelines = window.__timelines || {};
-      window.__timelines["internet-weg"] = gsap.timeline({ paused: true }).set({}, {}, 48);
+      window.__timelines["internet-weg"] = gsap.timeline({ paused: true }).set({}, {}, 40);
     </script>
     <script type="importmap">
       { "imports": { "three": "./lib/three.module.min.js" } }
