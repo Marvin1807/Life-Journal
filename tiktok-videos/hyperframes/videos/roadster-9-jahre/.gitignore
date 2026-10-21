@@ -1,0 +1,5 @@
+renders/
+.thumbnails/
+node_modules/
+audio/sfx.wav
+audio/voice.wav

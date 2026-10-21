@@ -1,0 +1,1754 @@
+{
+ "duration": 92.16,
+ "speech_end": 91.66,
+ "lines": [
+  {
+   "id": "hook",
+   "start": 0.2,
+   "end": 3.419
+  },
+  {
+   "id": "promise",
+   "start": 3.579,
+   "end": 5.262
+  },
+  {
+   "id": "build",
+   "start": 5.422,
+   "end": 8.112
+  },
+  {
+   "id": "lotus",
+   "start": 8.412,
+   "end": 10.498
+  },
+  {
+   "id": "gutted",
+   "start": 10.658,
+   "end": 11.909
+  },
+  {
+   "id": "cells",
+   "start": 12.069,
+   "end": 13.941
+  },
+  {
+   "id": "boom",
+   "start": 14.101,
+   "end": 16.597
+  },
+  {
+   "id": "space",
+   "start": 16.897,
+   "end": 19.923
+  },
+  {
+   "id": "orbit",
+   "start": 20.083,
+   "end": 21.387
+  },
+  {
+   "id": "new",
+   "start": 21.737,
+   "end": 23.638
+  },
+  {
+   "id": "accel",
+   "start": 23.798,
+   "end": 26.185
+  },
+  {
+   "id": "range",
+   "start": 26.345,
+   "end": 27.713
+  },
+  {
+   "id": "ready",
+   "start": 27.873,
+   "end": 29.341
+  },
+  {
+   "id": "easy",
+   "start": 29.501,
+   "end": 30.537
+  },
+  {
+   "id": "battery",
+   "start": 30.837,
+   "end": 34.721
+  },
+  {
+   "id": "cost",
+   "start": 34.881,
+   "end": 36.025
+  },
+  {
+   "id": "broke",
+   "start": 36.185,
+   "end": 37.832
+  },
+  {
+   "id": "weeks",
+   "start": 37.992,
+   "end": 40.879
+  },
+  {
+   "id": "price",
+   "start": 41.039,
+   "end": 44.391
+  },
+  {
+   "id": "ice",
+   "start": 44.55,
+   "end": 46.041
+  },
+  {
+   "id": "models",
+   "start": 46.201,
+   "end": 48.97
+  },
+  {
+   "id": "dessert",
+   "start": 49.13,
+   "end": 51.297
+  },
+  {
+   "id": "chips",
+   "start": 51.597,
+   "end": 52.594
+  },
+  {
+   "id": "years",
+   "start": 52.754,
+   "end": 58.84
+  },
+  {
+   "id": "rockets",
+   "start": 59.14,
+   "end": 62.823
+  },
+  {
+   "id": "fly",
+   "start": 62.983,
+   "end": 65.477
+  },
+  {
+   "id": "fans",
+   "start": 65.637,
+   "end": 67.538
+  },
+  {
+   "id": "stick",
+   "start": 67.698,
+   "end": 70.656
+  },
+  {
+   "id": "delay",
+   "start": 70.956,
+   "end": 75.035
+  },
+  {
+   "id": "reveal",
+   "start": 75.335,
+   "end": 77.27
+  },
+  {
+   "id": "flip",
+   "start": 77.43,
+   "end": 80.115
+  },
+  {
+   "id": "rocket",
+   "start": 80.275,
+   "end": 83.298
+  },
+  {
+   "id": "buy",
+   "start": 83.458,
+   "end": 85.149
+  },
+  {
+   "id": "2028",
+   "start": 85.309,
+   "end": 87.387
+  },
+  {
+   "id": "look",
+   "start": 87.737,
+   "end": 90.059
+  },
+  {
+   "id": "nine",
+   "start": 90.219,
+   "end": 91.5
+  }
+ ],
+ "words": [
+  {
+   "w": "Tesla",
+   "start": 0.21,
+   "end": 0.49,
+   "line": "hook"
+  },
+  {
+   "w": "hat",
+   "start": 0.49,
+   "end": 0.631,
+   "line": "hook"
+  },
+  {
+   "w": "gerade",
+   "start": 0.631,
+   "end": 1.051,
+   "line": "hook"
+  },
+  {
+   "w": "ein",
+   "start": 1.051,
+   "end": 1.191,
+   "line": "hook"
+  },
+  {
+   "w": "Auto",
+   "start": 1.191,
+   "end": 1.472,
+   "line": "hook"
+  },
+  {
+   "w": "gezeigt,",
+   "start": 1.472,
+   "end": 1.752,
+   "line": "hook"
+  },
+  {
+   "w": "das",
+   "start": 1.752,
+   "end": 2.002,
+   "line": "hook"
+  },
+  {
+   "w": "kopfüber",
+   "start": 2.002,
+   "end": 2.588,
+   "line": "hook"
+  },
+  {
+   "w": "an",
+   "start": 2.588,
+   "end": 2.728,
+   "line": "hook"
+  },
+  {
+   "w": "der",
+   "start": 2.728,
+   "end": 2.868,
+   "line": "hook"
+  },
+  {
+   "w": "Decke",
+   "start": 2.868,
+   "end": 3.149,
+   "line": "hook"
+  },
+  {
+   "w": "klebt.",
+   "start": 3.149,
+   "end": 3.419,
+   "line": "hook"
+  },
+  {
+   "w": "Versprochen",
+   "start": 3.624,
+   "end": 4.115,
+   "line": "promise"
+  },
+  {
+   "w": "wurde",
+   "start": 4.115,
+   "end": 4.443,
+   "line": "promise"
+  },
+  {
+   "w": "es",
+   "start": 4.443,
+   "end": 4.607,
+   "line": "promise"
+  },
+  {
+   "w": "vor",
+   "start": 4.607,
+   "end": 4.77,
+   "line": "promise"
+  },
+  {
+   "w": "neun",
+   "start": 4.77,
+   "end": 4.934,
+   "line": "promise"
+  },
+  {
+   "w": "Jahren.",
+   "start": 4.934,
+   "end": 5.262,
+   "line": "promise"
+  },
+  {
+   "w": "Lass",
+   "start": 5.427,
+   "end": 5.592,
+   "line": "build"
+  },
+  {
+   "w": "es",
+   "start": 5.592,
+   "end": 5.757,
+   "line": "build"
+  },
+  {
+   "w": "uns",
+   "start": 5.757,
+   "end": 6.018,
+   "line": "build"
+  },
+  {
+   "w": "bauen",
+   "start": 6.018,
+   "end": 6.183,
+   "line": "build"
+  },
+  {
+   "w": "und",
+   "start": 6.183,
+   "end": 6.349,
+   "line": "build"
+  },
+  {
+   "w": "schauen,",
+   "start": 6.349,
+   "end": 6.514,
+   "line": "build"
+  },
+  {
+   "w": "warum",
+   "start": 6.514,
+   "end": 6.955,
+   "line": "build"
+  },
+  {
+   "w": "das",
+   "start": 6.955,
+   "end": 7.12,
+   "line": "build"
+  },
+  {
+   "w": "so",
+   "start": 7.12,
+   "end": 7.285,
+   "line": "build"
+  },
+  {
+   "w": "lange",
+   "start": 7.285,
+   "end": 7.616,
+   "line": "build"
+  },
+  {
+   "w": "gedauert",
+   "start": 7.616,
+   "end": 7.947,
+   "line": "build"
+  },
+  {
+   "w": "hat.",
+   "start": 7.947,
+   "end": 8.112,
+   "line": "build"
+  },
+  {
+   "w": "Du",
+   "start": 8.427,
+   "end": 8.58,
+   "line": "lotus"
+  },
+  {
+   "w": "startest",
+   "start": 8.58,
+   "end": 8.885,
+   "line": "lotus"
+  },
+  {
+   "w": "2008",
+   "start": 8.885,
+   "end": 9.735,
+   "line": "lotus"
+  },
+  {
+   "w": "mit",
+   "start": 9.735,
+   "end": 9.888,
+   "line": "lotus"
+  },
+  {
+   "w": "einem",
+   "start": 9.888,
+   "end": 10.193,
+   "line": "lotus"
+  },
+  {
+   "w": "Lotus.",
+   "start": 10.193,
+   "end": 10.498,
+   "line": "lotus"
+  },
+  {
+   "w": "Motor",
+   "start": 10.663,
+   "end": 11.112,
+   "line": "gutted"
+  },
+  {
+   "w": "raus,",
+   "start": 11.112,
+   "end": 11.336,
+   "line": "gutted"
+  },
+  {
+   "w": "Tank",
+   "start": 11.336,
+   "end": 11.685,
+   "line": "gutted"
+  },
+  {
+   "w": "raus.",
+   "start": 11.685,
+   "end": 11.909,
+   "line": "gutted"
+  },
+  {
+   "w": "Fast",
+   "start": 12.084,
+   "end": 12.387,
+   "line": "cells"
+  },
+  {
+   "w": "7.000",
+   "start": 12.387,
+   "end": 13.078,
+   "line": "cells"
+  },
+  {
+   "w": "Laptop-Akkus",
+   "start": 13.078,
+   "end": 13.769,
+   "line": "cells"
+  },
+  {
+   "w": "rein.",
+   "start": 13.769,
+   "end": 13.941,
+   "line": "cells"
+  },
+  {
+   "w": "Und",
+   "start": 14.106,
+   "end": 14.275,
+   "line": "boom"
+  },
+  {
+   "w": "bumm:",
+   "start": 14.275,
+   "end": 14.444,
+   "line": "boom"
+  },
+  {
+   "w": "der",
+   "start": 14.444,
+   "end": 14.838,
+   "line": "boom"
+  },
+  {
+   "w": "allererste",
+   "start": 14.838,
+   "end": 15.513,
+   "line": "boom"
+  },
+  {
+   "w": "Tesla.",
+   "start": 15.513,
+   "end": 16.091,
+   "line": "boom"
+  },
+  {
+   "w": "Der",
+   "start": 16.091,
+   "end": 16.26,
+   "line": "boom"
+  },
+  {
+   "w": "Roadster.",
+   "start": 16.26,
+   "end": 16.597,
+   "line": "boom"
+  },
+  {
+   "w": "Elon",
+   "start": 16.902,
+   "end": 17.226,
+   "line": "space"
+  },
+  {
+   "w": "schießt",
+   "start": 17.226,
+   "end": 17.387,
+   "line": "space"
+  },
+  {
+   "w": "seinen",
+   "start": 17.387,
+   "end": 17.821,
+   "line": "space"
+  },
+  {
+   "w": "2018",
+   "start": 17.821,
+   "end": 18.629,
+   "line": "space"
+  },
+  {
+   "w": "mit",
+   "start": 18.629,
+   "end": 18.791,
+   "line": "space"
+  },
+  {
+   "w": "einer",
+   "start": 18.791,
+   "end": 19.115,
+   "line": "space"
+  },
+  {
+   "w": "Rakete",
+   "start": 19.115,
+   "end": 19.6,
+   "line": "space"
+  },
+  {
+   "w": "ins",
+   "start": 19.6,
+   "end": 19.761,
+   "line": "space"
+  },
+  {
+   "w": "All.",
+   "start": 19.761,
+   "end": 19.923,
+   "line": "space"
+  },
+  {
+   "w": "Da",
+   "start": 20.088,
+   "end": 20.251,
+   "line": "orbit"
+  },
+  {
+   "w": "oben",
+   "start": 20.251,
+   "end": 20.575,
+   "line": "orbit"
+  },
+  {
+   "w": "kreist",
+   "start": 20.575,
+   "end": 20.737,
+   "line": "orbit"
+  },
+  {
+   "w": "er",
+   "start": 20.737,
+   "end": 20.9,
+   "line": "orbit"
+  },
+  {
+   "w": "bis",
+   "start": 20.9,
+   "end": 21.062,
+   "line": "orbit"
+  },
+  {
+   "w": "heute.",
+   "start": 21.062,
+   "end": 21.387,
+   "line": "orbit"
+  },
+  {
+   "w": "2017",
+   "start": 21.742,
+   "end": 22.612,
+   "line": "new"
+  },
+  {
+   "w": "versprichst",
+   "start": 22.612,
+   "end": 22.922,
+   "line": "new"
+  },
+  {
+   "w": "du",
+   "start": 22.922,
+   "end": 23.172,
+   "line": "new"
+  },
+  {
+   "w": "einen",
+   "start": 23.172,
+   "end": 23.483,
+   "line": "new"
+  },
+  {
+   "w": "neuen.",
+   "start": 23.483,
+   "end": 23.638,
+   "line": "new"
+  },
+  {
+   "w": "Fast",
+   "start": 23.808,
+   "end": 24.092,
+   "line": "accel"
+  },
+  {
+   "w": "Tempo",
+   "start": 24.092,
+   "end": 24.421,
+   "line": "accel"
+  },
+  {
+   "w": "100",
+   "start": 24.421,
+   "end": 24.75,
+   "line": "accel"
+  },
+  {
+   "w": "in",
+   "start": 24.75,
+   "end": 24.914,
+   "line": "accel"
+  },
+  {
+   "w": "1,9",
+   "start": 24.914,
+   "end": 25.571,
+   "line": "accel"
+  },
+  {
+   "w": "Sekunden.",
+   "start": 25.571,
+   "end": 26.185,
+   "line": "accel"
+  },
+  {
+   "w": "1.000",
+   "start": 26.355,
+   "end": 26.656,
+   "line": "range"
+  },
+  {
+   "w": "Kilometer",
+   "start": 26.656,
+   "end": 27.26,
+   "line": "range"
+  },
+  {
+   "w": "Reichweite.",
+   "start": 27.26,
+   "end": 27.713,
+   "line": "range"
+  },
+  {
+   "w": "Fertig",
+   "start": 27.888,
+   "end": 28.322,
+   "line": "ready"
+  },
+  {
+   "w": "bis",
+   "start": 28.322,
+   "end": 28.492,
+   "line": "ready"
+  },
+  {
+   "w": "2020.",
+   "start": 28.492,
+   "end": 29.341,
+   "line": "ready"
+  },
+  {
+   "w": "Klingt",
+   "start": 29.516,
+   "end": 29.67,
+   "line": "easy"
+  },
+  {
+   "w": "einfach,",
+   "start": 29.67,
+   "end": 29.979,
+   "line": "easy"
+  },
+  {
+   "w": "oder?",
+   "start": 29.979,
+   "end": 30.537,
+   "line": "easy"
+  },
+  {
+   "w": "Problem:",
+   "start": 30.852,
+   "end": 31.165,
+   "line": "battery"
+  },
+  {
+   "w": "Dafür",
+   "start": 31.165,
+   "end": 31.672,
+   "line": "battery"
+  },
+  {
+   "w": "brauchst",
+   "start": 31.672,
+   "end": 31.828,
+   "line": "battery"
+  },
+  {
+   "w": "du",
+   "start": 31.828,
+   "end": 31.984,
+   "line": "battery"
+  },
+  {
+   "w": "einen",
+   "start": 31.984,
+   "end": 32.296,
+   "line": "battery"
+  },
+  {
+   "w": "Akku,",
+   "start": 32.296,
+   "end": 32.608,
+   "line": "battery"
+  },
+  {
+   "w": "doppelt",
+   "start": 32.608,
+   "end": 33.05,
+   "line": "battery"
+  },
+  {
+   "w": "so",
+   "start": 33.05,
+   "end": 33.206,
+   "line": "battery"
+  },
+  {
+   "w": "groß",
+   "start": 33.206,
+   "end": 33.362,
+   "line": "battery"
+  },
+  {
+   "w": "wie",
+   "start": 33.362,
+   "end": 33.518,
+   "line": "battery"
+  },
+  {
+   "w": "in",
+   "start": 33.518,
+   "end": 33.674,
+   "line": "battery"
+  },
+  {
+   "w": "jedem",
+   "start": 33.674,
+   "end": 33.986,
+   "line": "battery"
+  },
+  {
+   "w": "Tesla",
+   "start": 33.986,
+   "end": 34.298,
+   "line": "battery"
+  },
+  {
+   "w": "davor.",
+   "start": 34.298,
+   "end": 34.721,
+   "line": "battery"
+  },
+  {
+   "w": "Das",
+   "start": 34.886,
+   "end": 35.048,
+   "line": "cost"
+  },
+  {
+   "w": "kostet",
+   "start": 35.048,
+   "end": 35.374,
+   "line": "cost"
+  },
+  {
+   "w": "ein",
+   "start": 35.374,
+   "end": 35.537,
+   "line": "cost"
+  },
+  {
+   "w": "Vermögen.",
+   "start": 35.537,
+   "end": 36.025,
+   "line": "cost"
+  },
+  {
+   "w": "Nächstes",
+   "start": 36.19,
+   "end": 36.528,
+   "line": "broke"
+  },
+  {
+   "w": "Problem:",
+   "start": 36.528,
+   "end": 36.866,
+   "line": "broke"
+  },
+  {
+   "w": "Du",
+   "start": 36.866,
+   "end": 37.035,
+   "line": "broke"
+  },
+  {
+   "w": "bist",
+   "start": 37.035,
+   "end": 37.349,
+   "line": "broke"
+  },
+  {
+   "w": "pleite.",
+   "start": 37.349,
+   "end": 37.832,
+   "line": "broke"
+  },
+  {
+   "w": "2018",
+   "start": 37.997,
+   "end": 38.77,
+   "line": "weeks"
+  },
+  {
+   "w": "ist",
+   "start": 38.77,
+   "end": 38.924,
+   "line": "weeks"
+  },
+  {
+   "w": "Tesla",
+   "start": 38.924,
+   "end": 39.333,
+   "line": "weeks"
+  },
+  {
+   "w": "nur",
+   "start": 39.333,
+   "end": 39.488,
+   "line": "weeks"
+  },
+  {
+   "w": "wenige",
+   "start": 39.488,
+   "end": 39.951,
+   "line": "weeks"
+  },
+  {
+   "w": "Wochen",
+   "start": 39.951,
+   "end": 40.261,
+   "line": "weeks"
+  },
+  {
+   "w": "vor",
+   "start": 40.261,
+   "end": 40.415,
+   "line": "weeks"
+  },
+  {
+   "w": "der",
+   "start": 40.415,
+   "end": 40.57,
+   "line": "weeks"
+  },
+  {
+   "w": "Pleite.",
+   "start": 40.57,
+   "end": 40.879,
+   "line": "weeks"
+  },
+  {
+   "w": "Und",
+   "start": 41.044,
+   "end": 41.211,
+   "line": "price"
+  },
+  {
+   "w": "ein",
+   "start": 41.211,
+   "end": 41.379,
+   "line": "price"
+  },
+  {
+   "w": "Sportwagen",
+   "start": 41.379,
+   "end": 41.881,
+   "line": "price"
+  },
+  {
+   "w": "für",
+   "start": 41.881,
+   "end": 42.048,
+   "line": "price"
+  },
+  {
+   "w": "200.000",
+   "start": 42.048,
+   "end": 42.885,
+   "line": "price"
+  },
+  {
+   "w": "Dollar",
+   "start": 42.885,
+   "end": 43.219,
+   "line": "price"
+  },
+  {
+   "w": "bezahlt",
+   "start": 43.219,
+   "end": 43.554,
+   "line": "price"
+  },
+  {
+   "w": "keine",
+   "start": 43.554,
+   "end": 43.889,
+   "line": "price"
+  },
+  {
+   "w": "Rechnungen.",
+   "start": 43.889,
+   "end": 44.39,
+   "line": "price"
+  },
+  {
+   "w": "Also",
+   "start": 44.556,
+   "end": 44.927,
+   "line": "ice"
+  },
+  {
+   "w": "kommt",
+   "start": 44.927,
+   "end": 45.113,
+   "line": "ice"
+  },
+  {
+   "w": "der",
+   "start": 45.113,
+   "end": 45.298,
+   "line": "ice"
+  },
+  {
+   "w": "Roadster",
+   "start": 45.298,
+   "end": 45.67,
+   "line": "ice"
+  },
+  {
+   "w": "auf",
+   "start": 45.67,
+   "end": 45.856,
+   "line": "ice"
+  },
+  {
+   "w": "Eis.",
+   "start": 45.856,
+   "end": 46.041,
+   "line": "ice"
+  },
+  {
+   "w": "Du",
+   "start": 46.211,
+   "end": 46.378,
+   "line": "models"
+  },
+  {
+   "w": "baust",
+   "start": 46.378,
+   "end": 46.545,
+   "line": "models"
+  },
+  {
+   "w": "Model",
+   "start": 46.545,
+   "end": 47.14,
+   "line": "models"
+  },
+  {
+   "w": "3,",
+   "start": 47.14,
+   "end": 47.24,
+   "line": "models"
+  },
+  {
+   "w": "Model",
+   "start": 47.24,
+   "end": 47.886,
+   "line": "models"
+  },
+  {
+   "w": "Y",
+   "start": 47.886,
+   "end": 47.986,
+   "line": "models"
+  },
+  {
+   "w": "und",
+   "start": 47.986,
+   "end": 48.303,
+   "line": "models"
+  },
+  {
+   "w": "den",
+   "start": 48.303,
+   "end": 48.469,
+   "line": "models"
+  },
+  {
+   "w": "Cybertruck.",
+   "start": 48.469,
+   "end": 48.97,
+   "line": "models"
+  },
+  {
+   "w": "Elon",
+   "start": 49.135,
+   "end": 49.452,
+   "line": "dessert"
+  },
+  {
+   "w": "nennt",
+   "start": 49.452,
+   "end": 49.61,
+   "line": "dessert"
+  },
+  {
+   "w": "den",
+   "start": 49.61,
+   "end": 49.768,
+   "line": "dessert"
+  },
+  {
+   "w": "Roadster",
+   "start": 49.768,
+   "end": 50.195,
+   "line": "dessert"
+  },
+  {
+   "w": "nur",
+   "start": 50.195,
+   "end": 50.353,
+   "line": "dessert"
+  },
+  {
+   "w": "noch:",
+   "start": 50.353,
+   "end": 50.822,
+   "line": "dessert"
+  },
+  {
+   "w": "den",
+   "start": 50.822,
+   "end": 50.98,
+   "line": "dessert"
+  },
+  {
+   "w": "Nachtisch.",
+   "start": 50.98,
+   "end": 51.297,
+   "line": "dessert"
+  },
+  {
+   "w": "Dann",
+   "start": 51.602,
+   "end": 51.751,
+   "line": "chips"
+  },
+  {
+   "w": "kommt",
+   "start": 51.751,
+   "end": 51.901,
+   "line": "chips"
+  },
+  {
+   "w": "die",
+   "start": 51.901,
+   "end": 52.05,
+   "line": "chips"
+  },
+  {
+   "w": "Chipkrise.",
+   "start": 52.05,
+   "end": 52.594,
+   "line": "chips"
+  },
+  {
+   "w": "2020",
+   "start": 52.759,
+   "end": 53.726,
+   "line": "years"
+  },
+  {
+   "w": "wird",
+   "start": 53.726,
+   "end": 53.919,
+   "line": "years"
+  },
+  {
+   "w": "2021.",
+   "start": 53.919,
+   "end": 55.678,
+   "line": "years"
+  },
+  {
+   "w": "Dann",
+   "start": 55.678,
+   "end": 55.871,
+   "line": "years"
+  },
+  {
+   "w": "2022.",
+   "start": 55.871,
+   "end": 57.487,
+   "line": "years"
+  },
+  {
+   "w": "Dann",
+   "start": 57.487,
+   "end": 57.68,
+   "line": "years"
+  },
+  {
+   "w": "2023.",
+   "start": 57.68,
+   "end": 58.84,
+   "line": "years"
+  },
+  {
+   "w": "Und",
+   "start": 59.145,
+   "end": 59.318,
+   "line": "rockets"
+  },
+  {
+   "w": "dann",
+   "start": 59.318,
+   "end": 59.49,
+   "line": "rockets"
+  },
+  {
+   "w": "das",
+   "start": 59.49,
+   "end": 59.663,
+   "line": "rockets"
+  },
+  {
+   "w": "größte",
+   "start": 59.663,
+   "end": 60.008,
+   "line": "rockets"
+  },
+  {
+   "w": "Versprechen:",
+   "start": 60.008,
+   "end": 60.76,
+   "line": "rockets"
+  },
+  {
+   "w": "Düsen",
+   "start": 60.76,
+   "end": 61.105,
+   "line": "rockets"
+  },
+  {
+   "w": "von",
+   "start": 61.105,
+   "end": 61.278,
+   "line": "rockets"
+  },
+  {
+   "w": "SpaceX,",
+   "start": 61.278,
+   "end": 61.96,
+   "line": "rockets"
+  },
+  {
+   "w": "die",
+   "start": 61.96,
+   "end": 62.133,
+   "line": "rockets"
+  },
+  {
+   "w": "mit",
+   "start": 62.133,
+   "end": 62.305,
+   "line": "rockets"
+  },
+  {
+   "w": "Kaltgas",
+   "start": 62.305,
+   "end": 62.65,
+   "line": "rockets"
+  },
+  {
+   "w": "feuern.",
+   "start": 62.65,
+   "end": 62.823,
+   "line": "rockets"
+  },
+  {
+   "w": "Aber",
+   "start": 62.988,
+   "end": 63.281,
+   "line": "fly"
+  },
+  {
+   "w": "schnall",
+   "start": 63.281,
+   "end": 63.427,
+   "line": "fly"
+  },
+  {
+   "w": "Raketen",
+   "start": 63.427,
+   "end": 63.867,
+   "line": "fly"
+  },
+  {
+   "w": "an",
+   "start": 63.867,
+   "end": 64.013,
+   "line": "fly"
+  },
+  {
+   "w": "ein",
+   "start": 64.013,
+   "end": 64.16,
+   "line": "fly"
+  },
+  {
+   "w": "Auto,",
+   "start": 64.16,
+   "end": 64.453,
+   "line": "fly"
+  },
+  {
+   "w": "und",
+   "start": 64.453,
+   "end": 64.744,
+   "line": "fly"
+  },
+  {
+   "w": "es",
+   "start": 64.744,
+   "end": 64.891,
+   "line": "fly"
+  },
+  {
+   "w": "will",
+   "start": 64.891,
+   "end": 65.037,
+   "line": "fly"
+  },
+  {
+   "w": "abheben.",
+   "start": 65.037,
+   "end": 65.477,
+   "line": "fly"
+  },
+  {
+   "w": "Also",
+   "start": 65.642,
+   "end": 65.913,
+   "line": "fans"
+  },
+  {
+   "w": "kommen",
+   "start": 65.913,
+   "end": 66.183,
+   "line": "fans"
+  },
+  {
+   "w": "Ventilatoren",
+   "start": 66.183,
+   "end": 66.86,
+   "line": "fans"
+  },
+  {
+   "w": "unter",
+   "start": 66.86,
+   "end": 67.131,
+   "line": "fans"
+  },
+  {
+   "w": "das",
+   "start": 67.131,
+   "end": 67.267,
+   "line": "fans"
+  },
+  {
+   "w": "Auto.",
+   "start": 67.267,
+   "end": 67.538,
+   "line": "fans"
+  },
+  {
+   "w": "Die",
+   "start": 67.708,
+   "end": 67.857,
+   "line": "stick"
+  },
+  {
+   "w": "saugen",
+   "start": 67.857,
+   "end": 68.156,
+   "line": "stick"
+  },
+  {
+   "w": "es",
+   "start": 68.156,
+   "end": 68.305,
+   "line": "stick"
+  },
+  {
+   "w": "so",
+   "start": 68.305,
+   "end": 68.455,
+   "line": "stick"
+  },
+  {
+   "w": "fest",
+   "start": 68.455,
+   "end": 68.604,
+   "line": "stick"
+  },
+  {
+   "w": "an,",
+   "start": 68.604,
+   "end": 68.753,
+   "line": "stick"
+  },
+  {
+   "w": "dass",
+   "start": 68.753,
+   "end": 68.903,
+   "line": "stick"
+  },
+  {
+   "w": "es",
+   "start": 68.903,
+   "end": 69.152,
+   "line": "stick"
+  },
+  {
+   "w": "sogar",
+   "start": 69.152,
+   "end": 69.451,
+   "line": "stick"
+  },
+  {
+   "w": "kopfüber",
+   "start": 69.451,
+   "end": 70.054,
+   "line": "stick"
+  },
+  {
+   "w": "hängen",
+   "start": 70.054,
+   "end": 70.353,
+   "line": "stick"
+  },
+  {
+   "w": "bleibt.",
+   "start": 70.353,
+   "end": 70.503,
+   "line": "stick"
+  },
+  {
+   "w": "Termine",
+   "start": 70.966,
+   "end": 71.41,
+   "line": "delay"
+  },
+  {
+   "w": "platzen.",
+   "start": 71.41,
+   "end": 72.301,
+   "line": "delay"
+  },
+  {
+   "w": "Die",
+   "start": 72.301,
+   "end": 72.448,
+   "line": "delay"
+  },
+  {
+   "w": "Enthüllung",
+   "start": 72.448,
+   "end": 72.892,
+   "line": "delay"
+  },
+  {
+   "w": "wird",
+   "start": 72.892,
+   "end": 73.04,
+   "line": "delay"
+  },
+  {
+   "w": "verschoben.",
+   "start": 73.04,
+   "end": 73.704,
+   "line": "delay"
+  },
+  {
+   "w": "Zuletzt",
+   "start": 73.704,
+   "end": 74.0,
+   "line": "delay"
+  },
+  {
+   "w": "sogar",
+   "start": 74.0,
+   "end": 74.296,
+   "line": "delay"
+  },
+  {
+   "w": "wegen",
+   "start": 74.296,
+   "end": 74.591,
+   "line": "delay"
+  },
+  {
+   "w": "des",
+   "start": 74.591,
+   "end": 74.739,
+   "line": "delay"
+  },
+  {
+   "w": "Wetters.",
+   "start": 74.739,
+   "end": 75.035,
+   "line": "delay"
+  },
+  {
+   "w": "Am",
+   "start": 75.345,
+   "end": 75.588,
+   "line": "reveal"
+  },
+  {
+   "w": "15.",
+   "start": 75.588,
+   "end": 76.592,
+   "line": "reveal"
+  },
+  {
+   "w": "Oktober",
+   "start": 76.592,
+   "end": 76.681,
+   "line": "reveal"
+  },
+  {
+   "w": "ist",
+   "start": 76.681,
+   "end": 76.828,
+   "line": "reveal"
+  },
+  {
+   "w": "es",
+   "start": 76.828,
+   "end": 76.975,
+   "line": "reveal"
+  },
+  {
+   "w": "so",
+   "start": 76.975,
+   "end": 77.123,
+   "line": "reveal"
+  },
+  {
+   "w": "weit.",
+   "start": 77.123,
+   "end": 77.27,
+   "line": "reveal"
+  },
+  {
+   "w": "Dein",
+   "start": 77.435,
+   "end": 77.636,
+   "line": "flip"
+  },
+  {
+   "w": "Roadster",
+   "start": 77.636,
+   "end": 78.037,
+   "line": "flip"
+  },
+  {
+   "w": "springt,",
+   "start": 78.037,
+   "end": 78.237,
+   "line": "flip"
+  },
+  {
+   "w": "macht",
+   "start": 78.237,
+   "end": 78.532,
+   "line": "flip"
+  },
+  {
+   "w": "einen",
+   "start": 78.532,
+   "end": 78.933,
+   "line": "flip"
+  },
+  {
+   "w": "Kickflip",
+   "start": 78.933,
+   "end": 79.334,
+   "line": "flip"
+  },
+  {
+   "w": "und",
+   "start": 79.334,
+   "end": 79.775,
+   "line": "flip"
+  },
+  {
+   "w": "fliegt.",
+   "start": 79.775,
+   "end": 80.115,
+   "line": "flip"
+  },
+  {
+   "w": "Mit",
+   "start": 80.28,
+   "end": 80.434,
+   "line": "rocket"
+  },
+  {
+   "w": "Düsen",
+   "start": 80.434,
+   "end": 80.741,
+   "line": "rocket"
+  },
+  {
+   "w": "in",
+   "start": 80.741,
+   "end": 80.895,
+   "line": "rocket"
+  },
+  {
+   "w": "unter",
+   "start": 80.895,
+   "end": 81.203,
+   "line": "rocket"
+  },
+  {
+   "w": "0,6",
+   "start": 81.203,
+   "end": 81.818,
+   "line": "rocket"
+  },
+  {
+   "w": "Sekunden",
+   "start": 81.818,
+   "end": 82.28,
+   "line": "rocket"
+  },
+  {
+   "w": "auf",
+   "start": 82.28,
+   "end": 82.433,
+   "line": "rocket"
+  },
+  {
+   "w": "fast",
+   "start": 82.433,
+   "end": 82.587,
+   "line": "rocket"
+  },
+  {
+   "w": "Tempo",
+   "start": 82.587,
+   "end": 82.99,
+   "line": "rocket"
+  },
+  {
+   "w": "100.",
+   "start": 82.99,
+   "end": 83.298,
+   "line": "rocket"
+  },
+  {
+   "w": "Kaufen",
+   "start": 83.468,
+   "end": 83.791,
+   "line": "buy"
+  },
+  {
+   "w": "kann",
+   "start": 83.791,
+   "end": 83.953,
+   "line": "buy"
+  },
+  {
+   "w": "man",
+   "start": 83.953,
+   "end": 84.114,
+   "line": "buy"
+  },
+  {
+   "w": "ihn",
+   "start": 84.114,
+   "end": 84.276,
+   "line": "buy"
+  },
+  {
+   "w": "trotzdem",
+   "start": 84.276,
+   "end": 84.724,
+   "line": "buy"
+  },
+  {
+   "w": "noch",
+   "start": 84.724,
+   "end": 84.886,
+   "line": "buy"
+  },
+  {
+   "w": "nicht.",
+   "start": 84.886,
+   "end": 85.048,
+   "line": "buy"
+  },
+  {
+   "w": "Elon",
+   "start": 85.314,
+   "end": 85.676,
+   "line": "2028"
+  },
+  {
+   "w": "sagt:",
+   "start": 85.676,
+   "end": 86.122,
+   "line": "2028"
+  },
+  {
+   "w": "2028.",
+   "start": 86.122,
+   "end": 87.387,
+   "line": "2028"
+  },
+  {
+   "w": "Schau",
+   "start": 87.747,
+   "end": 87.898,
+   "line": "look"
+  },
+  {
+   "w": "dich",
+   "start": 87.898,
+   "end": 88.049,
+   "line": "look"
+  },
+  {
+   "w": "an.",
+   "start": 88.049,
+   "end": 88.199,
+   "line": "look"
+  },
+  {
+   "w": "Du",
+   "start": 88.199,
+   "end": 88.35,
+   "line": "look"
+  },
+  {
+   "w": "hast",
+   "start": 88.35,
+   "end": 88.855,
+   "line": "look"
+  },
+  {
+   "w": "gerade",
+   "start": 88.855,
+   "end": 89.307,
+   "line": "look"
+  },
+  {
+   "w": "ein",
+   "start": 89.307,
+   "end": 89.457,
+   "line": "look"
+  },
+  {
+   "w": "Auto",
+   "start": 89.457,
+   "end": 89.758,
+   "line": "look"
+  },
+  {
+   "w": "gebaut.",
+   "start": 89.758,
+   "end": 90.059,
+   "line": "look"
+  },
+  {
+   "w": "Hat",
+   "start": 90.244,
+   "end": 90.505,
+   "line": "nine"
+  },
+  {
+   "w": "nur",
+   "start": 90.505,
+   "end": 90.671,
+   "line": "nine"
+  },
+  {
+   "w": "neun",
+   "start": 90.671,
+   "end": 90.837,
+   "line": "nine"
+  },
+  {
+   "w": "Jahre",
+   "start": 90.837,
+   "end": 91.168,
+   "line": "nine"
+  },
+  {
+   "w": "gedauert.",
+   "start": 91.168,
+   "end": 91.5,
+   "line": "nine"
+  }
+ ]
+}

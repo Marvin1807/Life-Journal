@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Neun Jahre für ein Auto – der Tesla Roadster</title>
+    <style>
+      @font-face { font-family: "RS"; font-style: normal; font-weight: 800; src: url("lib/fonts/inter-latin-extrabold-normal.woff2") format("woff2"); }
+      @font-face { font-family: "RS"; font-style: normal; font-weight: 900; src: url("lib/fonts/inter-latin-black-normal.woff2") format("woff2"); }
+      @font-face { font-family: "RS"; font-style: normal; font-weight: 600; src: url("lib/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+      html, body { margin: 0; background: #000; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #scene { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+      .cap { position: absolute; left: 0; right: 0; top: 905px; text-align: center; font-family: "RS"; font-weight: 900;
+             font-size: 92px; letter-spacing: -1px; color: #fff; -webkit-text-stroke: 14px #000; paint-order: stroke fill;
+             text-shadow: 0 6px 16px rgba(0,0,0,0.35); white-space: nowrap; transform-origin: 50% 60%; }
+      .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+      .black { position: absolute; inset: 0; background: #000; opacity: 0; }
+      .end { position: absolute; inset: 0; background: #0f1014; opacity: 0; display: flex; flex-direction: column;
+             align-items: center; justify-content: center; font-family: "RS"; color: #fff; text-align: center; }
+      .end .q { font-weight: 900; font-size: 84px; line-height: 1.08; letter-spacing: -1px; padding: 0 80px; }
+      .end .q span { color: #ff4a3d; }
+      .end .s { margin-top: 46px; font-weight: 600; font-size: 34px; color: #9aa0aa; letter-spacing: 1px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="roadster-9-jahre" data-start="0" data-duration="96.1" data-width="1080" data-height="1920">
+      <canvas id="scene" class="clip" data-start="0" data-duration="96.1" data-track-index="0"></canvas>
+      <div id="overlay" class="clip" data-start="0" data-duration="96.1" data-track-index="1" style="position:absolute;inset:0"></div>
+      <audio id="sound" src="audio/sound.wav" data-start="0" data-duration="96.1" data-track-index="2" data-volume="1"></audio>
+    </div>
+
+    <script src="lib/gsap.min.js"></script>
+    <script>
+      // Leere Root-Timeline: gibt HyperFrames die Länge vor; die Szene selbst hört auf hf-seek.
+      window.__timelines = window.__timelines || {};
+      window.__timelines["roadster-9-jahre"] = gsap.timeline({ paused: true }).set({}, {}, 96.1);
+    </script>
+    <script type="importmap">
+      { "imports": { "three": "./lib/three.module.min.js" } }
+    </script>
+    <script type="module">
+      import "./scene.js";
+    </script>
+  </body>
+</html>
