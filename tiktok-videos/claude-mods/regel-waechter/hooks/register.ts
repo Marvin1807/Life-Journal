@@ -13,15 +13,19 @@ const mtime = ($: EngineInterface, path: string): Promise<number | null> =>
 
 export const load = async ($: EngineInterface, id: string): Promise<Sources> => {
   const dir = `${await $.session.root()}/${HF}/videos/${id}`
-  const [scene, index, sound, json, wav] = await Promise.all([
+  const [scene, index, sound, json, wav, words, script, voice] = await Promise.all([
     readOr($, `${dir}/scene.js`),
     readOr($, `${dir}/index.html`),
     readOr($, `${dir}/audio/sound.json`),
     mtime($, `${dir}/audio/sound.json`),
     mtime($, `${dir}/audio/sound.wav`),
+    readOr($, `${dir}/words.js`),
+    mtime($, `${dir}/sprecher.json`),
+    mtime($, `${dir}/audio/voice.wav`),
   ])
   const isWavStale = json === null ? null : wav === null ? true : wav < json
-  return { id, scene, index, sound, isWavStale }
+  const isVoiceStale = script === null ? null : voice === null ? true : voice < script
+  return { id, scene, index, sound, isWavStale, words, isVoiceStale }
 }
 
 export const register: Register = on => {
@@ -31,7 +35,7 @@ export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'regeln',
-      description: 'Prüft videos/<id> gegen die Was-wäre-wenn-Regeln (ohne ID: alle)',
+      description: 'Prüft videos/<id> gegen die Regeln der Nische (Was wäre wenn / Gedankenexperimente; ohne ID: alle)',
     })
     return next(e)
   })

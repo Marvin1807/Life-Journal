@@ -1,0 +1,122 @@
+{
+ "start": 0.2,
+ "speed": 1.05,
+ "pause": 0.22,
+ "lines": [
+  {
+   "say": "Was, wenn das Internet schon lange tot ist?",
+   "pause": 0.3
+  },
+  {
+   "say": "Und du einer der letzten echten Menschen in deinem Feed bist?",
+   "pause": 0.5
+  },
+  {
+   "say": "Klingt verrückt.",
+   "pause": 0.2
+  },
+  {
+   "say": "Aber genau das behauptet eine Theorie, die 2021 in einem kleinen Internetforum auftauchte.",
+   "pause": 0.3
+  },
+  {
+   "say": "Die Dedd Internett Theorie.",
+   "show": "Die Dead- Internet- Theorie.",
+   "pause": 0.35
+  },
+  {
+   "say": "Sie besagt: Das meiste, was du online siehst, stammt gar nicht mehr von Menschen.",
+   "pause": 0.15
+  },
+  {
+   "say": "Sondern von Botts.",
+   "pause": 0.4,
+   "show": "Sondern von Bots."
+  },
+  {
+   "say": "Programme, die posten, liken, kommentieren und sich gegenseitig antworten.",
+   "pause": 0.15
+  },
+  {
+   "say": "Rund um die Uhr.",
+   "pause": 0.45
+  },
+  {
+   "say": "Lange Zeit klang das nach einer Verschwörung.",
+   "pause": 0.2,
+   "show": "Lange Zeit klang das nach einer Verschwörung."
+  },
+  {
+   "say": "Dann kamen die Zahlen.",
+   "pause": 0.4
+  },
+  {
+   "say": "2024 kam zum ersten Mal seit zehn Jahren mehr Internetverkehr von Botts als von Menschen.",
+   "pause": 0.25,
+   "show": "2024 kam zum ersten Mal seit zehn Jahren mehr Internetverkehr von Bots als von Menschen."
+  },
+  {
+   "say": "51 Prozent. So steht es im Bäd Bott Riport der Sicherheitsfirma Imperva.",
+   "show": "51 Prozent. So steht es im Bad- Bot- Report der Sicherheitsfirma Imperva.",
+   "pause": 0.3
+  },
+  {
+   "say": "Und 37 Prozent des gesamten Verkehrs stammten von Botts, die Schaden anrichten sollen.",
+   "pause": 0.4,
+   "show": "Und 37 Prozent des gesamten Verkehrs stammten von Bots, die Schaden anrichten sollen."
+  },
+  {
+   "say": "Seit KI Texte, Bilder und Stimmen in Sekunden erzeugt, wird der Unterschied immer schwerer zu erkennen.",
+   "pause": 0.3
+  },
+  {
+   "say": "Europol zitierte schon 2022 eine Schätzung:",
+   "pause": 0.15
+  },
+  {
+   "say": "Bis 2026 könnten bis zu 90 Prozent aller Inhalte im Netz künstlich erzeugt sein.",
+   "pause": 0.45
+  },
+  {
+   "say": "2026.",
+   "pause": 0.35
+  },
+  {
+   "say": "Das ist jetzt.",
+   "pause": 0.6
+  },
+  {
+   "say": "Du glaubst mir nicht?",
+   "pause": 0.25
+  },
+  {
+   "say": "Geh unter irgendein virales Video und lies die Kommentare.",
+   "pause": 0.15
+  },
+  {
+   "say": "Achte darauf, wie viele fast gleich klingen.",
+   "pause": 0.5
+  },
+  {
+   "say": "Und wenn du das nächste Mal einen Streit in den Kommentaren liest, frag dich:",
+   "pause": 0.2
+  },
+  {
+   "say": "Streiten da gerade Menschen?",
+   "pause": 0.3
+  },
+  {
+   "say": "Oder nur Maschinen, die für dich Menschen spielen?",
+   "pause": 0.9
+  },
+  {
+   "say": "Ach, übrigens.",
+   "pause": 0.35
+  },
+  {
+   "say": "Diese Stimme hier gehört auch keinem Menschen.",
+   "speed": 0.92,
+   "pause": 1.2
+  }
+ ]
+}

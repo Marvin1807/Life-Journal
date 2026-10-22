@@ -1,5 +1,7 @@
 // Reine Prüflogik: liest scene.js, index.html und sound.json als Text und
-// meldet Verstöße gegen die Regeln aus .claude/skills/was-waere-wenn/SKILL.md.
+// meldet Verstöße gegen die Regeln aus .claude/skills/was-waere-wenn/SKILL.md
+// bzw. – bei Videos mit Sprecher (scene.js importiert ./words.js) – aus
+// .claude/skills/gedankenexperimente/SKILL.md.
 
 export type Level = 'fehler' | 'hinweis'
 export type Finding = { level: Level; text: string }
@@ -11,7 +13,27 @@ export type Sources = {
   sound: string | null
   // true: sound.wav ist älter als sound.json; null: unbekannt
   isWavStale: boolean | null
+  // Nur Gedankenexperimente: words.js (Sprecher-Zeiten) und ob voice.wav älter als sprecher.json ist
+  words?: string | null
+  isVoiceStale?: boolean | null
 }
+
+type Line = { t0: number; t1: number; text: string }
+type Word = { w: string; t0: number; t1: number }
+export type Narration = { duration: number; lines: Line[]; words: Word[] }
+
+// words.js: "export default {…};" → Objekt
+export const narration = (words: string): Narration | null => {
+  const m = /export\s+default\s+(\{[\s\S]*\})\s*;?\s*$/.exec(words)
+  if (!m?.[1]) return null
+  try {
+    return JSON.parse(m[1]) as Narration
+  } catch {
+    return null
+  }
+}
+
+export const isNarrated = (scene: string): boolean => /from\s+["']\.\/words\.js["']/.test(scene)
 
 export type Subtitle = { start: number; end: number; text: string }
 
@@ -91,7 +113,67 @@ const FORBIDDEN = /卐|卍|hakenkreuz|swastika|ss-rune|ᛋᛋ|sieg heil|heil hit
 
 const fmt = (n: number): string => String(n).replace('.', ',')
 
+// Regeln der Nische „Gedankenexperimente“ (Sprecher, Ein-Wort-Untertitel, Shots statt Orte)
+export const checkNarrated = (s: Sources & { scene: string }): Finding[] => {
+  const out: Finding[] = []
+  const fehler = (text: string) => out.push({ level: 'fehler', text })
+  const hinweis = (text: string) => out.push({ level: 'hinweis', text })
+
+  if (s.index === null) fehler('index.html fehlt.')
+  const duration = s.index === null ? null : compositionDuration(s.index)
+  if (s.index !== null && duration === null) fehler('index.html: data-duration der Komposition nicht gefunden.')
+  const sceneDuration = /const\s+DURATION\s*=\s*([\d.]+)/.exec(s.scene)
+  if (duration !== null && sceneDuration && Number(sceneDuration[1]) !== duration) {
+    fehler(`scene.js DURATION = ${sceneDuration[1]}, index.html data-duration = ${fmt(duration)}.`)
+  }
+  if (duration !== null && (duration < 55 || duration > 95)) hinweis(`Länge ${fmt(duration)} s – Regel: 60–90 s.`)
+
+  // Sprecher
+  const n = s.words ? narration(s.words) : null
+  if (!s.words) fehler('words.js fehlt – tools/sprecher.py ausführen.')
+  else if (!n) fehler('words.js ist nicht lesbar.')
+  if (s.isVoiceStale === true) fehler('audio/voice.wav/words.js sind älter als sprecher.json – tools/sprecher.py neu ausführen.')
+  if (n) {
+    if (duration !== null && n.duration > duration + 0.05) fehler(`Sprecher (${fmt(n.duration)} s) ist länger als das Video (${fmt(duration)} s).`)
+    const first = n.lines[0]
+    if (first && first.t1 > 7.5) hinweis(`Hook-Satz endet erst bei ${fmt(first.t1)} s – Regel: These in den ersten ~7 s.`)
+    const rate = n.words.length / Math.max(1, n.duration)
+    if (rate < 2.2 || rate > 3.2) hinweis(`Sprechtempo ${rate.toFixed(2)} Wörter/s – Referenz ≈ 2,7.`)
+    const long = n.words.filter(w => w.w.length > 18)
+    if (long.length) hinweis(`Sehr lange Untertitel-Wörter: ${long.map(w => w.w).join(', ')}.`)
+    if (duration !== null) {
+      const shots = (s.scene.match(/\{\s*at:\s*/g) ?? []).length
+      if (shots && duration / shots > 5.5) hinweis(`${shots} Shots in ${fmt(duration)} s (Ø ${(duration / shots).toFixed(1)} s) – Regel: alle 3–5 s ein neues Bild.`)
+      if (!shots) hinweis('Keine Shots ({ at: … }) gefunden.')
+    }
+  }
+
+  // Ton
+  if (s.sound === null) fehler('audio/sound.json fehlt – jedes Video braucht Sounddesign.')
+  else {
+    let sound: { duration?: number; cues?: { type?: string; at?: number }[] } | null = null
+    try {
+      sound = JSON.parse(s.sound)
+    } catch {
+      fehler('audio/sound.json ist kein gültiges JSON.')
+    }
+    if (sound) {
+      if (duration !== null && sound.duration !== duration) fehler(`sound.json duration = ${sound.duration ?? '–'} s, Video = ${fmt(duration)} s.`)
+      const cues = sound.cues ?? []
+      if (!cues.some(c => c.type === 'voice')) fehler('Ton: keine Sprecherspur (type "voice").')
+      if (!cues.some(c => c.type === 'pad' || c.type === 'drone')) hinweis('Ton: kein Musikbett (pad/drone) unter der Stimme.')
+      if (!cues.some(c => c.type === 'whoosh')) hinweis('Ton: keine Whooshes an den Schnitten.')
+    }
+  }
+  if (s.isWavStale === true) fehler('audio/sound.wav ist älter als sound.json – tools/sounddesign.py neu ausführen.')
+
+  const bad = FORBIDDEN.exec(s.scene)
+  if (bad) fehler(`Verbotener Begriff/Symbol in scene.js: „${bad[0]}“.`)
+  return out
+}
+
 export const check = (s: Sources): Finding[] => {
+  if (s.scene !== null && isNarrated(s.scene)) return checkNarrated({ ...s, scene: s.scene })
   const out: Finding[] = []
   const fehler = (text: string) => out.push({ level: 'fehler', text })
   const hinweis = (text: string) => out.push({ level: 'hinweis', text })

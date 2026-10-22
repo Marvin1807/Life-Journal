@@ -16,6 +16,9 @@ cp "videos/$template/index.html" "videos/$template/hyperframes.json" "videos/$te
    "videos/$template/.gitignore" "videos/$id/"
 cp "videos/$template/audio/sound.json" "videos/$id/audio/"
 [[ -f "videos/$template/scene.js" ]] && cp "videos/$template/scene.js" "videos/$id/"
+# Sprecher-Videos (Gedankenexperimente): Sprechtext und Ton-Generator mitnehmen
+[[ -f "videos/$template/sprecher.json" ]] && cp "videos/$template/sprecher.json" "videos/$id/"
+[[ -f "videos/$template/audio/ton.py" ]] && cp "videos/$template/audio/ton.py" "videos/$id/audio/"
 ln -s ../../lib "videos/$id/lib"
 printf '{ "id": "%s", "name": "%s" }\n' "$id" "$id" > "videos/$id/meta.json"
 sed -i "s/\"name\": \"$template\"/\"name\": \"$id\"/" "videos/$id/package.json"

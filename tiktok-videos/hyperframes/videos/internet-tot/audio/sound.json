@@ -1,0 +1,577 @@
+{
+ "duration": 83,
+ "cues": [
+  {
+   "type": "voice",
+   "file": "voice.wav",
+   "at": 0,
+   "gain": 1.0,
+   "duck": 0.45
+  },
+  {
+   "type": "pad",
+   "at": 0,
+   "dur": 71.893,
+   "freqs": [
+    110,
+    130.81,
+    164.81
+   ],
+   "gain": 0.16,
+   "seed": 3,
+   "fadeIn": 0.3,
+   "fadeOut": 1.5,
+   "verb": 0.4
+  },
+  {
+   "type": "drone",
+   "at": 0,
+   "dur": 71.893,
+   "freqs": [
+    55,
+    82.4
+   ],
+   "gain": 0.14,
+   "seed": 4,
+   "fadeIn": 0.2,
+   "fadeOut": 1.5
+  },
+  {
+   "type": "pad",
+   "at": 28.546,
+   "dur": 43.347,
+   "freqs": [
+    220,
+    261.63,
+    329.63,
+    493.88
+   ],
+   "gain": 0.07,
+   "seed": 5,
+   "fadeIn": 3,
+   "fadeOut": 1.5,
+   "verb": 0.6
+  },
+  {
+   "type": "sub",
+   "at": 24.811,
+   "dur": 46.582,
+   "freq": 44,
+   "gain": 0.16,
+   "from": 0.4,
+   "to": 1.0,
+   "fadeIn": 2,
+   "fadeOut": 1
+  },
+  {
+   "type": "whoosh",
+   "at": 2.46,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 20
+  },
+  {
+   "type": "whoosh",
+   "at": 5.386,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 21
+  },
+  {
+   "type": "whoosh",
+   "at": 6.251,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 22
+  },
+  {
+   "type": "whoosh",
+   "at": 12.319999999999999,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 23
+  },
+  {
+   "type": "whoosh",
+   "at": 13.905,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 24
+  },
+  {
+   "type": "whoosh",
+   "at": 19.358999999999998,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 25
+  },
+  {
+   "type": "whoosh",
+   "at": 24.761,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 26
+  },
+  {
+   "type": "whoosh",
+   "at": 28.496,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 27
+  },
+  {
+   "type": "whoosh",
+   "at": 34.257000000000005,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 28
+  },
+  {
+   "type": "whoosh",
+   "at": 39.289,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 29
+  },
+  {
+   "type": "whoosh",
+   "at": 44.822,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 30
+  },
+  {
+   "type": "whoosh",
+   "at": 50.278000000000006,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 31
+  },
+  {
+   "type": "whoosh",
+   "at": 53.915000000000006,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 32
+  },
+  {
+   "type": "whoosh",
+   "at": 60.262,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 33
+  },
+  {
+   "type": "whoosh",
+   "at": 63.581,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 34
+  },
+  {
+   "type": "whoosh",
+   "at": 70.343,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 35
+  },
+  {
+   "type": "whoosh",
+   "at": 75.435,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 36
+  },
+  {
+   "type": "whoosh",
+   "at": 78.436,
+   "dur": 0.7,
+   "gain": 0.22,
+   "verb": 0.3,
+   "seed": 37
+  },
+  {
+   "type": "beep",
+   "at": 0.35,
+   "freq": 980,
+   "dur": 0.09,
+   "gain": 0.06
+  },
+  {
+   "type": "beep",
+   "at": 0.97,
+   "freq": 980,
+   "dur": 0.09,
+   "gain": 0.06
+  },
+  {
+   "type": "beep",
+   "at": 1.5899999999999999,
+   "freq": 980,
+   "dur": 0.09,
+   "gain": 0.06
+  },
+  {
+   "type": "beep",
+   "at": 1.8470000000000002,
+   "freq": 980,
+   "dur": 2.0,
+   "gain": 0.07
+  },
+  {
+   "type": "chime",
+   "at": 3.505,
+   "freq": 523.25,
+   "dur": 2.5,
+   "gain": 0.12,
+   "verb": 0.6
+  },
+  {
+   "type": "beep",
+   "at": 7.879,
+   "freq": 2400,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 7.968999999999999,
+   "freq": 2700,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.059,
+   "freq": 3000,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.149,
+   "freq": 2400,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.238999999999999,
+   "freq": 2700,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.328999999999999,
+   "freq": 3000,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.419,
+   "freq": 2400,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.509,
+   "freq": 2700,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.599,
+   "freq": 3000,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.689,
+   "freq": 2400,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.779,
+   "freq": 2700,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.869,
+   "freq": 3000,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 8.959,
+   "freq": 2400,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 9.049,
+   "freq": 2700,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 9.139,
+   "freq": 3000,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 9.229,
+   "freq": 2400,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 9.318999999999999,
+   "freq": 2700,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "beep",
+   "at": 9.408999999999999,
+   "freq": 3000,
+   "dur": 0.03,
+   "gain": 0.04
+  },
+  {
+   "type": "impact",
+   "at": 8.572,
+   "gain": 0.18,
+   "low": 60,
+   "verb": 0.4,
+   "seed": 7
+  },
+  {
+   "type": "powerdown",
+   "at": 12.469999999999999,
+   "dur": 1.4,
+   "gain": 0.14
+  },
+  {
+   "type": "static",
+   "at": 18.252,
+   "dur": 1.2,
+   "gain": 0.1,
+   "seed": 8
+  },
+  {
+   "type": "ding",
+   "at": 20.17,
+   "gain": 0.07,
+   "pan": -0.4
+  },
+  {
+   "type": "ding",
+   "at": 20.645,
+   "gain": 0.07,
+   "pan": 0.4
+  },
+  {
+   "type": "ding",
+   "at": 21.016,
+   "gain": 0.07,
+   "pan": -0.3
+  },
+  {
+   "type": "ding",
+   "at": 22.866,
+   "gain": 0.07,
+   "pan": 0.3
+  },
+  {
+   "type": "ticks",
+   "at": 23.424,
+   "dur": 1.2,
+   "interval": [
+    0.09,
+    0.04
+   ],
+   "gain": 0.16,
+   "seed": 9
+  },
+  {
+   "type": "flutter",
+   "at": 27.068,
+   "dur": 1.0,
+   "gain": 0.12,
+   "seed": 10
+  },
+  {
+   "type": "riser",
+   "at": 31.783,
+   "dur": 2.4,
+   "gain": 0.12,
+   "seed": 11
+  },
+  {
+   "type": "impact",
+   "at": 34.307,
+   "gain": 0.16,
+   "low": 48,
+   "verb": 0.5,
+   "seed": 12
+  },
+  {
+   "type": "static",
+   "at": 39.554,
+   "dur": 0.8,
+   "gain": 0.1,
+   "seed": 13
+  },
+  {
+   "type": "ice_crack",
+   "at": 43.307,
+   "gain": 0.12,
+   "seed": 14
+  },
+  {
+   "type": "shimmer",
+   "at": 44.985,
+   "dur": 2.0,
+   "gain": 0.08,
+   "seed": 15,
+   "verb": 0.5
+  },
+  {
+   "type": "splat",
+   "at": 53.435,
+   "gain": 0.16,
+   "seed": 16
+  },
+  {
+   "type": "static",
+   "at": 56.185,
+   "dur": 1.6,
+   "gain": 0.09,
+   "seed": 17
+  },
+  {
+   "type": "riser",
+   "at": 62.339,
+   "dur": 2.0,
+   "gain": 0.12,
+   "seed": 18
+  },
+  {
+   "type": "impact",
+   "at": 62.776,
+   "gain": 0.3,
+   "low": 40,
+   "verb": 0.6,
+   "seed": 19
+  },
+  {
+   "type": "tinnitus",
+   "at": 62.826,
+   "dur": 2.2,
+   "gain": 0.015
+  },
+  {
+   "type": "beep",
+   "at": 69.66,
+   "freq": 1600,
+   "dur": 0.05,
+   "gain": 0.05
+  },
+  {
+   "type": "beep",
+   "at": 69.78,
+   "freq": 1600,
+   "dur": 0.05,
+   "gain": 0.05
+  },
+  {
+   "type": "beep",
+   "at": 69.89999999999999,
+   "freq": 1600,
+   "dur": 0.05,
+   "gain": 0.05
+  },
+  {
+   "type": "beep",
+   "at": 70.02,
+   "freq": 1600,
+   "dur": 0.05,
+   "gain": 0.05
+  },
+  {
+   "type": "beep",
+   "at": 70.14,
+   "freq": 1600,
+   "dur": 0.05,
+   "gain": 0.05
+  },
+  {
+   "type": "heartbeat",
+   "at": 70.393,
+   "dur": 11.617000000000004,
+   "bpm": 62,
+   "gain": 0.2,
+   "seed": 21
+  },
+  {
+   "type": "creak",
+   "at": 75.685,
+   "dur": 2.4,
+   "gain": 0.05,
+   "seed": 22
+  },
+  {
+   "type": "chime",
+   "at": 80.988,
+   "freq": 392.0,
+   "dur": 3.0,
+   "gain": 0.14,
+   "verb": 0.7
+  },
+  {
+   "type": "shimmer",
+   "at": 80.988,
+   "dur": 1.8,
+   "gain": 0.07,
+   "seed": 23,
+   "verb": 0.5
+  },
+  {
+   "type": "silence",
+   "at": 82.01,
+   "dur": 0.9899999999999949
+  }
+ ]
+}

@@ -18,6 +18,7 @@ Typen: siehe CUES unten (`python tools/sounddesign.py --list`).
 """
 
 import json
+import os
 import sys
 import wave
 
@@ -687,10 +688,27 @@ def render_cue(c):
 PRE_ROLL = {"whoosh": 0.6, "riser": 1.0, "reverse": 1.0}
 
 
-def build(cfg):
+def load_wav(path):
+    """WAV-Datei (z. B. Sprecherstimme aus tools/sprecher.py) als Mono-Signal in SR laden."""
+    with wave.open(path, "rb") as w:
+        if w.getframerate() != SR:
+            raise SystemExit(f"{path}: bitte {SR} Hz (ist {w.getframerate()})")
+        x = np.frombuffer(w.readframes(w.getnframes()), dtype="<i2").astype(float) / 32768
+        if w.getnchannels() == 2:
+            x = x.reshape(-1, 2).mean(axis=1)
+    return x
+
+
+def build(cfg, base="."):
     m = Mix(cfg["duration"])
     silences = []
+    voices = []
     for c in cfg["cues"]:
+        if c["type"] == "voice":
+            # Sprecherspur: kommt ungedämpft nach dem Ducking dazu, alles andere wird darunter leiser
+            x = load_wav(os.path.join(base, c["file"])) * c.get("gain", 1.0)
+            voices.append((x, c["at"], c.get("duck", 0.45)))
+            continue
         if c["type"] == "silence":
             silences.append((c["at"], c.get("dur", 0.5)))
             continue
@@ -701,6 +719,17 @@ def build(cfg):
             x = hp(x, c["hp"])
         start = c["at"] - PRE_ROLL.get(c["type"], 0) * c.get("dur", 1.0)
         m.add(x, start, c.get("gain", 1.0), c.get("pan", 0.0), c.get("verb", 0.0))
+    for x, at, duck in voices:
+        i = int(at * SR)
+        x = x[: max(0, m.n - i)]
+        # Ducking: Hüllkurve der Stimme (Attack schnell, Release ~0,4 s) senkt Musik/Atmo
+        e = np.zeros(m.n)
+        e[i:i + len(x)] = np.abs(x)
+        e = np.clip(lp(e, 3, 1) * 12, 0, 1)
+        g = 1 - duck * e
+        m.dry *= g[:, None]
+        m.verb *= g[:, None]
+        m.dry[i:i + len(x)] += np.stack([x, x], axis=1) * 0.7071
     out = master(m)
     for a, d in silences:
         i, j = int(a * SR), int((a + d) * SR)
@@ -722,12 +751,13 @@ if __name__ == "__main__":
         print("Atmos:", ", ".join(AMBIENCES))
         print("Typen: ambience, sub, pad, tinnitus, heartbeat, riser, drop, reverse, shimmer, chime, ticks, impact, whoosh,"
               " powerdown, chord, bell, footsteps(surface: " + ", ".join(SURFACES) + "), ice_crack, crackle, splat,"
-              " flutter, rattle, squeak, beep, ding, flicker, drip, water, static, creak, wind, birds, city, car, drone, silence")
+              " flutter, rattle, squeak, beep, ding, flicker, drip, water, static, creak, wind, birds, city, car, drone, silence,"
+              " voice(file, duck: Sprecherspur, Musik wird darunter leiser)")
         sys.exit(0)
     if len(sys.argv) != 3:
         sys.exit(__doc__)
     cfg = json.load(open(sys.argv[1], encoding="utf-8"))
-    out = build(cfg)
+    out = build(cfg, os.path.dirname(os.path.abspath(sys.argv[1])))
     write_wav(sys.argv[2], out)
     rms = 20 * np.log10(np.sqrt(np.mean(out ** 2)) + 1e-12)
     print(f"✔ {sys.argv[2]}  (RMS {rms:.1f} dB, Peak {20 * np.log10(np.max(np.abs(out))):.1f} dB)")

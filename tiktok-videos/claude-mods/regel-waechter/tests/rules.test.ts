@@ -68,3 +68,40 @@ test('render commands and video ids are recognised', async () => {
   expect(findVideoId('cd /h/tiktok-videos/hyperframes && npx hyperframes render', '/r')).toBe(null)
   expect(findVideoId('cd /h/tiktok-videos/hyperframes/videos/mond && npx hyperframes render', '/r')).toBe('mond')
 })
+
+// --- Gedankenexperimente (Sprecher-Videos) ---
+const words = (dur: number, first: number) =>
+  'export default ' +
+  JSON.stringify({
+    duration: dur,
+    lines: [{ t0: 0.2, t1: first, text: 'Was, wenn das Internet tot ist?' }],
+    words: Array.from({ length: Math.round(dur * 2.6) }, (_, i) => ({ w: 'Wort', t0: i / 2.6, t1: (i + 1) / 2.6 })),
+  }) +
+  ';\n'
+const narrScene = `import V from "./words.js";\nconst DURATION = 83;\nconst A = { at: 0 };\n` +
+  Array.from({ length: 18 }, (_, i) => `const S${i} = { at: L(${i}) };`).join('\n')
+const narrIndex = '<div id="root" data-composition-id="x" data-start="0" data-duration="83">'
+const narrSound = JSON.stringify({ duration: 83, cues: [{ type: 'voice', at: 0 }, { type: 'pad', at: 0 }, { type: 'whoosh', at: 3 }] })
+const narrOk = { id: 'x', scene: narrScene, index: narrIndex, sound: narrSound, isWavStale: false, words: words(82, 2.2), isVoiceStale: false }
+
+test('Gedankenexperiment: gültiges Video ohne Befund (keine Was-wäre-wenn-Regeln)', () => {
+  expect(check(narrOk)).toEqual([])
+})
+
+test('Gedankenexperiment: fehlende Stimme, veraltete voice.wav, Sprecher zu lang', () => {
+  const texts = check({
+    ...narrOk,
+    sound: JSON.stringify({ duration: 83, cues: [{ type: 'pad', at: 0 }, { type: 'whoosh', at: 1 }] }),
+    words: words(85, 2.2),
+    isVoiceStale: true,
+  }).map(f => f.text)
+  expect(texts.some(t => t.includes('Sprecherspur'))).toBe(true)
+  expect(texts.some(t => t.includes('voice.wav'))).toBe(true)
+  expect(texts.some(t => t.includes('länger als das Video'))).toBe(true)
+})
+
+test('Gedankenexperiment: zu später Hook ist ein Hinweis', () => {
+  const f = check({ ...narrOk, words: words(82, 9.5) })
+  expect(f.length).toBe(1)
+  expect(f[0]?.level).toBe('hinweis')
+})
